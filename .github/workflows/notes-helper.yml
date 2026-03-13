@@ -13,6 +13,7 @@ on:
           - organize
           - search
           - import
+          - process-inbox
       file:
         description: "File path for 'analyze' (relative to repo root, leave blank for all) or 'import' (path to the file to import)"
         required: false
@@ -121,16 +122,26 @@ jobs:
             fi
           fi
 
+          if [[ "$CMD" == "process-inbox" ]]; then
+            if [[ "${{ inputs.import_dry_run }}" == "true" ]]; then
+              ARGS="$ARGS --dry-run"
+            fi
+            if [[ "${{ inputs.import_organize }}" == "true" ]]; then
+              ARGS="$ARGS --organize"
+            fi
+          fi
+
           echo "args=$ARGS" >> "$GITHUB_OUTPUT"
 
       - name: Run notes_helper.py
         run: |
           python3 tools/notes_helper.py ${{ inputs.command }} ${{ steps.build_args.outputs.args }}
 
-      - name: Commit generated files (organize with output, or import with organize)
+      - name: Commit generated files (organize with output, import, or process-inbox)
         if: |
           (inputs.command == 'organize' && inputs.output != '') ||
-          (inputs.command == 'import' && inputs.import_dry_run != 'true')
+          (inputs.command == 'import' && inputs.import_dry_run != 'true') ||
+          (inputs.command == 'process-inbox' && inputs.import_dry_run != 'true')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -140,6 +151,8 @@ jobs:
           else
             if [[ "${{ inputs.command }}" == "import" ]]; then
               git commit -m "chore: import note via Notes Helper workflow"
+            elif [[ "${{ inputs.command }}" == "process-inbox" ]]; then
+              git commit -m "chore: process inbox via Notes Helper workflow"
             else
               git commit -m "chore: refresh notes index via Notes Helper workflow"
             fi

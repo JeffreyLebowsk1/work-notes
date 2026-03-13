@@ -35,6 +35,62 @@ def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
     return sorted(notes)
 
 
+def _all_assets() -> list[Path]:
+    """Return all non-hidden, non-placeholder files in assets/, sorted by path."""
+    assets_dir = REPO_ROOT / "assets"
+    if not assets_dir.exists():
+        return []
+    return sorted(
+        p for p in assets_dir.rglob("*")
+        if p.is_file()
+        and not p.name.startswith(".")
+        and p.name != ".gitkeep"
+    )
+
+
+def _asset_meta(path: Path) -> dict:
+    """Extract metadata from any asset file (Markdown or binary)."""
+    stat = path.stat()
+    size_bytes = stat.st_size
+    modified = datetime.fromtimestamp(stat.st_mtime)
+
+    ext = path.suffix.lower()
+    if ext in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico"):
+        kind = "image"
+    elif ext == ".pdf":
+        kind = "document"
+    elif ext in (".xlsx", ".xls", ".csv", ".ods", ".numbers"):
+        kind = "spreadsheet"
+    elif ext in (".md", ".txt"):
+        kind = "text"
+    else:
+        kind = ext.lstrip(".") or "file"
+
+    if size_bytes >= 1_048_576:
+        size_display = f"{size_bytes / 1_048_576:.1f} MB"
+    elif size_bytes >= 1024:
+        size_display = f"{size_bytes / 1024:.1f} KB"
+    else:
+        size_display = f"{size_bytes} B"
+
+    try:
+        rel_to_assets = path.relative_to(REPO_ROOT / "assets")
+        subfolder = rel_to_assets.parts[0] if len(rel_to_assets.parts) > 1 else "(root)"
+    except ValueError:
+        subfolder = "(external)"
+
+    return {
+        "path": path,
+        "relative": _relative(path),
+        "name": path.name,
+        "kind": kind,
+        "size_bytes": size_bytes,
+        "size_display": size_display,
+        "modified": modified,
+        "subfolder": subfolder,
+    }
+
+
 def _relative(path: Path) -> str:
     """Return path relative to the repo root, or the absolute path if outside the repo."""
     try:
@@ -332,7 +388,7 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
         if p.is_file()
         and not p.name.startswith(".")
         and p.name.lower() != "readme.md"
-        and p.suffix.lower() in (".md", ".txt", "")
+        and p.suffix.lower() in (".md", ".txt")
     )
 
     if not candidates:
@@ -448,6 +504,39 @@ def cmd_analyze(args: argparse.Namespace) -> None:
 
 def cmd_sort(args: argparse.Namespace) -> None:
     """List notes sorted by the chosen criterion."""
+
+    # Assets are handled separately: all file types, file-size instead of words
+    if args.folder == "assets":
+        assets_meta = [_asset_meta(p) for p in _all_assets()]
+        if not assets_meta:
+            print("\nNo files found in assets/.\n")
+            return
+
+        by = args.by
+        if by == "date":
+            assets_meta.sort(key=lambda m: m["modified"], reverse=True)
+            col_header = "Modified"
+            col_fn = lambda m: m["modified"].strftime("%Y-%m-%d %H:%M")
+        elif by == "size":
+            assets_meta.sort(key=lambda m: m["size_bytes"], reverse=True)
+            col_header = "Size"
+            col_fn = lambda m: m["size_display"]
+        else:  # name
+            assets_meta.sort(key=lambda m: m["relative"])
+            col_header = "Type"
+            col_fn = lambda m: m["kind"]
+
+        col_w = max(len(col_fn(m)) for m in assets_meta) if assets_meta else 10
+        path_w = max(len(m["relative"]) for m in assets_meta) if assets_meta else 20
+
+        header = f"{'Path':<{path_w}}  {col_header}"
+        print(f"\n{header}")
+        print("-" * (len(header) + 4))
+        for m in assets_meta:
+            print(f"{m['relative']:<{path_w}}  {col_fn(m)}")
+        print(f"\n{len(assets_meta)} asset(s) found.\n")
+        return
+
     notes_meta = [_parse_note(p) for p in _all_notes()]
 
     if args.folder:
@@ -558,6 +647,29 @@ def cmd_organize(args: argparse.Namespace) -> None:
             lines.append(f"  {item}")
         lines.append("")
 
+    # Assets inventory
+    all_assets = [_asset_meta(p) for p in _all_assets()]
+    if all_assets:
+        lines += [
+            "## Assets",
+            "",
+        ]
+        by_subfolder: dict[str, list[dict]] = {}
+        for a in all_assets:
+            by_subfolder.setdefault(a["subfolder"], []).append(a)
+        for subfolder in sorted(by_subfolder):
+            lines.append(f"### assets/{subfolder}" if subfolder != "(root)" else "### assets")
+            lines.append("")
+            lines.append(f"| File | Type | Size | Modified |")
+            lines.append(f"|------|------|------|----------|")
+            for a in sorted(by_subfolder[subfolder], key=lambda x: x["name"]):
+                rel = a["relative"]
+                link = f"../{rel}" if args.output else rel
+                lines.append(
+                    f"| [{a['name']}]({link}) | {a['kind']} | {a['size_display']} | {a['modified'].strftime('%Y-%m-%d')} |"
+                )
+            lines.append("")
+
     content = "\n".join(lines)
 
     if args.output:
@@ -641,6 +753,8 @@ Examples:
   analyze daily-logs/2026-03/2026-03-13.md
   sort by date
   sort by size in graduation
+  sort assets by date
+  sort assets by size
   organize
   organize to tools/index.md
   search FERPA
@@ -717,9 +831,15 @@ def _parse_agent_input(text: str) -> argparse.Namespace | None:
                 by = word
                 break
         folder_m = re.search(r"\bin\s+(\S+)", text, re.I)
+        if folder_m:
+            folder = folder_m.group(1)
+        elif re.search(r"\bassets\b", text, re.I):
+            folder = "assets"
+        else:
+            folder = None
         ns.func = cmd_sort
         ns.by = by
-        ns.folder = folder_m.group(1) if folder_m else None
+        ns.folder = folder
         return ns
 
     if intent == "organize":
@@ -805,6 +925,7 @@ Examples:
   python3 tools/notes_helper.py analyze daily-logs/2026-03/2026-03-13.md
   python3 tools/notes_helper.py sort --by date
   python3 tools/notes_helper.py sort --by size --folder graduation
+  python3 tools/notes_helper.py sort --by size --folder assets
   python3 tools/notes_helper.py organize
   python3 tools/notes_helper.py organize --output tools/index.md
   python3 tools/notes_helper.py search "action item"
@@ -812,6 +933,8 @@ Examples:
   python3 tools/notes_helper.py import /path/to/note.md
   python3 tools/notes_helper.py import /path/to/note.md --dest meetings --organize
   python3 tools/notes_helper.py import /path/to/note.md --dry-run
+  python3 tools/notes_helper.py process-inbox --organize
+  python3 tools/notes_helper.py process-inbox --dry-run
   python3 tools/notes_helper.py agent
         """,
     )
@@ -912,6 +1035,28 @@ Examples:
         help="Refresh tools/index.md after a successful import",
     )
     p_import.set_defaults(func=cmd_import)
+
+    # process-inbox
+    p_inbox = sub.add_parser(
+        "process-inbox",
+        help="Import all files from the inbox/ folder, then remove them from inbox",
+    )
+    p_inbox.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would happen without copying or deleting any files",
+    )
+    p_inbox.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite destination files that already exist",
+    )
+    p_inbox.add_argument(
+        "--organize",
+        action="store_true",
+        help="Refresh tools/index.md after all files are processed",
+    )
+    p_inbox.set_defaults(func=cmd_process_inbox)
 
     # agent
     p_agent = sub.add_parser(

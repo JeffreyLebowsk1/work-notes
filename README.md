@@ -16,6 +16,7 @@
 | [📓 Daily Logs](./daily-logs/) | Day-to-day logs and notes |
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |
 | [📣 Updates & Changes](./updates/) | Policy, technology, workflow, and graduation updates log |
+| [📥 Inbox](./inbox/) | Drop files here — the Notes Helper will auto-sort them into the right section |
 
 ## 🛠️ Tools
 
