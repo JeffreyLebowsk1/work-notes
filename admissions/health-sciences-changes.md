@@ -34,9 +34,27 @@ Students should **not** submit the limited enrollment application until all of t
 |---|---|
 | **Transcripts** | Official transcripts from high school and **all** previously attended colleges must be on file |
 | **Academic Readiness** | Must be English and Math ready — no corequisite courses required |
-| **Minimum GPA** | Cumulative **2.5 GPA** in program-specific general education courses |
+| **Minimum GPA** | Cumulative **2.5 GPA** (or program-specific threshold — see table below) in program-specific general education courses |
 | **Science Courses** | **"B" or better** in all required science courses (required for Full Acceptance; a "C" may qualify for Provisional Acceptance — see below) |
 | **Other Gen Ed Courses** | **"C" or better** in all other required general education courses |
+
+### Per-Program Minimum Admission GPA
+
+The 2.5 GPA floor is a baseline; several programs require a higher threshold:
+
+| Program | Minimum Admission GPA |
+| :--- | :--- |
+| **Dental Assisting** | 2.5 |
+| **Dental Hygiene** | 3.0 |
+| **Medical Sonography** | 3.0 |
+| **Nursing (ADN)** | 2.8 |
+| **Practical Nursing (PN)** | 2.5 |
+| **Physical Therapist Assistant (PTA)** | 3.0 |
+| **Veterinary Medical Technology (VMT)** | 2.5 |
+
+> ⚠️ **Important policy change for 2026 cohort:** The "Alternate List" previously available for students with a 2.0–2.5 GPA has been **eliminated**. Students with a GPA below 2.5 (or the program-specific minimum above) will not be accepted.
+
+> **Note:** **Medical Assisting** and **Health Information Technology (HIT)** require a **2.0 GPA** for entry. These programs are **no longer treated as limited enrollment programs** in the same manner. They still require ENG/MAT readiness and — for Medical Assisting — a current CNA transcript on file. See [Conflicts Pending Resolution](../updates/conflicts-pending.md) — CONFLICT 3 for details.
 
 ---
 
