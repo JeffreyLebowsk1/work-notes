@@ -52,5 +52,29 @@ International applicants to Dental Hygiene and HIT may be improperly accepted or
 
 ---
 
+## CONFLICT 3 — Medical Assisting & Health Information Technology — Limited Enrollment Status
+
+**Affects:** Admissions, Health Sciences Programs (Medical Assisting, Health Information Technology)
+**Status:** ⚠️ Awaiting official clarification
+
+### The Conflict
+| Source | Position |
+|--------|----------|
+| **Published Catalog (2025–2026)** | **Medical Assisting** and **Health Information Technology** are listed as **limited enrollment** programs. |
+| **Administrative Update** | These programs are **no longer treated as limited enrollment** for the 2026 admissions cycle. |
+
+### Why This Matters
+Applying limited enrollment procedures (separate application, seat caps, acceptance tiers) to these programs when they are no longer intended to operate that way could prevent qualified students from enrolling or create inconsistent advising outcomes.
+
+### Action Required
+- [ ] Verify current limited enrollment status for Medical Assisting and Health Information Technology with the respective department chairs before advising students.
+- [ ] Once confirmed, update admissions checklists and advising materials for these programs accordingly.
+- [ ] Update this entry with the resolution once received.
+
+### Resolution
+<!-- Record official response here, including date and source -->
+
+---
+
 *See also: [Health Sciences Admissions Changes](../admissions/health-sciences-changes.md)*
 *Last updated: 2026-03-13*

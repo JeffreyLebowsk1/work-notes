@@ -101,7 +101,7 @@ For a detailed breakdown of grades and their SAP impact, see [Academic Advising 
 When a student needs to submit a GED/HSE transcript for aid eligibility:
 
 - Standard fee: **$20.00** per document through **DiplomaSender**.
-- Remind the student to have it sent **directly to CCCC**.
+- The transcript must be sent **directly to CCCC** at **admissions@cccc.edu**.
 
 ---
 
