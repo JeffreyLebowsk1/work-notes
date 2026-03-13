@@ -1,0 +1,111 @@
+name: Notes Helper
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Command to run"
+        required: true
+        type: choice
+        options:
+          - analyze
+          - sort
+          - organize
+          - search
+      file:
+        description: "File path for 'analyze' (relative to repo root, leave blank to analyze all)"
+        required: false
+        default: ""
+      keyword:
+        description: "Keyword or phrase for 'search'"
+        required: false
+        default: ""
+      folder:
+        description: "Limit 'sort' or 'search' to a top-level folder (e.g. graduation, meetings)"
+        required: false
+        default: ""
+      sort_by:
+        description: "Sort criterion for 'sort' (name, date, size)"
+        required: false
+        type: choice
+        default: name
+        options:
+          - name
+          - date
+          - size
+      context:
+        description: "Context lines around each match for 'search' (default: 2)"
+        required: false
+        default: "2"
+      output:
+        description: "Output file path for 'organize' (e.g. tools/index.md — leave blank to print)"
+        required: false
+        default: ""
+
+jobs:
+  run-helper:
+    name: Run notes_helper.py ${{ inputs.command }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build command arguments
+        id: build_args
+        shell: bash
+        run: |
+          CMD="${{ inputs.command }}"
+          ARGS=""
+
+          if [[ "$CMD" == "analyze" && -n "${{ inputs.file }}" ]]; then
+            ARGS="${{ inputs.file }}"
+          fi
+
+          if [[ "$CMD" == "sort" ]]; then
+            ARGS="--by ${{ inputs.sort_by }}"
+            if [[ -n "${{ inputs.folder }}" ]]; then
+              ARGS="$ARGS --folder ${{ inputs.folder }}"
+            fi
+          fi
+
+          if [[ "$CMD" == "organize" && -n "${{ inputs.output }}" ]]; then
+            ARGS="--output ${{ inputs.output }}"
+          fi
+
+          if [[ "$CMD" == "search" ]]; then
+            if [[ -z "${{ inputs.keyword }}" ]]; then
+              echo "::error::A keyword is required for the 'search' command."
+              exit 1
+            fi
+            ARGS="${{ inputs.keyword }} --context ${{ inputs.context }}"
+            if [[ -n "${{ inputs.folder }}" ]]; then
+              ARGS="$ARGS --folder ${{ inputs.folder }}"
+            fi
+          fi
+
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Run notes_helper.py
+        run: |
+          python3 tools/notes_helper.py ${{ inputs.command }} ${{ steps.build_args.outputs.args }}
+
+      - name: Commit generated index (organize with output only)
+        if: inputs.command == 'organize' && inputs.output != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "${{ inputs.output }}"
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: refresh notes index via Notes Helper workflow"
+            git push
+          fi
