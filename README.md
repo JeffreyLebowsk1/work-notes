@@ -1,5 +1,8 @@
 # 📚 Work Notes — Registrar's Office
 
+> ⚠️ **PRIVATE REPOSITORY — DO NOT MAKE PUBLIC.**
+> This repository contains internal work notes and references for the Student Records Registrar's Office. It may contain information subject to FERPA and other confidentiality obligations. Keep repository visibility set to **Private** at all times. See [SETUP.md](./SETUP.md#-repository-privacy) for instructions.
+
 > Personal work notes, references, and resources for the Student Records Registrar's Office.
 
 ## 🗂️ Sections

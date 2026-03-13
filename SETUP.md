@@ -27,6 +27,24 @@ git --version
 
 ---
 
+## 🔒 Repository Privacy
+
+This repository **must be kept private** at all times. It contains internal work notes that may include information subject to FERPA and other confidentiality requirements.
+
+### How to Set the Repository to Private (Do This Now If It Isn't Already)
+
+1. Go to the repository on GitHub: [https://github.com/JeffreyLebowsk1/work-notes](https://github.com/JeffreyLebowsk1/work-notes)
+2. Click the **Settings** tab (top of the page, gear icon)
+3. Scroll down to the **Danger Zone** section at the bottom of the page
+4. Click **Change visibility**
+5. Select **Make private**
+6. Type the repository name (`JeffreyLebowsk1/work-notes`) to confirm
+7. Click **I understand, change repository visibility**
+
+> If you don't see the Settings tab, you may not have admin access to the repository. Contact the repository owner to make this change.
+
+---
+
 ## 🚀 First-Time Setup (Do This Once)
 
 ### Clone the Repo Into Google Drive
