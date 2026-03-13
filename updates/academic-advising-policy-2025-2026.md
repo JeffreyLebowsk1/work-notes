@@ -94,19 +94,88 @@ The strategic link between academic progress and Title IV funding is governed by
 
 Academic sanctions are intended as intervention tools rather than punishment, designed to help students regain their academic footing.
 
+> ⚠️ **Terminology:** Effective Fall 2025, **"Academic Probation"** has been officially retired and replaced with **"Academic Warning."** Do not use the old term in any student communications, records, or reports. The suspension threshold was also extended from two to three consecutive semesters. See [policy-updates.md](../updates/policy-updates.md).
+
 ### The Sanctions Hierarchy
 
-1. **Academic Warning:** Triggered when a term GPA falls below 2.0. Requires a meeting with an Education Navigator and enrollment in ACA 085 (Academic Recovery).
-2. **Extended Academic Warning:** Triggered after a second consecutive term below 2.0.
-   - Credit Hour Cap: Tailored to the student's academic plan.
-   - Bi-Weekly Meetings: Mandatory check-ins with a Navigator.
-   - Required Engagement: Mandatory use of the Academic Assistance Center or Library.
-3. **Academic Suspension:** Occurs after the third term of unsatisfactory progress. Students are suspended for one semester.
+1. **First Semester Below 2.0 — Academic Warning**
+   - Student must meet with their **Education Navigator** to complete a self-assessment.
+   - Student must enroll in and successfully complete a zero-level ACA course (e.g., **ACA 085**).
+   - *Exception:* If the student's **cumulative GPA is 3.0 or higher**, the ACA course is not required — though a reduced course load is still recommended.
+
+2. **Second Consecutive Semester Below 2.0 — Extended Academic Warning**
+   - A **credit hour cap** is applied, tailored to the student's academic plan by the Education Navigator and Department Chair.
+   - **Bi-weekly meetings** with the Education Navigator are mandatory.
+   - Mandatory engagement with campus resources — the [Academic Assistance Center](https://www.cccc.edu/support-success/academic-support-tutoring/) or the library.
+
+3. **Third Consecutive Semester Below 2.0 — Academic Suspension**
+   - *(The suspension threshold was extended in Fall 2025 from two to three consecutive low-GPA semesters.)*
+   - Student is suspended from all coursework and college activities for **one full semester**.
+   - To return, the student must meet with an Education Navigator to complete a **Success Plan**, which must be approved by their Academic Advisor.
 
 ### The Success Plan and Forgiveness
 
 - **Readmission after suspension** requires a Success Plan approved by both the Navigator and the Academic Advisor. The student must meet with their Navigator at least three times during their return semester.
 - **Academic Forgiveness** provides a one-time "clean slate" for students away for 36 consecutive months. Eligible students must complete 12 hours at a 100-level or higher with a 2.0 GPA. The Navigator must connect the student to the Dean of Student Onboarding and Success and the Dean of Health Sciences for final approval. *(Note: Confirm the appropriate approval authority for students outside Health Sciences programs.)*
+
+### Financial Aid SAP Connection
+
+Academic sanctions and Financial Aid SAP operate on parallel but independent tracks. Both are evaluated at the end of every term.
+
+| Academic Standing | Financial Aid Status |
+|---|---|
+| First term below 2.0 → **Academic Warning** | First term below cumulative 2.0 → **Financial Aid Warning** (aid continues for one semester) |
+| Second consecutive term → **Extended Academic Warning** | Failure to meet standard after Warning term → **Financial Aid Suspension** (aid lost) |
+| Third consecutive term → **Academic Suspension** | Student may file a [SAP Appeal](https://www.cccc.edu/paying-college/deadlines-policies-procedures/satisfactory-academic-progress-sap-policy) for reinstatement on probationary status |
+
+> A student may be on Academic Warning (institutional) but still receiving aid, or on Financial Aid Suspension without being on institutional Academic Suspension — these are separate determinations. See [Financial Aid README — SAP section](../financial-aid/README.md) for full appeal deadlines and procedures.
+
+### Program-Specific Impacts
+
+| Program | Additional Requirement |
+|---|---|
+| **Career & College Promise (CCP)** | Must maintain a 2.0 GPA after completing two courses to remain eligible. Falling below may result in removal from CCP. Grades are permanently on the college transcript. |
+| **Health Sciences (general)** | Most programs require a "C" or better in all core courses to matriculate. |
+| **Nursing (NUR courses)** | Students must achieve a final grade of **78 (B) or higher** in every NUR course. |
+
+### Staff Talking Points
+
+- *"Since your GPA fell below 2.0, you are now on Academic Warning. This is a signal that we need to adjust your plan to get you back on track."*
+- *"You'll need to meet with your Education Navigator to complete a self-assessment and plan your next steps, which includes taking a study skills course (ACA 085)."*
+- *"If you receive financial aid, you have one 'Warning' semester to pull your grades up before your funding is at risk."*
+- *"For CCP students: It is critical to stay above a 2.0 to remain in the program and keep these grades from following you on your permanent college transcript."*
+
+### Internal Staff Action
+
+| Action | Detail |
+|---|---|
+| **Verify standing** | Use the **SACS** screen in Colleague to confirm whether the student is on their 1st (Academic Warning), 2nd (Extended Academic Warning), or 3rd (Academic Suspension) consecutive semester below 2.0. |
+| **Check for hold** | If the student has not yet met with a Navigator, a hold should remain on the account. Verify on **SACS** — do not clear it until the meeting is confirmed. |
+| **Find the right Navigator** | Navigator assignment is based on the student's **program code** (e.g., A10100, A55280NR) and **home campus** (LMC, HMC, or PMC). Provide the program code, campus, and the first letter of the student's last name to identify the assigned Navigator. See the [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts) for the full assignment list. |
+| **Early intervention** | If a student mentions struggling, refer them immediately to the **Academic Assistance Center** at (919) 718-7502 or their assigned Navigator. |
+| **Escalation** | For complex Academic Warning or Suspension policy questions, refer to **Megan Burgess**, Dean of Student Onboarding and Success — mburgess@cccc.edu. |
+
+### Campus Navigator Contacts
+
+For immediate assistance, contact the campus lead below. Full Navigator assignments by program are on the [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts).
+
+| Campus | Name | Contact |
+|---|---|---|
+| **Chatham Main Campus (CMC)** | James Carr | (984) 368-5159 (Text) |
+| **Chatham Main Campus (CMC)** | Kim Brzozowski | (984) 368-5354 (Text) |
+| **Harnett Main Campus (HMC)** | Brian Post | (984) 368-4911 (Text) |
+| **Harnett Main Campus (HMC)** | J. Dwayne Garnett | (984) 368-4550 (Text) |
+| **Lee Main Campus (LMC)** | Student Onboarding & Success Office | (919) 718-7300 — onboarding@cccc.edu |
+| **Lee Main Campus (LMC)** | Sarah Shannon-Mohamed (Director) | sshannon@cccc.edu |
+
+### Contacts
+
+| Office / Person | Phone | Link / Email |
+|---|---|---|
+| Student Onboarding and Success (general) | (919) 718-7300 | onboarding@cccc.edu — [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts) |
+| Megan Burgess (Dean of Student Onboarding and Success) | — | mburgess@cccc.edu |
+| Financial Aid Office | (919) 718-7229 | [Financial Aid Webpage](https://www.cccc.edu/paying-college/financial-aid/) |
+| Student Records and Registrar's Office | (919) 718-7201 | admissions@cccc.edu — [Registrar's Webpage](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office) |
 
 ---
 
