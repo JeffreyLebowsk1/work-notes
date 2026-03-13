@@ -45,9 +45,24 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
+| NCresidency.org (Student Portal) | [ncresidency.org](https://www.ncresidency.org) |
 | Residency Policy Document | *(pending)* |
 | Tuition Rate Schedule | *(pending)* |
-| Residency Appeal Form | *(pending)* |
+| Residency Appeal Form | [ncresidency.org](https://www.ncresidency.org) |
+| Finding RCN in CFNC (PDF) | *(pending — shared drive)* |
+| How to Update Residency — Jamie's version | *(pending — shared drive)* |
+| Recalculating RCN — Jessica's version (PDF) | *(pending — shared drive)* |
+
+### RDS Contact Numbers
+
+| Contact | Details |
+|---|---|
+| RDS Student Toll-Free | 844-319-3640 |
+| RDS Student Local | 919-835-2290 |
+| RDS Student Fax | 919-835-2427 |
+| RDS Student Email | rdsinfo@ncresidency.org |
+| RDS Operations Staff (our contact) | 844-417-0164 · rds@ncresidency.org |
+| RDS Operations Hours | Mon–Thu 8 AM–6 PM; Fri 8 AM–5 PM |
 
 ---
 
