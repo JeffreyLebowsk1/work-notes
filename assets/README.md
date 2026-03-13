@@ -1,10 +1,18 @@
 # 📁 Assets
 
-Shared assets including images, spreadsheets, and reference files.
+Shared assets including images, screenshots, spreadsheets, and reference files.
 
 ## Structure
 
-- `images/` — Screenshots, diagrams, photos
+- `images/` — Diagrams, photos, and general images
+- `screenshots/` — Screenshots organized by topic/area
+  - `admissions/` — Admissions system screenshots
+  - `continuing-education/` — CE and workforce program screenshots
+  - `graduation/` — Graduation process and ceremony screenshots
+  - `residency-tuition/` — Residency and tuition system screenshots
+  - `transcripts/` — Transcript processing screenshots
+  - `tools/` — Notes Helper and other tool screenshots
+  - `updates/` — Policy, technology, and workflow update screenshots
 - `spreadsheets/` — Excel/CSV files and data exports
 - `documents/` — PDFs and other documents
 
@@ -12,4 +20,5 @@ Shared assets including images, spreadsheets, and reference files.
 
 - CSV files will render as tables directly in GitHub
 - Images can be embedded in Markdown notes using: `![description](../assets/images/filename.png)`
+- Screenshots can be embedded using: `![description](../assets/screenshots/<topic>/filename.png)`
 - For files over 50MB, consider using Git LFS
