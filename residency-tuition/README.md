@@ -9,5 +9,3 @@ Notes, policies, and data related to residency determinations and tuition classi
 - [Data](./data/) — Tuition data, spreadsheets, and records
 
 ## Quick Notes
-
-<!-- Add quick reference notes here -->
