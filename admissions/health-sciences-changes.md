@@ -34,9 +34,27 @@ Students should **not** submit the limited enrollment application until all of t
 |---|---|
 | **Transcripts** | Official transcripts from high school and **all** previously attended colleges must be on file |
 | **Academic Readiness** | Must be English and Math ready — no corequisite courses required |
-| **Minimum GPA** | Cumulative **2.5 GPA** in program-specific general education courses |
+| **Minimum GPA** | Cumulative **2.5 GPA** (or program-specific threshold — see table below) in program-specific general education courses |
 | **Science Courses** | **"B" or better** in all required science courses (required for Full Acceptance; a "C" may qualify for Provisional Acceptance — see below) |
 | **Other Gen Ed Courses** | **"C" or better** in all other required general education courses |
+
+### Per-Program Minimum Admission GPA
+
+The 2.5 GPA floor is a baseline; several programs require a higher threshold:
+
+| Program | Minimum Admission GPA |
+| :--- | :--- |
+| **Dental Assisting** | 2.5 |
+| **Dental Hygiene** | 3.0 |
+| **Medical Sonography** | 3.0 |
+| **Nursing (ADN)** | 2.8 |
+| **Practical Nursing (PN)** | 2.5 |
+| **Physical Therapist Assistant (PTA)** | 3.0 |
+| **Veterinary Medical Technology (VMT)** | 2.5 |
+
+> ⚠️ **Important policy change for 2026 cohort:** The "Alternate List" previously available for students with a 2.0–2.5 GPA has been **eliminated**. Students who do not meet the program-specific minimum GPA in the table above will not be accepted.
+
+> **Note:** **Medical Assisting** and **Health Information Technology (HIT)** require a **2.0 GPA** for entry. These programs are **no longer subject to the rolling limited enrollment application window and seat allocation process** used by other Health Sciences programs. They still require ENG/MAT readiness and — for Medical Assisting — a current CNA transcript on file. See [Conflicts Pending Resolution](../updates/conflicts-pending.md) — CONFLICT 3 for details.
 
 ---
 
@@ -53,6 +71,19 @@ The traditional Alternate List has been eliminated. The single acceptance status
 
 ### What You Need to Do Differently
 Communicate clearly to applicants which status they have received and what steps or deadlines apply. Remind Fully Accepted students of the two-week confirmation window. Update SIS or tracking documents to distinguish between the two statuses.
+
+### Provisional Seat Update Windows
+
+While the general application window closes **May 15, 2026**, remaining seats for Provisionally Accepted students are offered during program-specific windows:
+
+| Program | Provisional Seat Update Window |
+| :--- | :--- |
+| **ADN, PN, and Paramedic-to-RN** | May 18 – May 29, 2026 |
+| **Physical Therapist Assistant (PTA)** | July 1 – July 15, 2026 |
+| **Veterinary Medical Technology (VMT)** | July 15 – July 31, 2026 |
+| **Dental Assisting** | Rolling until the mandatory orientation date |
+
+> ⚠️ **Dental Hygiene** and **Medical Sonography** do **not** have a provisional window — seats in these programs are filled by Fully Accepted students only.
 
 ---
 
@@ -145,6 +176,21 @@ Update program prerequisite checklists for Veterinary Medical Technology and Den
 
 ---
 
+## Graduation Standards for Health Sciences Programs
+
+Once admitted, students must maintain the following standards to remain in the program and graduate:
+
+| Requirement | Standard |
+| :--- | :--- |
+| **Minimum Program GPA** | 2.0 |
+| **Minimum Cumulative GPA** | 2.0 |
+| **NUR prefix courses (ADN & PN)** | Final grade of **78 or higher** in every NUR course |
+| **Transfer Degrees (AA, AS, AE)** | **"C" or better** in all required coursework |
+
+> **Note:** Use **EVAL** or **PSPR** in Colleague to verify a student's program-specific GPA when confirming graduation eligibility. See [What-If EVAL/PSPR Guidance](../graduation/student-tracking/what-if-eval-pspr.md) for the full process.
+
+---
+
 ## Staff Talking Points
 
 Use the following when advising students about Health Sciences limited enrollment:
@@ -152,6 +198,9 @@ Use the following when advising students about Health Sciences limited enrollmen
 - *"You can apply directly through your **Success Hub** in the CCCC Portal. The window for the 2026 cohort is open until May 15."*
 - *"Great news — we've removed the TEAS test and TOEFL requirements for this cycle to make the process more straightforward."*
 - *"Admission is now primarily first-come, first-served for qualified students, so it's best to complete your general education courses with the required grades as soon as possible."*
+- *"Most programs now use a rolling 'first-qualified, first-accepted' model. However, the **PTA program** still ranks applicants by GPA, making it a more competitive selection process."*
+- *"If you are applying for **Dental Hygiene or Medical Sonography**, please be aware that these programs are highly competitive and do not offer provisional spots. You must meet all requirements fully to be considered."*
+- *"If you are provisionally accepted, keep a close eye on your **Success Hub** during your program's specific update window in May or July to see if a seat becomes available."*
 
 ---
 
@@ -159,7 +208,15 @@ Use the following when advising students about Health Sciences limited enrollmen
 
 ### Verify Status in Colleague
 
-Check the student's record on **IASU >> HSA** and **SPRO** screens to confirm transcript receipt and GPA before processing a limited enrollment application.
+Check the student's record on **IASU >> HSA** and **SPRO** screens to confirm transcript receipt and acceptance status ("Fully Accepted" or "Provisionally Accepted") before processing a limited enrollment application.
+
+### Verify GPA Eligibility
+
+Use the **EVAL** or **PSPR** mnemonics in Colleague to run a "what-if" evaluation and confirm the student's program-specific GPA against the minimum admission threshold. Ensure all external transcripts are received and evaluated via **IASU > HSA** before confirming eligibility. See [What-If EVAL/PSPR Guidance](../graduation/student-tracking/what-if-eval-pspr.md) for the step-by-step process.
+
+### Veterinary Medical Technology — New Diploma Program (Fall 2026)
+
+> 📝 A new **Diploma program in Veterinary Medical Technology** begins Fall 2026 with fewer stipulations than the AAS degree. When advising VMT-interested students, confirm whether they are applying to the AAS degree or the new Diploma program, as requirements differ.
 
 ### Medical Assisting & Health Information Technology — Program Status Conflict
 
