@@ -1,0 +1,62 @@
+# auto-sync.service — systemd unit for the work-notes auto-sync watcher.
+#
+# INSTALLATION (one-time, as your normal user — not root):
+#
+#   1.  Edit the paths below to match your setup:
+#         WorkingDirectory=  →  absolute path to your cloned work-notes folder
+#         ExecStart=         →  absolute path to auto-sync.sh inside that folder
+#         Environment=REPO_DIR=  →  same absolute path as WorkingDirectory
+#
+#   2.  Copy the file into your user systemd directory:
+#         mkdir -p ~/.config/systemd/user
+#         cp tools/auto-sync.service ~/.config/systemd/user/auto-sync.service
+#
+#   3.  Reload systemd and enable the service:
+#         systemctl --user daemon-reload
+#         systemctl --user enable --now auto-sync.service
+#
+#   4.  Check that it is running:
+#         systemctl --user status auto-sync.service
+#
+#   5.  Follow live logs:
+#         journalctl --user -u auto-sync.service -f
+#
+# To stop the service temporarily:
+#   systemctl --user stop auto-sync.service
+#
+# To disable it permanently:
+#   systemctl --user disable auto-sync.service
+# -------------------------------------------------------------------------
+
+[Unit]
+Description=Work-notes Google Drive auto-sync watcher
+Documentation=https://github.com/JeffreyLebowsk1/work-notes
+# Start only after the network is up (needed for git push)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# ── EDIT THESE THREE LINES to match your actual paths ──────────────────────
+WorkingDirectory=/home/YOUR_USERNAME/gdrive/work-notes
+ExecStart=/home/YOUR_USERNAME/gdrive/work-notes/tools/auto-sync.sh
+Environment=REPO_DIR=/home/YOUR_USERNAME/gdrive/work-notes
+# ───────────────────────────────────────────────────────────────────────────
+
+# Optional tuning (uncomment to override defaults in auto-sync.sh)
+#Environment=DEBOUNCE_SECONDS=10
+#Environment=GIT_USER_NAME=jetson-auto-sync
+#Environment=GIT_USER_EMAIL=auto-sync@localhost
+#Environment=COMMIT_PREFIX=auto: sync from Google Drive
+
+# Restart the watcher automatically if it exits unexpectedly
+Restart=on-failure
+RestartSec=30
+
+# Keep stdout/stderr in the journal
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
