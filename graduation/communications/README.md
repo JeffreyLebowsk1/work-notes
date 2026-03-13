@@ -4,6 +4,12 @@ Email templates, announcements, and messaging for graduation coordination.
 
 ## Templates
 
+- [Graduation Application Campaign](./graduation-application-campaign.md) — Strategic communications plan for the final-term graduation application campaign
+  - Campaign goals & success metrics
+  - Target audiences & key stakeholders
+  - Core messaging framework
+  - Multi-channel execution timeline
+  - Support & contact information
 - [Student Announcements](./student-announcements.md) — Templates for communicating with graduating students
   - Graduation application open
   - Degree audit results (pass / outstanding requirements)

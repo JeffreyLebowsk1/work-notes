@@ -6,6 +6,7 @@ A running log of changes that affect how we work — policy updates, new softwar
 
 | Log | Description |
 |---|---|
+| [🏫 Operating Status Messaging](./operating-status-messaging.md) | Approved messaging templates for open, delayed, early closing, remote, and full closure statuses |
 | [📋 Policy Updates](./policy-updates.md) | Changes to institutional, state, or federal policies |
 | [🖥️ Technology & Software](./technology-software.md) | New systems, software rollouts, IT changes |
 | [🔄 Workflow Changes](./workflow-changes.md) | Changes to office procedures and day-to-day workflows |
