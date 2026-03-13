@@ -23,7 +23,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-IGNORED_DIRS = {".git", "tools", "assets"}
+IGNORED_DIRS = {".git", "tools", "assets", "inbox"}
 
 
 def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
@@ -33,6 +33,62 @@ def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
         if not any(part in IGNORED_DIRS for part in path.parts):
             notes.append(path)
     return sorted(notes)
+
+
+def _all_assets() -> list[Path]:
+    """Return all non-hidden, non-placeholder files in assets/, sorted by path."""
+    assets_dir = REPO_ROOT / "assets"
+    if not assets_dir.exists():
+        return []
+    return sorted(
+        p for p in assets_dir.rglob("*")
+        if p.is_file()
+        and not p.name.startswith(".")
+        and p.name != ".gitkeep"
+    )
+
+
+def _asset_meta(path: Path) -> dict:
+    """Extract metadata from any asset file (Markdown or binary)."""
+    stat = path.stat()
+    size_bytes = stat.st_size
+    modified = datetime.fromtimestamp(stat.st_mtime)
+
+    ext = path.suffix.lower()
+    if ext in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico"):
+        kind = "image"
+    elif ext == ".pdf":
+        kind = "document"
+    elif ext in (".xlsx", ".xls", ".csv", ".ods", ".numbers"):
+        kind = "spreadsheet"
+    elif ext in (".md", ".txt"):
+        kind = "text"
+    else:
+        kind = ext.lstrip(".") or "file"
+
+    if size_bytes >= 1_048_576:
+        size_display = f"{size_bytes / 1_048_576:.1f} MB"
+    elif size_bytes >= 1024:
+        size_display = f"{size_bytes / 1024:.1f} KB"
+    else:
+        size_display = f"{size_bytes} B"
+
+    try:
+        rel_to_assets = path.relative_to(REPO_ROOT / "assets")
+        subfolder = rel_to_assets.parts[0] if len(rel_to_assets.parts) > 1 else "(root)"
+    except ValueError:
+        subfolder = "(external)"
+
+    return {
+        "path": path,
+        "relative": _relative(path),
+        "name": path.name,
+        "kind": kind,
+        "size_bytes": size_bytes,
+        "size_display": size_display,
+        "modified": modified,
+        "subfolder": subfolder,
+    }
 
 
 def _relative(path: Path) -> str:
@@ -313,6 +369,90 @@ def cmd_import(args: argparse.Namespace) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Subcommand: process-inbox
+# ---------------------------------------------------------------------------
+
+
+def cmd_process_inbox(args: argparse.Namespace) -> None:
+    """
+    Process all files in the inbox/ folder: auto-detect the destination
+    for each file, import it using the same logic as 'import', then remove
+    the original from inbox.  Skips README.md and hidden files.
+    """
+    inbox_dir = REPO_ROOT / "inbox"
+    if not inbox_dir.exists():
+        sys.exit("inbox/ folder not found. Create it at the repository root first.")
+
+    candidates = sorted(
+        p for p in inbox_dir.iterdir()
+        if p.is_file()
+        and not p.name.startswith(".")
+        and p.name.lower() != "readme.md"
+        and p.suffix.lower() in (".md", ".txt")
+    )
+
+    if not candidates:
+        print("\n📭 No files found in inbox/ to process.\n")
+        return
+
+    print(f"\n{'='*60}")
+    print(f"  📬 Processing inbox/ ({len(candidates)} file(s))")
+    print(f"{'='*60}\n")
+
+    imported: list[str] = []
+    skipped: list[str] = []
+
+    for source in candidates:
+        print(f"  ── {source.name}")
+        try:
+            content = source.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            print(f"     ❌ Cannot read: {exc}\n")
+            skipped.append(source.name)
+            continue
+
+        detected_folder, confidence = _detect_folder(source.name, content)
+        suggested_filename = _suggest_filename(source, detected_folder, content)
+        dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+        dest_path = dest_dir / suggested_filename
+
+        try:
+            dest_display = _relative(dest_path)
+        except ValueError:
+            dest_display = str(dest_path)
+
+        print(f"     Detected   : {detected_folder}  (confidence: {confidence:.0%})")
+        print(f"     Destination: {dest_display}")
+
+        if args.dry_run:
+            print(f"     DRY RUN — would copy to: {dest_display}\n")
+            imported.append(source.name)
+            continue
+
+        if dest_path.exists() and not args.force:
+            print(f"     ⚠️  Destination already exists — skipped (use --force to overwrite)\n")
+            skipped.append(source.name)
+            continue
+
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        dest_path.write_text(content, encoding="utf-8")
+        source.unlink()
+        print(f"     ✅ Imported → {dest_display}\n")
+        imported.append(source.name)
+
+    print(f"{'='*60}")
+    verb = "previewed" if args.dry_run else "imported"
+    print(f"  Done: {len(imported)} {verb}, {len(skipped)} skipped")
+    print(f"{'='*60}\n")
+
+    if not args.dry_run and args.organize and imported:
+        idx_path = REPO_ROOT / "tools" / "index.md"
+        print("  🔄 Refreshing master index…")
+        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)))
+        cmd_organize(org_args)
+
+
+# ---------------------------------------------------------------------------
 # Subcommand: analyze
 # ---------------------------------------------------------------------------
 
@@ -364,6 +504,39 @@ def cmd_analyze(args: argparse.Namespace) -> None:
 
 def cmd_sort(args: argparse.Namespace) -> None:
     """List notes sorted by the chosen criterion."""
+
+    # Assets are handled separately: all file types, file-size instead of words
+    if args.folder == "assets":
+        assets_meta = [_asset_meta(p) for p in _all_assets()]
+        if not assets_meta:
+            print("\nNo files found in assets/.\n")
+            return
+
+        by = args.by
+        if by == "date":
+            assets_meta.sort(key=lambda m: m["modified"], reverse=True)
+            col_header = "Modified"
+            col_fn = lambda m: m["modified"].strftime("%Y-%m-%d %H:%M")
+        elif by == "size":
+            assets_meta.sort(key=lambda m: m["size_bytes"], reverse=True)
+            col_header = "Size"
+            col_fn = lambda m: m["size_display"]
+        else:  # name
+            assets_meta.sort(key=lambda m: m["relative"])
+            col_header = "Type"
+            col_fn = lambda m: m["kind"]
+
+        col_w = max(len(col_fn(m)) for m in assets_meta) if assets_meta else 10
+        path_w = max(len(m["relative"]) for m in assets_meta) if assets_meta else 20
+
+        header = f"{'Path':<{path_w}}  {col_header}"
+        print(f"\n{header}")
+        print("-" * (len(header) + 4))
+        for m in assets_meta:
+            print(f"{m['relative']:<{path_w}}  {col_fn(m)}")
+        print(f"\n{len(assets_meta)} asset(s) found.\n")
+        return
+
     notes_meta = [_parse_note(p) for p in _all_notes()]
 
     if args.folder:
@@ -474,6 +647,29 @@ def cmd_organize(args: argparse.Namespace) -> None:
             lines.append(f"  {item}")
         lines.append("")
 
+    # Assets inventory
+    all_assets = [_asset_meta(p) for p in _all_assets()]
+    if all_assets:
+        lines += [
+            "## Assets",
+            "",
+        ]
+        by_subfolder: dict[str, list[dict]] = {}
+        for a in all_assets:
+            by_subfolder.setdefault(a["subfolder"], []).append(a)
+        for subfolder in sorted(by_subfolder):
+            lines.append(f"### assets/{subfolder}" if subfolder != "(root)" else "### assets")
+            lines.append("")
+            lines.append(f"| File | Type | Size | Modified |")
+            lines.append(f"|------|------|------|----------|")
+            for a in sorted(by_subfolder[subfolder], key=lambda x: x["name"]):
+                rel = a["relative"]
+                link = f"../{rel}" if args.output else rel
+                lines.append(
+                    f"| [{a['name']}]({link}) | {a['kind']} | {a['size_display']} | {a['modified'].strftime('%Y-%m-%d')} |"
+                )
+            lines.append("")
+
     content = "\n".join(lines)
 
     if args.output:
@@ -547,6 +743,9 @@ _AGENT_HELP = """\
 Notes Helper Agent — type a request in plain language and I'll do it for you.
 
 Examples:
+  process inbox
+  process inbox dry-run
+  process inbox organize
   import /path/to/note.md
   import /path/to/note.md to meetings
   import /path/to/note.md --dry-run
@@ -554,6 +753,8 @@ Examples:
   analyze daily-logs/2026-03/2026-03-13.md
   sort by date
   sort by size in graduation
+  sort assets by date
+  sort assets by size
   organize
   organize to tools/index.md
   search FERPA
@@ -563,6 +764,7 @@ Examples:
 """
 
 _INTENT_PATTERNS: list[tuple[re.Pattern, str]] = [
+    (re.compile(r"\bprocess.?inbox\b|\binbox\b", re.I), "process-inbox"),
     (re.compile(r"\bimport\b|\bupload\b|\bingest\b|\badd\s+file\b", re.I), "import"),
     (re.compile(r"\banalyze\b", re.I), "analyze"),
     (re.compile(r"\bsort\b|\blist\b|\border\b", re.I), "sort"),
@@ -588,6 +790,13 @@ def _parse_agent_input(text: str) -> argparse.Namespace | None:
         return None
 
     ns = argparse.Namespace()
+
+    if intent == "process-inbox":
+        ns.func = cmd_process_inbox
+        ns.dry_run = bool(re.search(r"\bdry.?run\b", text, re.I))
+        ns.force = bool(re.search(r"\bforce\b|\boverwrite\b", text, re.I))
+        ns.organize = bool(re.search(r"\borganize\b|\bindex\b", text, re.I))
+        return ns
 
     if intent == "import":
         # "import <file>" or "upload <file>"
@@ -622,9 +831,15 @@ def _parse_agent_input(text: str) -> argparse.Namespace | None:
                 by = word
                 break
         folder_m = re.search(r"\bin\s+(\S+)", text, re.I)
+        if folder_m:
+            folder = folder_m.group(1)
+        elif re.search(r"\bassets\b", text, re.I):
+            folder = "assets"
+        else:
+            folder = None
         ns.func = cmd_sort
         ns.by = by
-        ns.folder = folder_m.group(1) if folder_m else None
+        ns.folder = folder
         return ns
 
     if intent == "organize":
@@ -710,6 +925,7 @@ Examples:
   python3 tools/notes_helper.py analyze daily-logs/2026-03/2026-03-13.md
   python3 tools/notes_helper.py sort --by date
   python3 tools/notes_helper.py sort --by size --folder graduation
+  python3 tools/notes_helper.py sort --by size --folder assets
   python3 tools/notes_helper.py organize
   python3 tools/notes_helper.py organize --output tools/index.md
   python3 tools/notes_helper.py search "action item"
@@ -717,6 +933,8 @@ Examples:
   python3 tools/notes_helper.py import /path/to/note.md
   python3 tools/notes_helper.py import /path/to/note.md --dest meetings --organize
   python3 tools/notes_helper.py import /path/to/note.md --dry-run
+  python3 tools/notes_helper.py process-inbox --organize
+  python3 tools/notes_helper.py process-inbox --dry-run
   python3 tools/notes_helper.py agent
         """,
     )
@@ -817,6 +1035,28 @@ Examples:
         help="Refresh tools/index.md after a successful import",
     )
     p_import.set_defaults(func=cmd_import)
+
+    # process-inbox
+    p_inbox = sub.add_parser(
+        "process-inbox",
+        help="Import all files from the inbox/ folder, then remove them from inbox",
+    )
+    p_inbox.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would happen without copying or deleting any files",
+    )
+    p_inbox.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite destination files that already exist",
+    )
+    p_inbox.add_argument(
+        "--organize",
+        action="store_true",
+        help="Refresh tools/index.md after all files are processed",
+    )
+    p_inbox.set_defaults(func=cmd_process_inbox)
 
     # agent
     p_agent = sub.add_parser(
