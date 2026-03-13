@@ -1,26 +1,30 @@
 # Residency & Tuition Policies
 
 > **Reference only.** Always verify current policies with the official policy documents and/or your supervisor.
+> For the full RDS background, immigration categories, and appeals process, see [RDS Reference](./rds.md).
 
-## Residency Classification Criteria
+## Residency Classification Criteria (NC / RDS)
 
-Students are generally classified as **in-state (resident)** or **out-of-state (non-resident)** for tuition purposes. Classification is based on:
+Students are classified as **in-state (resident)** or **out-of-state (non-resident)** for tuition purposes by the [Residency Determination Service (RDS)](https://www.ncresidency.org). Classification is based on:
 
 - **Domicile:** The student's permanent, fixed home — where they intend to remain indefinitely.
-- **Duration:** Most states require 12 consecutive months of domicile in the state **prior to the start of the term** (not merely living there to attend school).
-- **Intent:** The student must have moved to the state for reasons **other than attending school** (work, family, etc.).
-- **Financial independence:** Dependent students may be classified based on their parent's/guardian's domicile, not their own.
+- **Duration:** 12 consecutive months of domicile in NC **prior to the start of the term** (not merely living here to attend school).
+- **Intent:** The student must have moved to NC for reasons **other than attending school** (work, family, etc.).
+- **Financial independence:** Dependent students may be classified based on their parent's/guardian's domicile.
 
 ### Common Disqualifiers
 - Living in-state only to attend school (no independent domicile intent)
 - Dependent student whose parents reside out-of-state
-- Non-immigrant visa status (F-1, J-1, B-1/B-2, etc.) — generally ineligible for in-state rates unless state policy provides an exception
+- Non-immigrant visa status (F-1, J-1, B-1/B-2, etc.) — generally ineligible for in-state rates
+- **No visa at all** — students must have a visa to take curriculum (CU) classes, regardless of how long they have lived in the US
 
 ### Exceptions & Special Categories
-- **Active duty military and dependents** — many states grant in-state rates regardless of domicile; verify with state statute.
-- **Undocumented students (DACA)** — eligibility varies by state; check state law (e.g., AB 540 in California).
-- **Graduate assistants / employees** — may qualify for in-state rates per institutional policy; verify.
-- **Reciprocity agreements** — some states have tuition reciprocity; verify applicable agreements.
+- **Active duty military and dependents** — may qualify for in-state rates; see [RDS Reference — Military Students](./rds.md#military-students)
+- **Permanent Residents (Green Card / Form I-551)** — can take CU classes and receive credentials
+- **Foreign Nationals with EAD (Employment Authorization)** — lawful status; can take CU classes and receive credentials except Allied Health
+- **DECA Status** — last-chance registration; CU classes allowed except Allied Health; credentials awarded; employer sponsorship eligible
+- **Undocumented students** — restricted; see [RDS Reference — Foreign National & Immigration Categories](./rds.md#foreign-national--immigration-categories)
+- **Reciprocity agreements** — some states have tuition reciprocity; verify applicable agreements
 
 ## Tuition Rate Categories
 
@@ -38,22 +42,11 @@ Students are generally classified as **in-state (resident)** or **out-of-state (
 
 ## Appeal Process
 
-A student who disagrees with their residency classification may file a **Residency Appeal**:
+See [RDS Reference — Reconsideration & Appeals Process](./rds.md#reconsideration--appeals-process) for the full three-step process (Reconsideration → RDS Appeal → SEAA Appeal).
 
-1. Student submits a Residency Appeal Form with supporting documentation.
-2. Registrar's Office reviews the appeal and documentation.
-3. Decision issued within <!-- timeframe --> business days.
-4. If denied, student may escalate to <!-- next level, e.g., Dean of Students, Provost -->.
-5. Decisions are **retroactive to the start of the term** if the appeal is filed within the appeal window.
-
-**Documentation commonly required for appeal:**
-- State driver's license (showing in-state address)
-- State vehicle registration
-- Voter registration in state
-- Income tax returns filed in state
-- Lease or mortgage in state
-- Employer letter (if claiming work-based domicile)
-- Proof of parents' residency (if dependent)
+**Key deadlines:**
+- Appeal must be **requested** within **10 calendar days** of determination
+- After requesting, the student has **25 days** to submit additional documentation and the full appeal request
 
 ## RDS Future Outlook: Potential Expansion or Modification of the RDS Mandate
 

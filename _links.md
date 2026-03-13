@@ -45,21 +45,24 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
+| NCresidency.org (Student Portal) | [ncresidency.org](https://www.ncresidency.org) |
 | Residency Policy Document | *(pending)* |
 | Tuition Rate Schedule | *(pending)* |
-| Residency Appeal Form | *(pending)* |
-| RDS — NC Community Colleges | [nccommunitycolleges.edu](https://www.nccommunitycolleges.edu/students/student-services/regulations-policies/residency-determination/) |
-| RDS — CFNC | [cfnc.org](https://www.cfnc.org/apply-to-college/residency-determination/) |
-| NC Residency Determination Service | [ncresidency.org](https://www.ncresidency.org/) |
-| RDS — Salem College | [salem.edu](https://www.salem.edu/financialaid/nc-residency-determination-rds/) |
-| Residency — NC State Graduate School | [grad.ncsu.edu](https://grad.ncsu.edu/admissions/residency/) |
-| RDS — James Sprunt Community College | [jamessprunt.edu](https://jamessprunt.edu/admissions-aid/nc-residency/residency-determination-service-rds/) |
-| NC RDS Residency Process | [ncresidency.org](https://www.ncresidency.org/residency-process/) |
-| NC RDS Guidebook (PDF) | [ncresidency.org](https://www.ncresidency.org/media/3safqses/rds_guidebook.pdf) |
-| NC DHHS — RDS Partner Agency | [ncdhhs.gov](https://www.ncdhhs.gov/) |
-| NC RDS FAQs | [ncresidency.org](https://www.ncresidency.org/faqs/) |
-| RDS — UNC Charlotte Niner Central | [ninercentral.charlotte.edu](https://ninercentral.charlotte.edu/article/Residency-Determination-Service) |
-| Health & Social Services — NC.gov (RDS context) | [nc.gov](https://www.nc.gov/living/health-social-services) |
+| Residency Appeal Form | [ncresidency.org](https://www.ncresidency.org) |
+| Finding RCN in CFNC (PDF) | *(pending — shared drive)* |
+| How to Update Residency — Jamie's version | *(pending — shared drive)* |
+| Recalculating RCN — Jessica's version (PDF) | *(pending — shared drive)* |
+
+### RDS Contact Numbers
+
+| Contact | Details |
+|---|---|
+| RDS Student Toll-Free | 844-319-3640 |
+| RDS Student Local | 919-835-2290 |
+| RDS Student Fax | 919-835-2427 |
+| RDS Student Email | rdsinfo@ncresidency.org |
+| RDS Operations Staff (our contact) | 844-417-0164 · rds@ncresidency.org |
+| RDS Operations Hours | Mon–Thu 8 AM–6 PM; Fri 8 AM–5 PM |
 
 ---
 
