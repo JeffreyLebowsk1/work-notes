@@ -106,7 +106,7 @@ If a student is placed on **Financial Aid Suspension**, they have two options:
 1. **Pay out-of-pocket** until they meet SAP standards.
 2. **Submit a SAP Appeal** documenting extenuating circumstances (e.g., illness, death in family, military deployment). See [Maximum Timeframe — Detail & Appeals](#-maximum-timeframe--detail--appeals) for the full appeal process and deadlines.
 
-> **Terminology Note:** The 2025-2026 Catalog uses the term "Academic Probation" with a two-semester threshold before suspension. Per administrative updates ("All Notes - Matt"), the correct term is **"Academic Warning,"** and the threshold is **three consecutive semesters** of a GPA below 2.0. See [policy-updates.md](../updates/policy-updates.md) for the full entry. This conflict is tracked in [conflicts-pending.md](../updates/conflicts-pending.md) — do not use "Academic Probation" in student communications.
+> **Terminology Note:** Effective Fall 2025, **"Academic Probation"** has been officially retired. The correct term is **"Academic Warning,"** and the suspension threshold is **three consecutive semesters** of a GPA below 2.0 (extended from two). Do not use "Academic Probation" in any student communications, records, or reports. See [policy-updates.md](../updates/policy-updates.md) for the full entry and [Academic Advising Policy — Section 5](../updates/academic-advising-policy-2025-2026.md) for the complete sanctions hierarchy, talking points, and program-specific impacts.
 
 For a detailed breakdown of grades and their SAP impact, see [Academic Advising Policy Manual — Section 4](../updates/academic-advising-policy-2025-2026.md).
 

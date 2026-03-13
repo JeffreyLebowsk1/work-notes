@@ -52,3 +52,31 @@ Third parties (employers, other institutions, licensing boards) must receive **o
 | Recipient claims they never received | Confirm delivery method; re-send if needed; check spam/junk for electronic |
 | Student wants grades from transfer credits | Explain that transfer credits are not on the institutional transcript; refer to originating school |
 | Request for a student who hasn't attended recently | Locate archived records; may need to pull from older system or paper files |
+
+---
+
+## Continuing Education (Non-Credit) Transcript Requests
+
+Non-credit/CE transcript handling is split by record date. **Always ask the student whether their CE courses were before or after 2007** before routing.
+
+| Record Date | Who Handles It |
+|---|---|
+| **2007 to present** | Student Records and Registrar's Office — (919) 718-7201 / admissions@cccc.edu |
+| **Prior to 2007** | Nutan Varma, Harnett Main Campus (CE Building) — (910) 814-8975 / nvarma@cccc.edu |
+
+### Personal Enrichment & Short-Term Training
+
+- Students must use the specific **"Personal Enrichment & Short-Term Training Transcript Request"** form.
+- CE transcripts are provided **free of charge**.
+- Pre-2007 requests: processing time up to **five business days** (Nutan Varma).
+- AHS backup printing (urgent situations): Chesure Tate — Bell Welcome Center, (919) 718-7716; or Anita Green — Lee Main Campus, (919) 545-8669.
+
+### GED / HiSET Records
+
+CCCC does not maintain official NC High School Equivalency records. Direct students to:
+
+- **DiplomaSender** — (855) 313-5799
+- Standard fee: **$20.00 per document** *(see [Conflicts Pending — CONFLICT 4](./updates/conflicts-pending.md) for a noted fee discrepancy)*
+- Records must be sent directly to CCCC at **admissions@cccc.edu** to be considered official.
+
+See also: [Continuing Education — Programs, Policies & Records](./continuing-education/programs-and-policies.md)
