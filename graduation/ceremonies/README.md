@@ -55,7 +55,24 @@ Planning, logistics, and notes for commencement ceremonies.
 
 | Venue | Capacity | Address | Contact | Notes |
 |---|---|---|---|---|
+| Small Auditorium | 115 | | | Row-by-row breakdown below |
 | <!-- venue --> | | | | |
+
+#### Small Auditorium — Row Seating Capacity
+
+| Row | Seats |
+|---|---|
+| 1 | 9 |
+| 2 | 10 |
+| 3 | 10 |
+| 4 | 11 |
+| 5 | 12 |
+| 6 | 12 |
+| 7 | 11 |
+| 8 | 13 |
+| 9 | 14 |
+| 10 | 13 |
+| **Total** | **115** |
 
 ---
 
