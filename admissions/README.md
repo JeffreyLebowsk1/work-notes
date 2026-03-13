@@ -15,5 +15,3 @@ Notes and coordination related to the admissions process.
 - [Data](./data/) — Admissions data and spreadsheets
 
 ## Quick Notes
-
-<!-- Add quick reference notes here -->

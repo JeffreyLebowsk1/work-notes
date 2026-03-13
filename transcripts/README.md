@@ -12,5 +12,3 @@ Notes and procedures related to transcript processing and requests.
 - [Data](./data/) — Transcript-related data and spreadsheets
 
 ## Quick Notes
-
-<!-- Add quick reference notes here -->

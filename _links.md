@@ -8,11 +8,11 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| Main Work Drive Folder | <!-- paste link here --> |
-| Graduation Folder | <!-- paste link here --> |
-| Transcripts Folder | <!-- paste link here --> |
-| Residency & Tuition Folder | <!-- paste link here --> |
-| Admissions Folder | <!-- paste link here --> |
+| Main Work Drive Folder | *(pending)* |
+| Graduation Folder | *(pending)* |
+| Transcripts Folder | *(pending)* |
+| Residency & Tuition Folder | *(pending)* |
+| Admissions Folder | *(pending)* |
 | Registrar Office File | [View File](https://drive.google.com/file/d/1pimrV4DOfIfIWj2-9RNf5IiW543Uyyhk/view?usp=drive_link) |
 | Google Slides Presentation | [View Slides](https://docs.google.com/presentation/d/1xWEYc9gotlLEd5tYxcvNSD5qjBaqTGn7jXGxsTJYyFA/edit?usp=drive_link) |
 
@@ -22,12 +22,12 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| Graduation Application Portal | <!-- paste link here --> |
-| Commencement Program Template | <!-- paste link here --> |
-| Cap & Gown Vendor | <!-- paste link here --> |
-| Ceremony Venue Contact | <!-- paste link here --> |
-| Diploma Vendor | <!-- paste link here --> |
-| Graduation Candidate Tracking Sheet | <!-- paste link here --> |
+| Graduation Application Portal | *(pending)* |
+| Commencement Program Template | *(pending)* |
+| Cap & Gown Vendor | *(pending)* |
+| Ceremony Venue Contact | *(pending)* |
+| Diploma Vendor | *(pending)* |
+| Graduation Candidate Tracking Sheet | *(pending)* |
 
 ---
 
@@ -35,9 +35,9 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| Transcript Request Portal | <!-- paste link here --> |
-| Third-Party Transcript Service | <!-- paste link here --> |
-| Transcript Processing Procedures | <!-- paste link here --> |
+| Transcript Request Portal | *(pending)* |
+| Third-Party Transcript Service | *(pending)* |
+| Transcript Processing Procedures | *(pending)* |
 
 ---
 
@@ -45,9 +45,9 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| Residency Policy Document | <!-- paste link here --> |
-| Tuition Rate Schedule | <!-- paste link here --> |
-| Residency Appeal Form | <!-- paste link here --> |
+| Residency Policy Document | *(pending)* |
+| Tuition Rate Schedule | *(pending)* |
+| Residency Appeal Form | *(pending)* |
 
 ---
 
@@ -55,9 +55,9 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| Admissions Office Portal | <!-- paste link here --> |
-| Application Review System | <!-- paste link here --> |
-| Admissions Requirements Reference | <!-- paste link here --> |
+| Admissions Office Portal | *(pending)* |
+| Application Review System | *(pending)* |
+| Admissions Requirements Reference | *(pending)* |
 | NCDPI CCP Website | [dpi.nc.gov](https://www.dpi.nc.gov/students-families/enhancing-student-learning/career-and-college-promise) |
 | NCCCS CCP Website | [nccommunitycolleges.edu](https://www.nccommunitycolleges.edu/academic-programs/college-and-career-readiness/career-college-promise-ccp/) |
 | NCDPI CIHS Website | [dpi.nc.gov](https://www.dpi.nc.gov/students-families/enhancing-student-learning/cooperative-innovative-high-schools) |
@@ -71,8 +71,8 @@ A central index of important links, tools, and resources used in the Registrar's
 | Description | Link |
 |---|---|
 | FERPA Official Reference | [FERPA Statute — 20 U.S.C. § 1232g (Cornell LII)](https://www.law.cornell.edu/uscode/text/20/1232g) |
-| Institutional FERPA Policy | <!-- paste link here --> |
-| Data Breach Reporting Procedure | <!-- paste link here --> |
+| Institutional FERPA Policy | *(pending)* |
+| Data Breach Reporting Procedure | *(pending)* |
 
 ---
 
@@ -80,10 +80,10 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Tool | Purpose | Link |
 |---|---|---|
-| Student Information System (SIS) | Main student records system | <!-- paste link here --> |
-| Email / Calendar | Work email and scheduling | <!-- paste link here --> |
-| HR Portal | HR and payroll | <!-- paste link here --> |
-| IT Help Desk | Tech support | <!-- paste link here --> |
+| Student Information System (SIS) | Main student records system | *(pending)* |
+| Email / Calendar | Work email and scheduling | *(pending)* |
+| HR Portal | HR and payroll | *(pending)* |
+| IT Help Desk | Tech support | *(pending)* |
 
 ---
 
@@ -91,10 +91,10 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Document | Description | Link |
 |---|---|---|
-| Student Handbook | Official student handbook | <!-- paste link here --> |
-| Academic Calendar | Key dates and deadlines | <!-- paste link here --> |
-| Registrar Office Policies | Internal office policies | <!-- paste link here --> |
-| State Residency Statutes | Legal residency requirements | <!-- paste link here --> |
+| Student Handbook | Official student handbook | *(pending)* |
+| Academic Calendar | Key dates and deadlines | *(pending)* |
+| Registrar Office Policies | Internal office policies | *(pending)* |
+| State Residency Statutes | Legal residency requirements | *(pending)* |
 
 ---
 
@@ -133,8 +133,6 @@ A central index of important links, tools, and resources used in the Registrar's
 ---
 
 ## 📝 Notes
-
-<!-- Add any additional link notes or context here -->
 
 ---
 *Last updated: 2026-03-13*

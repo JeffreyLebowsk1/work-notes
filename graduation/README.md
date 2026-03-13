@@ -15,8 +15,6 @@ Central hub for all graduation coordination activities.
 
 ## 📌 Key Deadlines
 
-<!-- Add upcoming key deadlines here -->
-
 | Deadline | Date | Notes |
 |---|---|---|
 | Graduation Application Deadline | | |
@@ -26,8 +24,6 @@ Central hub for all graduation coordination activities.
 | Ceremony Date | | |
 
 ## 📋 Current Term Status
-
-<!-- Track the status of the current graduation cycle -->
 
 - [ ] Applications open
 - [ ] Applications closed & list finalized
