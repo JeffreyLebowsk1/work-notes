@@ -269,5 +269,63 @@ CCP students have been found whose programs, student types, pathways, locations,
 
 ---
 
+## Population Mailing — One Off (Bullhorn / Slate)
+
+Step-by-step process for sending a one-off population mailing to CCP students via Slate's Bullhorn mailing tool.
+
+### Create the Mailing
+
+1. **Bullhorn >> Mailings >> New Mailing**
+2. Fill in the fields:
+   - **Name:** *(descriptive name for this mailing)*
+   - **Folder:** CCP Folder
+   - **Realm:** CCP
+   - **Template:** Student Template 1 → Ed
+3. Click **Save**.
+
+### Attach a File (if needed)
+
+> ⚠️ **Slate cannot send attachments directly.** You must embed content or link out to a hosted file instead.
+
+To host a file in Slate:
+
+1. **Database >> Files**
+2. Choose a folder (e.g., *Docs*)
+3. Click **Upload File >> Choose File**
+4. ⚠️ **Remove all spaces from the file name before uploading**
+5. After upload, ask for the file path. The URL format is:
+   ```
+   apply.cccc.edu/…/docs/[FILE NAME]
+   ```
+6. Use this URL as a link in the mailing body.
+
+### Build the Recipient List
+
+1. Go to **Recipient >> Edit Recipient List >> New Query**
+2. **Name:** *(doesn't matter)*
+3. **Category:** Person
+4. Set up filters:
+   - **Person Status:** Enrolled CCP
+   - **Population:** 12th Grade
+5. **Configure Exports:**
+   - Preferred First Name
+   - **Email:** Use *Subquery Join* — this prevents pulling inactive email addresses
+     - **Filter:** Personal
+   - **Export:** Device Value
+
+> ⚠️ Verify whether the Personal email fix has been applied before relying on personal email addresses (there were historically ~5,000 problematic filters).
+
+Exports can be saved and reused for other purposes.
+
+### Send the Mailing
+
+1. Go to **Message >> Recipient**
+2. Drag in the **Personal Email** export field
+3. Click **Send Mailing**
+4. Preview the recipient list before sending; optionally configure send frequency
+5. **Always send a Test Email first** before sending to the full list
+
+---
+
 *Source: NCDPI Feb 2021; internal staff notes and communications*
 *Last updated: 2026-03-13*
