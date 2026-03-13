@@ -4,6 +4,59 @@ A log of changes to institutional, state, or federal policies that affect the Re
 
 > Add newest entries at the top. See [README](./README.md) for entry format.
 
+## 2026 Cohort — Health Sciences Limited Enrollment GPA & Grade Standards Standardized
+
+**Category:** Policy
+**Affects:** Admissions, Health Sciences, Student Records, Advising
+
+### What Changed
+GPA and grade requirements for limited enrollment Health Sciences programs have been standardized for the 2026 cohort:
+- **Minimum admission GPA** is now **2.5** for most programs. Several programs require higher: Dental Hygiene (3.0), Medical Sonography (3.0), ADN Nursing (2.8), PTA (3.0).
+- The **"Alternate List"** for students with a 2.0–2.5 GPA has been **eliminated**. Students below the program minimum will not be accepted.
+- **Science courses** require a **"B" or better** for Full Acceptance; a "C" may qualify for Provisional Acceptance (except Dental Hygiene and Medical Sonography, which do not offer provisional acceptance).
+- **General education courses** (non-science) require a **"C" or better**.
+- **Medical Assisting** and **Health Information Technology** require a 2.0 GPA and are no longer treated as limited enrollment programs in the same manner.
+- The **PTA program** continues to use a **ranked GPA system** for selection rather than first-come, first-served.
+- Provisional acceptance seats are offered during program-specific windows after May 15, 2026 (see health-sciences-changes.md for the full table).
+
+### What You Need to Do Differently
+- Verify each program's specific minimum GPA before advising students on eligibility.
+- Do not refer students to an Alternate List — this option no longer exists.
+- Use **EVAL** or **PSPR** in Colleague to confirm program-specific GPA before processing any limited enrollment application.
+- Ensure all external transcripts are evaluated via **IASU > HSA** before confirming eligibility.
+- Communicate provisional seat update windows to Provisionally Accepted students.
+
+### Links / References
+See [Health Sciences Admissions Changes](../admissions/health-sciences-changes.md) for the full per-program GPA table, provisional seat windows, graduation standards, and staff talking points.
+
+---
+
+## 2026 Cohort — SAP Policy: W/WF/I Impact, Status Flow, Maximum Timeframe Appeals & Deadlines
+
+**Category:** Policy
+**Affects:** Financial Aid, Student Records, Advising
+
+### What Changed
+Guidance for Satisfactory Academic Progress (SAP) has been expanded and clarified:
+- **W, WF, I, F, and R** grades count as attempted but not completed hours, lowering PACE and counting toward the 150% Maximum Timeframe.
+- **Transfer credits** count as both attempted and completed in the PACE calculation.
+- **Developmental coursework** is capped at **30 credit hours** for aid purposes.
+- **Graduates** are automatically placed on Maximum Timeframe status and must appeal before receiving aid for a second program. Aid covers a maximum of **two associate degrees** at CCCC.
+- **SAP status flow:** Satisfactory → Warning (one term, aid continues) → Suspension (aid lost) → Probation (one term, after approved appeal).
+- **SAP Appeal deadlines for 2025–2026:** Fall — July 1; Spring — November 1; Summer — April 1. Late appeals are processed for the subsequent semester.
+- Approved appeals result in **Probation** status for one term; the student must then meet SAP standards or follow their academic progress plan.
+
+### What You Need to Do Differently
+- Use **SASM** (Summary Academic Info) or **ASUM** (Applicant Summary) in Colleague to check a student's SAP status and total attempted hours.
+- Run an **EVAL** to see how many credits remain for degree completion — required context for any SAP appeal advising.
+- When a student considers withdrawing, manually estimate the PACE impact before they decide.
+- Direct students needing to appeal to the Financial Aid Office with the correct deadline for their target semester.
+
+### Links / References
+See [Financial Aid README — SAP section](../financial-aid/README.md) and [Financial Aid README — Maximum Timeframe section](../financial-aid/README.md) for full detail, talking points, and the appeal process.
+
+---
+
 ## 2026–2027 — Pell Grant & FAFSA Changes (OBBBA)
 
 **Category:** Policy
