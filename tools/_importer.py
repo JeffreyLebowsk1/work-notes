@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 from _commands import cmd_organize
-from _helpers import REPO_ROOT, _parse_note, _relative
+from _helpers import REPO_ROOT, _parse_note, _relative, pending_inbox_files
 
 
 # ---------------------------------------------------------------------------
@@ -215,13 +215,8 @@ def cmd_import(args: argparse.Namespace) -> None:
     if args.organize:
         idx_path = REPO_ROOT / "tools" / "index.md"
         print("  🔄 Refreshing master index…")
-        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)))
+        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)), check_inbox=False)
         cmd_organize(org_args)
-
-
-# ---------------------------------------------------------------------------
-# Subcommand: process-inbox
-# ---------------------------------------------------------------------------
 
 
 def cmd_process_inbox(args: argparse.Namespace) -> None:
@@ -299,5 +294,5 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
     if not args.dry_run and args.organize and imported:
         idx_path = REPO_ROOT / "tools" / "index.md"
         print("  🔄 Refreshing master index…")
-        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)))
+        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)), check_inbox=False)
         cmd_organize(org_args)

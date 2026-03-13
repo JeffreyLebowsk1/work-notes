@@ -34,6 +34,8 @@ Examples:
   sort assets by size
   organize
   organize to tools/index.md
+  organize check-inbox
+  organize check-inbox to tools/index.md
   search FERPA
   search deadline in graduation
   help
@@ -128,6 +130,7 @@ def _parse_agent_input(text: str) -> argparse.Namespace | None:
         output_m = re.search(r"\b(?:to|into|output|file)\s+(\S+)", text, re.I)
         ns.func = cmd_organize
         ns.output = output_m.group(1) if output_m else None
+        ns.check_inbox = bool(re.search(r"\bcheck.?inbox\b", text, re.I))
         return ns
 
     if intent == "search":
