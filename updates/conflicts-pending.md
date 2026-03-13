@@ -76,5 +76,32 @@ Applying limited enrollment procedures (separate application, seat caps, accepta
 
 ---
 
-*See also: [Health Sciences Admissions Changes](../admissions/health-sciences-changes.md)*
+## CONFLICT 4 — DiplomaSender Fee: $15.00 vs. $20.00
+
+**Affects:** Continuing Education, Admissions, Financial Aid
+**Status:** ⚠️ Awaiting official clarification
+
+### The Conflict
+
+| Source | Position |
+|--------|----------|
+| **Official Policy / Registrar Instruction** | The standard fee is **$20.00 per document** when ordering through DiplomaSender. |
+| **Some internal notes** | A fee of **$15.00** has been referenced in some informal staff communications. |
+
+### Why This Matters
+
+Staff advising students on the cost to order GED®/HiSET® transcripts or diplomas through DiplomaSender may give inconsistent information. The wrong fee could cause students to underpay and have their order delayed.
+
+### Action Required
+
+- [ ] Verify current DiplomaSender pricing on the [CCCC Transcript Request page](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office/cccc-transcript-request) before confirming any fee with a student.
+- [ ] Confirm the official fee with the Registrar or Financial Aid Office and update all reference files accordingly.
+- [ ] Update this entry with the resolution once received.
+
+### Resolution
+<!-- Record official response here, including date and source -->
+
+---
+
+*See also: [GED® vs. HiSET® Reference](../continuing-education/ged-hiset.md)*
 *Last updated: 2026-03-13*

@@ -40,6 +40,13 @@ People and offices you work with regularly.
 | Student Affairs | | | | |
 | Disability Services | | | | |
 | International Student Office | | | | |
+| Student Onboarding & Success | Sarah Shannon-Mohamed (Director) | sshannon@cccc.edu | (919) 718-7300 | Director of Onboarding; LMC lead |
+| Student Onboarding & Success | Megan Burgess (Dean) | mburgess@cccc.edu | — | Dean of Student Onboarding and Success; escalation for Academic Warning/Suspension policy |
+| Student Onboarding & Success (LMC) | Office (general) | onboarding@cccc.edu | (919) 718-7300 | Lee Main Campus navigator referrals |
+| Student Onboarding & Success (HMC) | Brian Post | — | (984) 368-4911 (Text) | Harnett Main Campus navigator lead |
+| Student Onboarding & Success (HMC) | J. Dwayne Garnett | — | (984) 368-4550 (Text) | Harnett Main Campus navigator |
+| Student Onboarding & Success (CMC) | James Carr | — | (984) 368-5159 (Text) | Chatham Main Campus navigator lead |
+| Student Onboarding & Success (CMC) | Kim Brzozowski | — | (984) 368-5354 (Text) | Chatham Main Campus navigator |
 |
 ---
 
@@ -71,9 +78,21 @@ People and offices you work with regularly.
 ## 📄 Transcript & Enrollment Verification
 
 | Service | Contact / URL | Notes |
-|---|---|
+|---|---|---|
 | Third-Party Transcript Service | | |
 | Enrollment Verification Service | | |
-|
+
+---
+
+## 🎓 Continuing Education / Workforce Development
+
+| Role | Name | Phone | Email |
+|---|---|---|---|
+| ConEd Health Program Certificates | Pamela McKoy | (919) 545-8662 | pmckoy@cccc.edu |
+| Director of Health Programs (ConEd) | Bev Brock | (919) 545-8042 | bbrock@cccc.edu |
+| Pre-2007 CE Transcripts / Adult High School / Harnett CCR Coordinator | Dr. Nutan Varma | (910) 814-8975 | nvarma@cccc.edu |
+| AHS Transcript Backup (Bell Welcome Center) | Chesure Tate | (919) 718-7716 | — |
+| Lee/Chatham CCR Coordinator | Anita Green | (919) 545-8669 | agreen@cccc.edu |
+
 ---
 *Last updated: 2026-03-13*

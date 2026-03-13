@@ -165,4 +165,10 @@ Thank you,
 Registrar's Office
 
 ---
+
+## 🎓 Continuing Education
+
+> For the full personal enrichment email template, see [Personal Enrichment](./continuing-education/personal-enrichment.md).
+
+---
 *Last updated: 2026-03-13*
