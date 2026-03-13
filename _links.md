@@ -134,7 +134,7 @@ A central index of important links, tools, and resources used in the Registrar's
 | Document | Description | Link |
 |---|---|---|
 | Student Handbook | Official student handbook | *(pending)* |
-| Academic Calendar | Key dates and deadlines | *(pending)* |
+| Academic Calendar | Key dates and deadlines | [calendar.cccc.edu](https://calendar.cccc.edu/) |
 | Registrar Office Policies | Internal office policies | *(pending)* |
 | State Residency Statutes | Legal residency requirements | *(pending)* |
 

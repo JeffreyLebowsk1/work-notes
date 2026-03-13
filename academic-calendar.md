@@ -2,6 +2,8 @@
 
 Key dates and deadlines for the current and upcoming academic year.
 
+> 🔗 Official CCCC Calendar: [calendar.cccc.edu](https://calendar.cccc.edu/)
+
 ---
 
 ## 🗓️ Spring 2026
