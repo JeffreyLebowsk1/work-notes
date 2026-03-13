@@ -28,6 +28,7 @@ Planning, logistics, and notes for commencement ceremonies.
 - Graduates must wear **black caps and gowns** ordered through **Herff Jones**.
 - No personal stoles or cords are permitted.
 - **Allowed:** Official honors stoles (3.5+ GPA) and pre-approved program cords.
+- **Cost assistance:** If a student cannot afford regalia, refer them to the **CCCC Foundation** (Abby Walker) as early as possible — emergency assistance or scholarship funds may be available. See [Foundation Scholarships](../../../financial-aid/foundation-scholarships.md).
 
 ### Arrival & Ceremony Flow
 - Students should arrive **45 minutes early** for their assigned ceremony.

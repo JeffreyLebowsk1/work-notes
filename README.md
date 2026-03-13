@@ -11,6 +11,7 @@
 | [🎓 Admissions](./admissions/) | Admissions notes, requirements, and coordination |
 | [🔒 Personal Data](./personal-data/) | FERPA, data handling guidelines, privacy procedures |
 | [🎓 Graduation](./graduation/) | **Graduation Coordinator** — ceremonies, checklists, timelines, and more |
+| [💰 Financial Aid](./financial-aid/) | Financial Aid policies, SAP, FAFSA, OBBBA updates, Foundation scholarships |
 | [📅 Meetings](./meetings/) | Meeting notes by date |
 | [📓 Daily Logs](./daily-logs/) | Day-to-day logs and notes |
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |

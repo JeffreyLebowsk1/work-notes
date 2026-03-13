@@ -43,12 +43,22 @@ People and offices you work with regularly.
 |
 ---
 
+## 🏛️ CCCC Foundation
+
+| Name | Role | Email | Phone | Notes |
+|---|---|---|---|---|
+| Abby Walker | Assistant Director, Foundation | awalker@cccc.edu | (919) 718-7332 | Scholarships, K14 Promise, regalia assistance |
+| Nichelle Lariviere | Scholarship Disbursement | nlariviere@cccc.edu | | Coordinates disbursement to student accounts via Financial Aid |
+| Foundation Office (general) | Marchant Hall, Room 7332 | | | [cccc.edu/foundation](https://www.cccc.edu/foundation/) |
+
+---
+
 ## 🎓 Graduation Vendors & External Contacts
 
 | Vendor / Organization | Contact Name | Email | Phone | Notes |
 |---|---|---|---|---|
 | Graduation Coordinator | Matt Dilworth | mdilw269@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
-| Financial Assistance | Abby Walker (CCCC Foundation) | awalker@cccc.edu | (919) 718-7332 | |
+| Financial Assistance / Regalia | Abby Walker (CCCC Foundation) | awalker@cccc.edu | (919) 718-7332 | See also: [CCCC Foundation section](#-cccc-foundation) above |
 | Advisor Hub Issues | Jim Johnson | jjohn087@cccc.edu | (919) 718-7349 | Advising Hub upload/access issues |
 | Cap & Gown Vendor | Herff Jones | | | Black caps and gowns; no personal stoles/cords |
 | Diploma Vendor | | | | |

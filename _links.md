@@ -33,6 +33,17 @@ A central index of important links, tools, and resources used in the Registrar's
 
 ---
 
+## 💰 Financial Aid & Scholarships
+
+| Description | Link |
+|---|---|
+| CCCC Financial Aid Page | [cccc.edu/paying-college](https://www.cccc.edu/paying-college) |
+| FAFSA Application | [studentaid.gov](https://studentaid.gov) |
+| CCCC Foundation | [cccc.edu/foundation](https://www.cccc.edu/foundation/) |
+| Foundation Scholarship Application | [cccc.edu/scholarships](https://www.cccc.edu/scholarships) |
+
+---
+
 ## 📄 Transcripts
 
 | Description | Link |
