@@ -1,7 +1,7 @@
 # FERPA Quick Reference
 
 > **FERPA = Family Educational Rights and Privacy Act (20 U.S.C. § 1232g)**  
-> Full reference: [studentprivacy.ed.gov](https://studentprivacy.ed.gov/ferpa)
+> Full reference: [law.cornell.edu — 20 U.S.C. § 1232g](https://www.law.cornell.edu/uscode/text/20/1232g)
 
 ---
 
@@ -103,7 +103,7 @@ Disclosure without student consent is permitted in these situations:
 
 | Resource | Link |
 |---|---|
-| FERPA Official Text & Overview | [studentprivacy.ed.gov/ferpa](https://studentprivacy.ed.gov/ferpa) |
-| FERPA FAQs (U.S. Dept. of Education) | [studentprivacy.ed.gov/faq](https://studentprivacy.ed.gov/faq) |
+| FERPA Official Text & Overview | [law.cornell.edu — 20 U.S.C. § 1232g](https://www.law.cornell.edu/uscode/text/20/1232g) |
+| FERPA Regulations (34 CFR Part 99) | [ecfr.gov — 34 CFR Part 99](https://www.ecfr.gov/current/title-34/subtitle-A/part-99) |
 | Institutional FERPA Policy | <!-- paste link --> |
 | FERPA Consent / Release Form | <!-- paste link --> |
