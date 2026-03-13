@@ -12,6 +12,7 @@ A running log of changes that affect how we work — policy updates, new softwar
 | [🎓 Graduation Updates](./graduation-updates.md) | Changes specific to graduation coordination |
 | [📁 General Updates](./general-updates.md) | Everything else |
 | [⚠️ Conflicts Pending Resolution](./conflicts-pending.md) | Known conflicts between administrative decisions and the published catalog |
+| [📘 Academic Advising Policy Manual (2025-2026)](./academic-advising-policy-2025-2026.md) | Comprehensive advising & registrar policy reference for O&A and Registrar staff |
 
 ## How to Use This Section
 
