@@ -105,5 +105,5 @@ Disclosure without student consent is permitted in these situations:
 |---|---|
 | FERPA Official Text & Overview | [law.cornell.edu — 20 U.S.C. § 1232g](https://www.law.cornell.edu/uscode/text/20/1232g) |
 | FERPA Regulations (34 CFR Part 99) | [ecfr.gov — 34 CFR Part 99](https://www.ecfr.gov/current/title-34/subtitle-A/part-99) |
-| Institutional FERPA Policy | <!-- paste link --> |
-| FERPA Consent / Release Form | <!-- paste link --> |
+| Institutional FERPA Policy | *(pending)* |
+| FERPA Consent / Release Form | *(pending)* |

@@ -10,5 +10,3 @@ Tools and notes for tracking graduation candidates.
 - [Data](./data/) — Spreadsheets and tracking files
 
 ## Tracking Notes
-
-<!-- Add notes on tracking graduation candidates here -->

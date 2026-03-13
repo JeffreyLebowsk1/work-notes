@@ -11,27 +11,27 @@
 
 ### Spring 2026
 
-- Application deadline: <!-- confirm with Admissions Office -->
-- Admitted student record creation due: <!-- confirm with SIS team -->
-- Orientation date: <!-- confirm with Student Affairs -->
-- Notes: <!-- Add any Spring 2026-specific coordination notes -->
+- Application deadline: *(TBD — confirm with Admissions Office)*
+- Admitted student record creation due: *(TBD — confirm with SIS team)*
+- Orientation date: *(TBD — confirm with Student Affairs)*
+- Notes:
 
 ### Fall 2026
 
-- Application deadline: <!-- confirm with Admissions Office -->
-- Admitted student record creation due: <!-- confirm with SIS team -->
-- Orientation date: <!-- confirm with Student Affairs -->
-- Notes: <!-- Add any Fall 2026-specific coordination notes -->
+- Application deadline: *(TBD — confirm with Admissions Office)*
+- Admitted student record creation due: *(TBD — confirm with SIS team)*
+- Orientation date: *(TBD — confirm with Student Affairs)*
+- Notes:
 
 ## Coordination with Other Offices
 
 | Office | Coordination Point | Contact |
 |---|---|---|
-| Admissions Office | Admitted student lists, application data | <!-- contact --> |
-| Financial Aid | Enrollment verification for aid eligibility | <!-- contact --> |
-| Bursar / Student Accounts | Tuition setup for new students | <!-- contact --> |
-| IT | Student ID and portal account creation | <!-- contact --> |
-| Academic Departments | Transfer credit evaluation, program requirements | <!-- varies --> |
+| Admissions Office | Admitted student lists, application data | *(pending)* |
+| Financial Aid | Enrollment verification for aid eligibility | *(pending)* |
+| Bursar / Student Accounts | Tuition setup for new students | *(pending)* |
+| IT | Student ID and portal account creation | *(pending)* |
+| Academic Departments | Transfer credit evaluation, program requirements | *(varies)* |
 
 ## Common Admissions Tasks for Registrar Staff
 

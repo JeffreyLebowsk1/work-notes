@@ -14,7 +14,8 @@
 - Application fee
 
 ### Minimum GPA / Test Score Thresholds
-<!-- Add current institutional thresholds here -->
+
+*(Confirm current thresholds with the Admissions Office each term.)*
 
 ## Graduate Requirements
 
@@ -29,7 +30,8 @@
 - Application fee
 
 ### Program-Specific Requirements
-<!-- Add program-specific notes here as needed -->
+
+*(Add program-specific notes as needed.)*
 
 ## International Students
 
@@ -41,16 +43,16 @@ In addition to standard requirements:
 - SEVIS I-20 form issued after admission (coordinate with DSO/International Student Office)
 
 ### Transcript Evaluation for International Applicants
-- Use an approved credential evaluation service (e.g., WES, ECE) for foreign transcripts if required by your institution.
-- <!-- add approved services list here -->
+- Use an approved credential evaluation service (e.g., WES, ECE, NACES member) for foreign transcripts.
+- See [Foreign Students & Registration](./foreign-students-and-registration.md) and [`_links.md`](../_links.md) for a current list of approved services.
 
 ## Transfer Students
 
 - Official transcripts from all previously attended institutions
-- Minimum GPA requirement: <!-- verify -->
-- Credits accepted: <!-- verify policy — max transferable credits, course equivalency process -->
+- Minimum GPA requirement: *(verify with Admissions Office)*
+- Credits accepted: *(verify policy — max transferable credits, course equivalency process)*
 - Transfer credit evaluation must be completed before first registration
-- Military credit / CLEP / AP credits: <!-- verify acceptance policy -->
+- Military credit / CLEP / AP credits: *(verify acceptance policy)*
 
 ## Important Notes
 

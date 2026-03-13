@@ -80,21 +80,4 @@ Out-of-state nurse aides may be able to be listed on the **NC Nurse Aide I Regis
 
 ## Helpful Resources for Immigration & Credential Evaluation
 
-See also: [`_links.md`](../_links.md) — Immigration & Credential Evaluation section.
-
-| Resource | Link |
-|---|---|
-| NAFSA 2023 Immigration Classifications Guide | [nafsa.org](https://www.nafsa.org/bookstore/2023-immigration-classifications-and-employment-quick-reference-guide) |
-| NAFSA 2023 Immigration Classifications Poster | [nafsa.org](https://www.nafsa.org/bookstore/2023-immigration-classifications-and-employment-poster) |
-| SBCC Proposed Amendment 1D SBCCC 400.2 | [ncccsstg.wpengine.com](https://ncccsstg.wpengine.com/sites/default/files/state-board/policy/pol_04_-_proposed_amendment_to_1d_sbccc_400.2_-_admission_to_colleges_ssns.pdf) |
-| USCIS — Temporary Protected Status | [uscis.gov](https://www.uscis.gov/humanitarian/temporary-protected-status) |
-| USCIS — Employment Authorization | [uscis.gov](https://www.uscis.gov/employment-authorization) |
-| NC General Statute § 115D-39 | [ncleg.gov](https://www.ncleg.gov/enactedlegislation/statutes/pdf/bysection/chapter_115d/gs_115d-39.pdf) |
-| NCresidency.org Residency Guidebook | Login required — contact Registrar's Office for access credentials |
-| IERF Publications | [ierf.org](https://ierf.org/for-institutions/ierf-publications/) |
-| Scholaro | [scholaro.com](https://www.scholaro.com/) |
-| WES Required Documents | [wes.org](https://applications.wes.org/required-documents) |
-| ECE | [ece.org](https://www.ece.org/) |
-| MyIEE | [myiee.org](https://myiee.org/) |
-| Josef Silny & Associates | [jsilny.org](https://www.jsilny.org/) |
-| SpanTran | [spantran.com](https://spantran.com/) |
+See [`_links.md`](../_links.md) → Immigration & Credential Evaluation section for a full list of links (NAFSA, USCIS, NACES, AICE, WES, ECE, and other evaluation services).
