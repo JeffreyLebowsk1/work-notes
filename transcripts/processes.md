@@ -1,13 +1,54 @@
 # Transcript Processes
 
 ## Official Transcript Requests
-<!-- Document the steps for handling official transcript requests -->
+
+1. Student submits request via the [Transcript Request Portal](_links.md) (online) or completes a paper request form in person.
+2. Verify student identity — confirm name, student ID, and date of birth match records.
+3. Confirm the request is complete: recipient address/institution, number of copies, delivery method (electronic vs. mail), and purpose.
+4. Check for any holds on the student's account (financial, academic, administrative) — **do not release transcripts if a hold is present; notify the student.**
+5. Process the request in the Student Information System (SIS):
+   - Locate the student record.
+   - Generate/export the official transcript.
+   - Apply the official seal / registrar signature as required.
+6. Send via the requested delivery method:
+   - **Electronic:** Upload to third-party service (e.g., Parchment/National Student Clearinghouse) or send securely to the recipient.
+   - **Mail:** Print, seal in an official envelope with the registrar's stamp across the seal, and mail.
+7. Log the request and mark as completed. See [`templates/request-log.md`](./templates/request-log.md).
+8. Notify the student when the transcript has been sent (if electronic, the platform may do this automatically).
 
 ## Unofficial Transcript Requests
-<!-- Document the steps for handling unofficial transcript requests -->
+
+1. Student requests via the student portal (self-service) or in person at the office.
+2. Verify student identity.
+3. **Unofficial transcripts are for student use only** — do not release directly to third parties.
+4. Generate an unofficial transcript from SIS (no seal required).
+5. Provide to the student (print, PDF, or portal download).
+6. No logging required unless your office tracks all transcript activity.
 
 ## Third-Party Requests
-<!-- Document procedures for third-party transcript requests (e.g., employers, institutions) -->
+
+Third parties (employers, other institutions, licensing boards) must receive **official** transcripts only — **never release to a third party upon their request alone.**
+
+1. Direct the third party to the student to initiate the request.
+2. If a signed student release/consent form is provided:
+   - Verify the signature and that consent is current and specific.
+   - Follow the Official Transcript Request steps above with the third party as the recipient.
+3. If a **subpoena or court order** is received — see [Data Requests — Subpoenas](../personal-data/data-requests.md).
+4. For **National Student Clearinghouse** or similar verification services — follow the enrollment verification procedure (not a transcript release).
+
+## Rush / Expedited Requests
+
+- Verify whether your office offers rush processing and any associated fee.
+- Prioritize in the queue and note the rush status in the SIS.
+- Confirm delivery timeline with the student at the time of request.
 
 ## Common Issues & Resolutions
-<!-- Document common issues and how to resolve them -->
+
+| Issue | Resolution |
+|---|---|
+| Student has a hold | Notify student, do not release; direct them to the office that placed the hold |
+| Student name doesn't match ID | Verify with government-issued ID; check for name changes in records |
+| Transcript not generating in SIS | Contact IT/SIS support; process manually if urgent |
+| Recipient claims they never received | Confirm delivery method; re-send if needed; check spam/junk for electronic |
+| Student wants grades from transfer credits | Explain that transfer credits are not on the institutional transcript; refer to originating school |
+| Request for a student who hasn't attended recently | Locate archived records; may need to pull from older system or paper files |

@@ -13,22 +13,4 @@ Example: `2026-03-13-staff-meeting.md`
 
 ## Template
 
-See below for the standard meeting note format:
-
----
-
-**Date:**  
-**Attendees:**  
-**Purpose:**  
-
-### Agenda
-1. 
-
-### Notes
-
-
-### Action Items
-
-| Item | Owner | Due Date |
-|---|---|---|
-| | | |
+See [template.md](./template.md) for the standard meeting note format.
