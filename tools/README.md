@@ -72,6 +72,12 @@ python3 tools/notes_helper.py sort --by size
 
 # Limit to one top-level folder
 python3 tools/notes_helper.py sort --by size --folder graduation
+
+# Sort assets (images, documents, spreadsheets) by file size
+python3 tools/notes_helper.py sort --by size --folder assets
+
+# Sort assets by most recently modified
+python3 tools/notes_helper.py sort --by date --folder assets
 ```
 
 **Options:**
@@ -79,13 +85,15 @@ python3 tools/notes_helper.py sort --by size --folder graduation
 | Option | Values | Default | Description |
 |--------|--------|---------|-------------|
 | `--by` | `name`, `date`, `size` | `name` | Sort criterion |
-| `--folder` | folder name | all | Limit to one top-level folder |
+| `--folder` | folder name | all | Limit to one top-level folder; use `assets` to list asset files |
+
+> **Note:** When `--folder assets` is used, the `size` column shows file size (KB/MB) instead of word count, and all file types (PDFs, images, spreadsheets) are listed — not just Markdown files.
 
 ---
 
 #### `organize` — Generate a master index
 
-Produces a Markdown index of all notes grouped by folder, including a word-count summary table and a consolidated list of all open action items.
+Produces a Markdown index of all notes grouped by folder, including a word-count summary table, a consolidated list of all open action items, and an **Assets inventory** table listing every file in `assets/` by sub-folder.
 
 ```bash
 # Print the index to the terminal
@@ -95,7 +103,7 @@ python3 tools/notes_helper.py organize
 python3 tools/notes_helper.py organize --output tools/index.md
 ```
 
-> **Tip:** Re-run with `--output tools/index.md` whenever you add new notes to keep the index current.
+> **Tip:** Re-run with `--output tools/index.md` whenever you add new notes or assets to keep the index current.
 
 ---
 
@@ -194,6 +202,33 @@ Filenames are also normalised automatically:
 
 ---
 
+#### `process-inbox` — Bulk-import everything in the inbox folder
+
+Reads every `.md` and `.txt` file placed in the `inbox/` folder, auto-detects the right destination for each one, imports it, and removes it from the inbox.  This is the same logic as `import` but applied to all inbox files at once.
+
+```bash
+# Preview what would happen — no files are moved
+python3 tools/notes_helper.py process-inbox --dry-run
+
+# Import all inbox files and refresh the master index
+python3 tools/notes_helper.py process-inbox --organize
+
+# Overwrite destinations that already exist
+python3 tools/notes_helper.py process-inbox --force --organize
+```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--dry-run` | Show what would happen without copying or deleting any files |
+| `--force` | Overwrite destination files that already exist |
+| `--organize` | Refresh `tools/index.md` after all files are processed |
+
+> **Tip:** You don't need to run this manually. Just upload files to `inbox/` on GitHub and the **Inbox Processor** workflow runs automatically.
+
+---
+
 ### Quick Reference
 
 | Goal | Command |
@@ -201,10 +236,13 @@ Filenames are also normalised automatically:
 | What's in this note? | `python3 tools/notes_helper.py analyze <file>` |
 | What have I written recently? | `python3 tools/notes_helper.py sort --by date` |
 | Which notes are the most detailed? | `python3 tools/notes_helper.py sort --by size` |
-| Get a full overview of all notes | `python3 tools/notes_helper.py organize` |
+| List all assets by file size | `python3 tools/notes_helper.py sort --by size --folder assets` |
+| List all assets by date | `python3 tools/notes_helper.py sort --by date --folder assets` |
+| Get a full overview of all notes and assets | `python3 tools/notes_helper.py organize` |
 | Find everything about a topic | `python3 tools/notes_helper.py search <keyword>` |
 | Refresh the master index file | `python3 tools/notes_helper.py organize --output tools/index.md` |
 | Bring in an external note file | `python3 tools/notes_helper.py import <file>` |
+| Process all files in inbox/ | `python3 tools/notes_helper.py process-inbox --organize` |
 | Use the tool without remembering commands | `python3 tools/notes_helper.py agent` |
 
 ---
@@ -223,20 +261,24 @@ If you can't run commands on your PC, you can trigger the helper tool directly f
 
 | Input | Description |
 |-------|-------------|
-| **Command** | `analyze`, `sort`, `organize`, `search`, or `import` |
+| **Command** | `analyze`, `sort`, `organize`, `search`, `import`, or `process-inbox` |
 | **File** | *(analyze)* Path to a single note, or blank for all notes; *(import)* path to the file to import |
 | **Keyword** | *(search only)* Keyword or phrase to search for |
-| **Folder** | *(sort / search)* Limit to a top-level folder, e.g. `graduation` |
+| **Folder** | *(sort / search)* Limit to a top-level folder, e.g. `graduation` or `assets` |
 | **Sort by** | *(sort only)* `name`, `date`, or `size` |
 | **Context** | *(search only)* Lines of context around matches (default: 2) |
 | **Output** | *(organize only)* File to write the index to, e.g. `tools/index.md` |
 | **Import dest** | *(import only)* Destination folder or path (leave blank to auto-detect) |
-| **Import dry-run** | *(import only)* `true` to preview without copying |
-| **Import organize** | *(import only)* `true` to refresh the index after import |
+| **Import dry-run** | *(import / process-inbox)* `true` to preview without copying |
+| **Import organize** | *(import / process-inbox)* `true` to refresh the index after import |
 
 6. Click **Run workflow** — the output appears in the workflow run log.
 
-> **Tip:** When you run `import`, the workflow automatically commits the new file (and the refreshed index if **Import organize** is `true`) back to the repository.
+> **Tip:** When you run `import` or `process-inbox`, the workflow automatically commits the new files (and the refreshed index if **Import organize** is `true`) back to the repository.
+
+### Inbox auto-processing
+
+Uploading files to `inbox/` via the GitHub web interface triggers the **Inbox Processor** workflow automatically — no manual steps needed.  See [`inbox/README.md`](../inbox/README.md) for full details.
 
 ---
 
@@ -251,12 +293,16 @@ python3 tools/notes_helper.py agent
 You will see a prompt where you can type requests in plain language:
 
 ```
+notes> process inbox
+notes> process inbox dry-run
+notes> process inbox organize
 notes> import /path/to/note.md
 notes> import /path/to/note.md to meetings
 notes> import /path/to/note.md dry-run
 notes> analyze daily-logs/2026-03/2026-03-13.md
 notes> sort by date
 notes> sort by size in graduation
+notes> sort assets by size
 notes> organize to tools/index.md
 notes> search FERPA
 notes> search deadline in graduation

@@ -1,0 +1,62 @@
+name: Inbox Processor
+
+on:
+  push:
+    paths:
+      - "inbox/**"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run — preview what would happen without moving any files (true/false)"
+        required: false
+        default: "false"
+      force:
+        description: "Overwrite destination files that already exist (true/false)"
+        required: false
+        default: "false"
+
+jobs:
+  process-inbox:
+    name: Process inbox files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build command arguments
+        id: build_args
+        shell: bash
+        run: |
+          ARGS="--organize"
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [[ "${{ inputs.force }}" == "true" ]]; then
+            ARGS="$ARGS --force"
+          fi
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Process inbox
+        run: |
+          python3 tools/notes_helper.py process-inbox ${{ steps.build_args.outputs.args }}
+
+      - name: Commit imported files and updated index
+        if: inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: process inbox [skip ci]"
+            git push
+          fi
