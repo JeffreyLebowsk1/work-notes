@@ -48,6 +48,32 @@ The **Career and College Promise (CCP)** program offers structured dual enrollme
 
 ---
 
+## Academic Expectations — Talking Points for CCP Students
+
+When advising CCP students — especially those new to college coursework — emphasize these key differences from high school:
+
+### For Students
+
+- **Rigor and Pace:** College classes are significantly more intense and move at a faster pace, requiring complete self-direction in learning.
+- **Grade Weighting:** Fewer assignments, but each one carries much more weight toward the final grade.
+- **Late Work and Extra Credit:** Unlike high school, there are often no opportunities for extra credit or making up missed work, and penalties for late work are much more severe.
+- **Permanent Record:** Every grade becomes part of a permanent college transcript that follows the student forever — even after high school graduation.
+- **The Syllabus:** The course syllabus is a binding guide for the semester; students must review it carefully to understand all deadlines and expectations.
+- **Attendance and Conduct:** Students are held to the same attendance policies, academic requirements, and honor code as traditional adult college students.
+- **Accommodations:** College accommodations for learning differences may differ from those provided in high school.
+
+### Staff Guidance
+
+| Situation | Action |
+|---|---|
+| Student performing poorly | Remind them this grade is permanent and could impact future financial aid eligibility. |
+| Student struggling with the transition | Refer immediately to the **Academic Assistance Center** at (919) 718-7502 or their **Education Navigator**. |
+| Student GPA falls below 2.0 after two courses | Student is placed on **Academic Warning** and may lose CCP eligibility. See [Academic Advising Policy — Section 5](../updates/academic-advising-policy-2025-2026.md). |
+
+> **Additional Resources:** [College & Career Readiness](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness) — [Advising](https://www.cccc.edu/support-success/advising)
+
+---
+
 ## CAT Welding Program
 
 > **⚠️ Important:** The CAT Welding Program must always be recorded as **CTE — Primary** and **Con Ed CCP — Secondary** in both XNC2 and SPRO.

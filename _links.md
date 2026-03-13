@@ -41,6 +41,7 @@ A central index of important links, tools, and resources used in the Registrar's
 | FAFSA Application | [studentaid.gov](https://studentaid.gov) |
 | CCCC Foundation | [cccc.edu/foundation](https://www.cccc.edu/foundation/) |
 | Foundation Scholarship Application | [cccc.edu/scholarships](https://www.cccc.edu/scholarships) |
+| SAP Policy Webpage | [cccc.edu — SAP Policy](https://www.cccc.edu/paying-college/deadlines-policies-procedures/satisfactory-academic-progress-sap-policy) |
 
 ---
 
@@ -51,6 +52,19 @@ A central index of important links, tools, and resources used in the Registrar's
 | Transcript Request Portal | *(pending)* |
 | Third-Party Transcript Service | *(pending)* |
 | Transcript Processing Procedures | *(pending)* |
+| CCCC Transcript Request Page | [cccc.edu — Transcript Request](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office/cccc-transcript-request) |
+
+---
+
+## 🎓 Continuing Education
+
+| Description | Link |
+|---|---|
+| CE Course Schedule | [cccc.edu/ecd/schedule](https://www.cccc.edu/ecd/schedule/) |
+| CE Scholarship Program | [cccc.edu/continuingeducation/workforceaccess](https://www.cccc.edu/continuingeducation/workforceaccess/) |
+| College & Career Readiness (CCR) | [cccc.edu — CCR Webpage](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness) |
+| CCR Registration Page | [cccc.edu — CCR Registration](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness/registration) |
+| DiplomaSender (GED/HiSET records) | [diplomasender.com](https://www.diplomasender.com) |
 
 ---
 
