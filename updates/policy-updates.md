@@ -4,6 +4,19 @@ A log of changes to institutional, state, or federal policies that affect the Re
 
 > Add newest entries at the top. See [README](./README.md) for entry format.
 
+## Fall MAT 110 sections
+
+**Category:** Policy
+**Affects:** Curriculum, Advising, Catalog
+
+### FYI about MAT 110 sections.
+
+### Administration required MAT 110 sections to be held for specific cohorts of students.  
+- MAT 110 LN1 and MAT 110 LN2 - health science students
+- MAT 110 LN3 - STEM/Business 
+- MAT 110 LN4 and MAT 110 LN5 - applied technologies
+- All other MAT 110 sections are unrestricted
+
 ---
 
 ## 2025-2026 — ACA 122 Renamed
