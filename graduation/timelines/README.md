@@ -10,23 +10,25 @@ Semester-by-semester timelines and key deadlines.
 
 | Task | Target Date | Status | Notes |
 |---|---|---|---|
-| Graduation applications open | <!-- e.g., 2025-10-01 --> | | |
-| Graduation applications close | <!-- e.g., 2026-01-15 --> | | |
-| Preliminary candidate list compiled | <!-- e.g., 2026-02-01 --> | | |
-| Degree audits begin | <!-- e.g., 2026-02-01 --> | | |
-| Advisors notified — review period begins | <!-- e.g., 2026-02-15 --> | | |
-| Advisor review period ends | <!-- e.g., 2026-03-01 --> | | |
-| Degree audits complete | <!-- e.g., 2026-03-15 --> | | |
-| Commencement program draft due | <!-- e.g., 2026-03-20 --> | | |
-| Cap & gown orders deadline | <!-- e.g., 2026-03-15 --> | | |
-| Commencement program submitted to printer | <!-- e.g., 2026-04-01 --> | | |
-| Ceremony details sent to graduates | <!-- e.g., 2026-04-15 --> | | |
-| Final headcount confirmed | <!-- e.g., 2026-04-25 --> | | |
-| Rehearsal | <!-- e.g., 2026-05-08 --> | | |
-| **Ceremony Date** | <!-- e.g., 2026-05-09 --> | | |
-| Final graduation list submitted to records | <!-- e.g., 2026-05-20 --> | | |
-| Student records updated with graduation status | <!-- e.g., 2026-05-31 --> | | |
-| Diplomas mailed | <!-- e.g., 2026-06-15 --> | | |
+| Graduation applications open | | ✅ | |
+| Graduation applications close (recommended deadline) | 2026-03-09 | ✅ | Midterm of final semester |
+| Graduation applications final cutoff | 2026-03-13 | ✅ | Absolute last day to apply |
+| Preliminary candidate list compiled | | | |
+| Degree audits begin | | | Advisors run EVAL in Colleague; upload PDF to Advising Hub |
+| Advisors notified — review period begins | | | Automated email sent when student applies via Success Hub |
+| Advisor review period ends | | | |
+| Degree audits complete | | | Final Technical Audits completed by Student Records & Registrar |
+| Commencement program draft due | | | |
+| Cap & gown orders deadline | | | Herff Jones; black caps and gowns only |
+| Commencement program submitted to printer | | | |
+| Graduation Practices | 2026-04-07 and 2026-04-08 | | Sanford Civic Center; graduates attend one session only |
+| Ceremony details sent to graduates | | | Include arrival time (45 min early), assigned ceremony info |
+| Final headcount confirmed | | | |
+| **Official Graduation Date** | **2026-05-07** | | Last day of the spring term |
+| **Ceremony Date** | **2026-05-14** | | Dennis A. Wicker Civic & Conference Center |
+| Final graduation list submitted to records | | | |
+| Student records updated with graduation status | | | |
+| Diplomas mailed | | | 7–10 days after processing |
 
 ---
 
