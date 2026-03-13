@@ -70,6 +70,12 @@ work-notes/
 
 ---
 
+## Technology & Runtime Requirements
+
+- **Node.js 24** is the required runtime for all JavaScript/Node.js tooling in this repository. Always use Node.js 24; do not use older versions.
+
+---
+
 ## When Adding or Editing Notes
 
 1. **Check for existing content first** — search the relevant section directory before creating a new file.
