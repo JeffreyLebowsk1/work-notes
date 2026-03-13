@@ -141,17 +141,6 @@ The error message "Must be CCPP student to enroll in this section" means the stu
 
 ---
 
-## CCP — Schools & Advisors
-
-### Brookside Christian Academy *(Added: 2025-07-30)*
-
-- **Location:** Harnett County
-- **Assigned Advisor:** Ben Thomas
-- **CEEB Code:** 246466
-- Anticipate CCP students coming from this school.
-
----
-
 ## CCP — NULL Date Rules for Graduating Students
 
 Use the following rules to determine when to NULL a student's CCP status when they submit a traditional application:

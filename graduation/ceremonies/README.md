@@ -104,5 +104,3 @@ Planning, logistics, and notes for commencement ceremonies.
 ---
 
 ## Post-Ceremony Notes
-
-<!-- Add notes here after each ceremony for future reference: what went well, what to improve, vendor ratings, etc. -->

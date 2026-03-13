@@ -92,6 +92,8 @@ Request official transcripts from all previously attended colleges. CCCC accepts
 - Must be evaluated and translated by a current member of [NACES](https://www.naces.org) or [AICE](https://www.aice-eval.org).
 - The official, course-by-course evaluation must be sent **directly from the evaluation agency** to CCCC Admissions. If sent to the student first, it must remain in the original, sealed envelope.
 
+> **Staff reference:** See [Foreign Students & Registration](./foreign-students-and-registration.md) for detailed credential evaluation service listings and visa-related procedures.
+
 ---
 
 ## 5.0 Find Your Path: A Guide for Every Student
@@ -122,6 +124,8 @@ Key steps:
 5. Arrive in the U.S. and report to the college to maintain student status.
 
 > **Important:** International students on F-1, J-1, or J-2 visas **cannot** be admitted into Allied Health programs unless they have a valid **permanent resident card (Green Card)**.
+
+> **Staff reference:** See [Foreign Students & Registration](./foreign-students-and-registration.md) for full details on visa types, Allied Health restrictions, registration priority, and foreign language placement.
 
 ### 5.4 Military & Veterans
 
