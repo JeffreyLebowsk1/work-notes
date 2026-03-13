@@ -37,7 +37,7 @@ The transcript must be a full, final record and include all of the following:
 
 ## 4. Important Staff Reminders
 
-- **Official Submission via Email:** Unlike most other institutions, emailed transcripts **can** be accepted as official specifically for homeschool students. This is the **only exception** to CCCC's standard rule that emailed transcripts are unofficial.
+- **Official Submission via Email:** CCCC's standard policy is that emailed transcripts are considered unofficial. Homeschool transcripts are the **only exception** — they **can** be accepted as official when received via email, specifically for homeschool students.
 - **Financial Aid Impact:** While a missing high school transcript does not prevent a student from enrolling in classes (unless they are a CCP student), it **will prevent financial aid from being awarded** and prevent the college from awarding a degree.
 - **HSE Alternative:** Homeschooled students may elect to take the **High School Equivalency (HSE)** exam; if passed, the HSE transcript can replace the high school diploma requirement.
 - **Missing Graduation Date:** If the student's transcript is missing the graduation date, we can accept an emailed letter from the school stating the month and year of graduation, though the full date on the transcript is preferred.
@@ -105,7 +105,7 @@ Use the **XRDS** screen to verify the student's **RCN (Residency Certification N
 
 When the transcript arrives, enter the data on the **IASU >> HSA** screen in Colleague:
 
-- If the transcript provides an unusable GPA or only a weighted GPA, enter **0.111** on the **HSA** and **TSUM** screens to satisfy the admission requirement while flagging it for further review.
+- If the transcript provides an unusable GPA or only a weighted GPA, enter **0.111** on the **HSA** and **TSUM** screens. This sentinel value satisfies the system's admission data requirement while flagging the record for further manual review (a real GPA will never be 0.111, making it easy to identify records needing follow-up).
 - Verify all data entry on the **SPRO** and **HSA** screens once the document is received and entered.
 
 ### 6.3 Financial Aid Reminder

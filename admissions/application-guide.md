@@ -145,13 +145,20 @@ Programs like Nursing, Dental Hygiene, Medical Sonography, and Veterinary Medica
 |---|---|
 | Application Period (2026 cohort) | Opens **November 1, 2025** — all steps must be completed by **May 15, 2026** |
 | How to Apply | After logging into the CCCC Portal, find the "Limited Enrollment Application" link in your Student Success Hub |
-| Notification Timeline | Notifications begin **December 1, 2025**, on a rolling basis |
+| Selection Method | **First-qualified, first-accepted** (rolling basis) — exception: the **PTA program** uses a ranked GPA system |
+| Notification | Decisions are posted in the student's **Success Hub** |
 
 ### 6.2 Key Changes for 2026 Applicants
 
 - **No TEAS Test** — the TEAS test is no longer required for most of these programs.
-- **New Acceptance Types** — "Fully Accepted" and "Provisionally Accepted" statuses give more students a clear path forward.
-- **GPA is Key** — admission is based on GPA in required general education courses: **B or better in all science courses**, **C or better in all other general education courses**.
+- **No TOEFL** — international students are no longer required to submit TOEFL scores.
+- **No Statement of Good Standing** — re-applicants no longer need to submit this.
+- **New Acceptance Types** — "Fully Accepted" and "Provisionally Accepted" statuses replace the old Alternate List.
+  - Fully Accepted students must confirm their seat within **two weeks**.
+  - Dental Hygiene and Medical Sonography do **not** offer Provisional Acceptance.
+- **Minimum GPA** — a cumulative **2.5 GPA** in program-specific general education courses is required; **"B" or better** in all science courses, **"C" or better** in all other general education courses.
+
+> 📋 **Full staff reference:** [Health Sciences Admissions Changes](./health-sciences-changes.md) — covers selection method, eligibility requirements, acceptance categories, staff talking points, and internal Colleague steps.
 
 ---
 
