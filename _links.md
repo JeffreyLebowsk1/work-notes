@@ -65,7 +65,7 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
-| FERPA Official Reference (ED.gov) | [FERPA Overview](https://studentprivacy.ed.gov/ferpa) |
+| FERPA Official Reference | [FERPA Statute — 20 U.S.C. § 1232g (Cornell LII)](https://www.law.cornell.edu/uscode/text/20/1232g) |
 | Institutional FERPA Policy | <!-- paste link here --> |
 | Data Breach Reporting Procedure | <!-- paste link here --> |
 
@@ -98,7 +98,7 @@ A central index of important links, tools, and resources used in the Registrar's
 | Resource | Description | Link |
 |---|---|---|
 | AACRAO | American Association of Collegiate Registrars and Admissions Officers | [aacrao.org](https://www.aacrao.org) |
-| FERPA Online | Student Privacy Policy Office | [studentprivacy.ed.gov](https://studentprivacy.ed.gov) |
+| FERPA Regulations | FERPA implementing regulations (34 CFR Part 99) | [ecfr.gov — 34 CFR Part 99](https://www.ecfr.gov/current/title-34/subtitle-A/part-99) |
 | NASPA | Student Affairs Administrators in Higher Education | [naspa.org](https://www.naspa.org) |
 | National Student Clearinghouse | Enrollment and degree verification | [studentclearinghouse.org](https://www.studentclearinghouse.org) |
 
