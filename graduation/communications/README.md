@@ -15,6 +15,9 @@ Email templates, announcements, and messaging for graduation coordination.
   - Department chair notification
   - Provost / academic affairs update
   - IT/SIS graduation posting request
+- [Coordinator Letters](./coordinator-letters.md) — External letters issued by the Graduation Coordinator
+  - Permission to take courses at another institution
+  - Completion / degree conferral letter
 
 ## Communication Log
 
