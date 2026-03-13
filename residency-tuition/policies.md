@@ -48,6 +48,12 @@ See [RDS Reference — Reconsideration & Appeals Process](./rds.md#reconsiderati
 - Appeal must be **requested** within **10 calendar days** of determination
 - After requesting, the student has **25 days** to submit additional documentation and the full appeal request
 
+## RDS Future Outlook: Potential Expansion or Modification of the RDS Mandate
+
+The current RDS framework demonstrates a successful model for cross-agency data integration under a secure, centralized administrative authority. This established capability — leveraging confirmed tax, employment, and identification data to verify long-term state commitment — could potentially be utilized or adapted for other residency-linked state benefits outside of higher education.
+
+The sustained integrity and authority of RDS as the sole arbiter of residency classification for higher education depends entirely on the continued stability and security of its technology platform. The commitment to robust data security and the necessary exchange of sensitive personal data with state and federal agencies (DOR, DOT, DHS) must remain a central administrative priority to maintain public trust and legal defensibility.
+
 ## Policy References
 
 | Document | Description | Link |
