@@ -4,6 +4,24 @@ A log of changes to institutional, state, or federal policies that affect the Re
 
 > Add newest entries at the top. See [README](./README.md) for entry format.
 
+## ADN Program — Humanities/Fine Arts Elective Pick List
+
+**Category:** Policy
+**Affects:** Curriculum, Advising, ADN Degree Audit (A45110)
+
+### What Changed
+Clarified that the ADN program (**A45110**) uses a specific approved pick list for its 5th-semester Humanities/Fine Arts elective — narrower than the general AAS elective options. Religion courses (REL 110, 211, 212) do **not** fulfill this requirement for ADN students.
+
+### What You Need to Do Differently
+- Advise ADN students to choose their Humanities elective only from the approved pick list (ART 111, ART 114, ART 115, HUM 115, MUS 110, MUS 112, or PHI 240).
+- During EVAL, do not force a Religion course into the Humanities slot without written approval from the Nursing Department Chair (Dr. Barbara Campbell, Advisor #466734) and a Course Substitution Form on file.
+- Confirm all ADN general education courses are completed with a **C or better**; NUR prefix courses require a **B (78 or higher)**.
+
+### Links / References
+See [ADN Program Requirements](../admissions/adn-program-requirements.md) for the full pick list and EVAL guidance.
+
+---
+
 ## Fall MAT 110 sections
 
 **Category:** Policy
