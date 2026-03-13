@@ -13,6 +13,7 @@ People and offices you work with regularly.
 | | Registrar | | | |
 | | Assistant Registrar | | | |
 | | Records Specialist | | | |
+| Student Records and Registrar's Office | (general) | admissions@cccc.edu | (919) 718-7201 | Records, policy, graduation status |
 |
 ---
 
@@ -44,9 +45,12 @@ People and offices you work with regularly.
 
 | Vendor / Organization | Contact Name | Email | Phone | Notes |
 |---|---|---|---|---|
-| Cap & Gown Vendor | | | | |
+| Graduation Coordinator | Matt Dilworth | mdilw269@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
+| Financial Assistance | Abby Walker (CCCC Foundation) | awalker@cccc.edu | (919) 718-7332 | |
+| Advisor Hub Issues | Jim Johnson | jjohn087@cccc.edu | (919) 718-7349 | Advising Hub upload/access issues |
+| Cap & Gown Vendor | Herff Jones | | | Black caps and gowns; no personal stoles/cords |
 | Diploma Vendor | | | | |
-| Ceremony Venue | | | | |
+| Ceremony Venue | Dennis A. Wicker Civic & Conference Center | | | Spring 2026 commencement venue |
 | Photographer / Videographer | | | | |
 | National Student Clearinghouse | | | | |
 |
