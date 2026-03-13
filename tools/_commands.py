@@ -15,6 +15,7 @@ from _helpers import (
     _asset_meta,
     _parse_note,
     _relative,
+    pending_inbox_files,
 )
 
 
@@ -144,7 +145,25 @@ def cmd_sort(args: argparse.Namespace) -> None:
 
 
 def cmd_organize(args: argparse.Namespace) -> None:
-    """Generate (or refresh) a master index of all notes."""
+    """Generate (or refresh) a master index of all notes.
+
+    If ``args.check_inbox`` is True, all pending inbox files are moved into
+    the repository first (same behaviour as ``process-inbox --organize``),
+    so the generated index always reflects an up-to-date state.
+    """
+    # --- Optional inbox processing -------------------------------------------
+    if args.check_inbox:
+        pending = pending_inbox_files()
+        if pending:
+            print(f"📬 {len(pending)} file(s) found in inbox/ — processing now…\n")
+            # Lazy import avoids a circular dependency at module load time
+            # (_importer imports cmd_organize from this module).
+            from _importer import cmd_process_inbox  # noqa: PLC0415
+            inbox_args = argparse.Namespace(dry_run=False, force=False, organize=False)
+            cmd_process_inbox(inbox_args)
+        else:
+            print("📭 inbox/ is empty — nothing to process.\n")
+
     notes_meta = [_parse_note(p) for p in _all_notes()]
 
     # Group by top-level folder
@@ -211,6 +230,24 @@ def cmd_organize(args: argparse.Namespace) -> None:
                 lines.append(f"**{rel}**")
                 current_file = rel
             lines.append(f"  {item}")
+        lines.append("")
+
+    # Inbox status — always show so the index reflects what's waiting
+    inbox_pending = pending_inbox_files()
+    if inbox_pending:
+        lines += [
+            "## 📬 Inbox — Pending Files",
+            "",
+            "> The following file(s) are in `inbox/` and have not yet been imported.",
+            "> Run `python3 tools/notes_helper.py process-inbox --organize` to move them.",
+            "",
+            "| File | Size |",
+            "|------|------|",
+        ]
+        for p in inbox_pending:
+            stat = p.stat()
+            size = f"{stat.st_size / 1024:.1f} KB" if stat.st_size >= 1024 else f"{stat.st_size} B"
+            lines.append(f"| {p.name} | {size} |")
         lines.append("")
 
     # Assets inventory

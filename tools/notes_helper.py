@@ -98,6 +98,15 @@ Examples:
         metavar="FILE",
         help="Write the index to this file (relative to repo root). Prints to stdout if omitted.",
     )
+    p_org.add_argument(
+        "--check-inbox",
+        action="store_true",
+        default=False,
+        help=(
+            "Process any pending inbox/ files before generating the index. "
+            "Equivalent to running process-inbox followed by organize."
+        ),
+    )
     p_org.set_defaults(func=cmd_organize)
 
     # search

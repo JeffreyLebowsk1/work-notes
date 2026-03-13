@@ -106,7 +106,7 @@ python3 tools/notes_helper.py sort --by date --folder assets
 
 #### `organize` — Generate a master index
 
-Produces a Markdown index of all notes grouped by folder, including a word-count summary table, a consolidated list of all open action items, and an **Assets inventory** table listing every file in `assets/` by sub-folder.
+Produces a Markdown index of all notes grouped by folder, including a word-count summary table, a consolidated list of all open action items, an **Assets inventory** table, and — when files are waiting — an **Inbox** section listing what still needs to be imported.
 
 ```bash
 # Print the index to the terminal
@@ -114,7 +114,21 @@ python3 tools/notes_helper.py organize
 
 # Write the index to a file (refreshes it each time)
 python3 tools/notes_helper.py organize --output tools/index.md
+
+# Process any pending inbox/ files first, then generate the index
+python3 tools/notes_helper.py organize --check-inbox --output tools/index.md
 ```
+
+**Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--output FILE` | Write the index to this file (relative to repo root). Prints to stdout if omitted. |
+| `--check-inbox` | Process any pending `inbox/` files before generating the index — equivalent to running `process-inbox` followed by `organize`. |
+
+> **Inbox awareness:** Even without `--check-inbox`, the generated index always includes a
+> **📬 Inbox — Pending Files** section when there are unprocessed files in `inbox/`, so you
+> never lose track of what's waiting.
 
 > **Tip:** Re-run with `--output tools/index.md` whenever you add new notes or assets to keep the index current.
 
@@ -254,6 +268,7 @@ python3 tools/notes_helper.py process-inbox --force --organize
 | Get a full overview of all notes and assets | `python3 tools/notes_helper.py organize` |
 | Find everything about a topic | `python3 tools/notes_helper.py search <keyword>` |
 | Refresh the master index file | `python3 tools/notes_helper.py organize --output tools/index.md` |
+| Process inbox then refresh the index | `python3 tools/notes_helper.py organize --check-inbox --output tools/index.md` |
 | Bring in an external note file | `python3 tools/notes_helper.py import <file>` |
 | Process all files in inbox/ | `python3 tools/notes_helper.py process-inbox --organize` |
 | Use the tool without remembering commands | `python3 tools/notes_helper.py agent` |

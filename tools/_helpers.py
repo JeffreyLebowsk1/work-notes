@@ -35,6 +35,20 @@ def _all_assets() -> list[Path]:
     )
 
 
+def pending_inbox_files() -> list[Path]:
+    """Return all processable (.md / .txt) files currently sitting in inbox/."""
+    inbox_dir = REPO_ROOT / "inbox"
+    if not inbox_dir.exists():
+        return []
+    return sorted(
+        p for p in inbox_dir.iterdir()
+        if p.is_file()
+        and not p.name.startswith(".")
+        and p.name.lower() != "readme.md"
+        and p.suffix.lower() in (".md", ".txt")
+    )
+
+
 def _asset_meta(path: Path) -> dict:
     """Extract metadata from any asset file (Markdown or binary)."""
     stat = path.stat()
