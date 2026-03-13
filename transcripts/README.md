@@ -4,8 +4,9 @@ Notes and procedures related to transcript processing and requests.
 
 ## Contents
 
-- [Processes](./processes.md) — Step-by-step transcript processing procedures
+- [Processes](./processes.md) — Step-by-step transcript processing procedures for official, unofficial, and third-party requests
 - [Templates](./templates/) — Reusable templates and forms
+  - [Request Log](./templates/request-log.md) — Track outgoing transcript requests
 - [Data](./data/) — Transcript-related data and spreadsheets
 
 ## Quick Notes
