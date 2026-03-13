@@ -16,6 +16,12 @@
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |
 | [📣 Updates & Changes](./updates/) | Policy, technology, workflow, and graduation updates log |
 
+## 🛠️ Tools
+
+| Tool | Description |
+|---|---|
+| [📋 Notes Helper](./tools/README.md) | Analyze, sort, organize, and search your notes from the command line |
+
 ## 📌 Quick Links
 - [Today's Log](./daily-logs/)
 - [Graduation Checklists](./graduation/checklists/)
