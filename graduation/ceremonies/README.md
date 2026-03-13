@@ -8,26 +8,44 @@ Planning, logistics, and notes for commencement ceremonies.
 
 | Term | Date | Location | Attendance | Notes |
 |---|---|---|---|---|
-| Spring 2026 | <!-- date --> | <!-- venue --> | | |
+| Spring 2026 | 2026-05-14 (Thursday) | Dennis A. Wicker Civic & Conference Center | | 3–4 ceremonies grouped by Career Community |
 | Fall 2025 | <!-- date --> | <!-- venue --> | | |
 
 ---
 
 ## Spring 2026 Planning Notes
 
-<!-- Add ceremony-specific planning notes as they develop -->
+**Official Graduation Date:** May 7, 2026 (last day of the spring term)
+**Ceremony Date:** Thursday, May 14, 2026
+**Venue:** [Dennis A. Wicker Civic & Conference Center](https://www.cccc.edu/about/locations/civic-center/)
+**Format:** 3–4 separate ceremonies, grouped by Career Community
+
+### Graduation Practices
+- **Dates:** April 7 and April 8, 2026, at the Sanford Civic Center
+- Graduates should attend **only one** practice session.
+
+### Regalia
+- Graduates must wear **black caps and gowns** ordered through **Herff Jones**.
+- No personal stoles or cords are permitted.
+- **Allowed:** Official honors stoles (3.5+ GPA) and pre-approved program cords.
+- **Cost assistance:** If a student cannot afford regalia, refer them to the **CCCC Foundation** (Abby Walker) as early as possible — emergency assistance or scholarship funds may be available. See [Foundation Scholarships](../../../financial-aid/foundation-scholarships.md).
+
+### Arrival & Ceremony Flow
+- Students should arrive **45 minutes early** for their assigned ceremony.
+- Students receive an **empty cover** during the ceremony.
+- Official credentials are **mailed 7–10 days** after processing.
 
 ### Key Contacts for Spring 2026
 
 | Role | Name | Contact |
 |---|---|---|
+| Graduation Coordinator | Matt Dilworth | (919) 718-7063; mdilw269@cccc.edu |
+| Student Records / Policy | Student Records and Registrar's Office | (919) 718-7201; admissions@cccc.edu |
+| Advisor Hub Issues | Jim Johnson | (919) 718-7349; jjohn087@cccc.edu |
+| Cap & Gown Vendor Rep | Herff Jones | *(pending — confirm ordering portal link)* |
 | Venue Coordinator | | |
-| Cap & Gown Vendor Rep | | |
 | Photography / Videography | | |
 | AV / Sound Vendor | | |
-| Accessibility Coordinator | | |
-| Faculty Marshal Coordinator | | |
-| Catering / Reception (if applicable) | | |
 
 ---
 
@@ -112,8 +130,9 @@ Planning, logistics, and notes for commencement ceremonies.
 
 ## Accessibility & Accommodations
 
+- A **permanent mobility ramp** is available at the venue (confirmed for Spring 2026).
+- An **ASL interpreter** will be provided for the Spring 2026 ceremony.
 - Reserve clearly marked accessible seating at the front for guests with mobility needs.
-- Provide an ASL interpreter if requested or required.
 - Confirm accessible routes from parking to the venue.
 - Ensure graduates with mobility needs have a modified processional plan.
 - Communicate accommodation options to graduates in the ceremony details email.
