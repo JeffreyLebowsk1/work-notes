@@ -7,6 +7,7 @@ Usage:
     python3 tools/notes_helper.py sort [--by date|size|name] [--folder FOLDER]
     python3 tools/notes_helper.py organize [--output FILE]
     python3 tools/notes_helper.py search KEYWORD [--folder FOLDER]
+    python3 tools/notes_helper.py import FILE [--dest DIR] [--dry-run] [--force] [--organize]
     python3 tools/notes_helper.py agent
 """
 
@@ -35,8 +36,11 @@ def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
 
 
 def _relative(path: Path) -> str:
-    """Return path relative to the repo root."""
-    return str(path.relative_to(REPO_ROOT))
+    """Return path relative to the repo root, or the absolute path if outside the repo."""
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
 
 
 def _parse_note(path: Path) -> dict:
@@ -80,6 +84,15 @@ def _parse_note(path: Path) -> dict:
     stat = path.stat()
     modified = datetime.fromtimestamp(stat.st_mtime)
 
+    try:
+        folder = (
+            path.parent.relative_to(REPO_ROOT).parts[0]
+            if path.parent != REPO_ROOT
+            else "(root)"
+        )
+    except ValueError:
+        folder = "(external)"
+
     return {
         "path": path,
         "relative": _relative(path),
@@ -90,10 +103,213 @@ def _parse_note(path: Path) -> dict:
         "done_items": done_items,
         "dates_in_text": dates_in_text,
         "modified": modified,
-        "folder": path.parent.relative_to(REPO_ROOT).parts[0]
-        if path.parent != REPO_ROOT
-        else "(root)",
+        "folder": folder,
     }
+
+
+# ---------------------------------------------------------------------------
+# Import helpers
+# ---------------------------------------------------------------------------
+
+FOLDER_KEYWORDS: dict[str, list[str]] = {
+    "graduation": [
+        "graduation", "ceremony", "commencement", "graduate", "diploma",
+        "cap and gown", "honor", "honours", "regalia",
+    ],
+    "meetings": [
+        "meeting", "agenda", "minutes", "attendees", "action items",
+        "discussion", "follow-up", "follow up",
+    ],
+    "daily-logs": [
+        "today", "daily log", "day log", "log for", "daily notes",
+        "today's focus", "completed today", "working on",
+    ],
+    "transcripts": [
+        "transcript", "official records", "unofficial transcript",
+        "grade", "credit transfer", "evaluation request",
+    ],
+    "residency-tuition": [
+        "residency", "tuition", "in-state", "out-of-state",
+        "domicile", "tuition classification", "residency determination",
+    ],
+    "admissions": [
+        "admissions", "application", "enrollment", "applicant",
+        "admission requirements", "new student", "transfer student",
+    ],
+    "continuing-education": [
+        "continuing education", "workforce", "scholarship", "ce ",
+        "workforce access", "wap", "non-credit",
+    ],
+    "personal-data": [
+        "ferpa", "privacy", "pii", "personally identifiable",
+        "data handling", "student data", "records request",
+    ],
+    "updates": [
+        "policy update", "workflow update", "technology update",
+        "system change", "procedure change", "announcement",
+    ],
+}
+
+
+def _detect_folder(filename: str, content: str) -> tuple[str, float]:
+    """Return the most likely top-level folder and a confidence score (0–1)."""
+    text_lower = (filename + " " + content).lower()
+    scores: dict[str, int] = {}
+    for folder, keywords in FOLDER_KEYWORDS.items():
+        score = sum(1 for kw in keywords if kw in text_lower)
+        if score:
+            scores[folder] = score
+
+    if not scores:
+        return "(root)", 0.0
+
+    best_folder = max(scores, key=lambda f: scores[f])
+    total = sum(scores.values())
+    confidence = scores[best_folder] / total if total else 0.0
+    return best_folder, confidence
+
+
+def _suggest_filename(source_path: Path, folder: str, content: str) -> str:
+    """
+    Suggest a destination filename following repository naming conventions:
+      - daily-logs → YYYY-MM-DD.md
+      - meetings   → YYYY-MM-DD-topic.md
+      - others     → lowercase-kebab original name
+    """
+    stem = source_path.stem
+    suffix = source_path.suffix or ".md"
+
+    # Try to extract a date from the filename first, then from the content
+    date_str: str | None = None
+    date_m = re.search(r"\d{4}-\d{2}-\d{2}", stem)
+    if date_m:
+        date_str = date_m.group(0)
+    else:
+        dates_in_content = re.findall(r"\b(\d{4}-\d{2}-\d{2})\b", content)
+        if dates_in_content:
+            date_str = dates_in_content[0]
+
+    if folder == "daily-logs":
+        if date_str:
+            return f"{date_str}{suffix}"
+        return re.sub(r"[^a-zA-Z0-9.]+", "-", stem).strip("-").lower() + suffix
+
+    if folder == "meetings":
+        if date_str:
+            topic = re.sub(r"\d{4}-\d{2}-\d{2}[-_]?", "", stem).strip("-_ ") or "meeting"
+            topic = re.sub(r"[^a-zA-Z0-9]+", "-", topic).strip("-").lower() or "meeting"
+            return f"{date_str}-{topic}{suffix}"
+        return re.sub(r"[^a-zA-Z0-9.]+", "-", stem).strip("-").lower() + suffix
+
+    # Default: normalize to lowercase kebab
+    return re.sub(r"[^a-zA-Z0-9.]+", "-", stem).strip("-").lower() + suffix
+
+
+def _suggest_dest_dir(folder: str, filename: str) -> Path:
+    """
+    Return the full destination directory for a file given its target folder.
+      - daily-logs → daily-logs/YYYY-MM/
+      - meetings   → meetings/
+      - others     → <folder>/
+    """
+    if folder == "daily-logs":
+        date_m = re.search(r"\d{4}-\d{2}", filename)
+        if date_m:
+            ym = date_m.group(0)  # YYYY-MM
+            return REPO_ROOT / "daily-logs" / ym
+        return REPO_ROOT / "daily-logs"
+
+    if folder in ("(root)", ""):
+        return REPO_ROOT
+
+    return REPO_ROOT / folder
+
+
+# ---------------------------------------------------------------------------
+# Subcommand: import
+# ---------------------------------------------------------------------------
+
+
+def cmd_import(args: argparse.Namespace) -> None:
+    """
+    Import a Markdown file into the repository:
+    analyze its content, determine the best destination folder,
+    rename to match naming conventions, and copy it into place.
+    """
+    source = Path(args.file)
+    if not source.is_absolute():
+        source = Path.cwd() / source
+    if not source.exists():
+        sys.exit(f"File not found: {args.file}")
+
+    try:
+        content = source.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        sys.exit(f"Cannot read file: {exc}")
+
+    # Detect destination
+    detected_folder, confidence = _detect_folder(source.name, content)
+    suggested_filename = _suggest_filename(source, detected_folder, content)
+    dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+    dest_path = dest_dir / suggested_filename
+
+    # Allow the user to override the destination
+    if args.dest:
+        override = Path(args.dest)
+        if not override.is_absolute():
+            override = REPO_ROOT / override
+        if override.suffix:
+            # Treat as a full file path
+            dest_dir = override.parent
+            dest_path = override
+        else:
+            # Treat as a directory
+            dest_dir = override
+            dest_path = override / suggested_filename
+
+    # Print analysis
+    print(f"\n{'='*60}")
+    print(f"  📥 Import Analysis")
+    print(f"{'='*60}")
+    print(f"  Source     : {source}")
+    print(f"  Detected   : {detected_folder}  (confidence: {confidence:.0%})")
+    try:
+        dest_display = _relative(dest_path)
+    except ValueError:
+        dest_display = str(dest_path)
+    print(f"  Destination: {dest_display}")
+
+    meta = _parse_note(source)
+    print(f"  Title      : {meta['title']}")
+    print(f"  Words      : {meta['words']}")
+    if meta["open_items"]:
+        print(f"  Open items : {len(meta['open_items'])}")
+    if meta["dates_in_text"]:
+        print(f"  Dates found: {', '.join(meta['dates_in_text'])}")
+    print()
+
+    if args.dry_run:
+        print(f"  DRY RUN — no changes made.")
+        print(f"  Would copy to: {dest_display}")
+        print()
+        return
+
+    if dest_path.exists() and not args.force:
+        sys.exit(
+            f"Destination already exists: {dest_display}\n"
+            f"Use --force to overwrite."
+        )
+
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest_path.write_text(content, encoding="utf-8")
+    print(f"  ✅ Imported to: {dest_display}")
+    print()
+
+    if args.organize:
+        idx_path = REPO_ROOT / "tools" / "index.md"
+        print("  🔄 Refreshing master index…")
+        org_args = argparse.Namespace(output=str(idx_path.relative_to(REPO_ROOT)))
+        cmd_organize(org_args)
 
 
 # ---------------------------------------------------------------------------
@@ -331,6 +547,9 @@ _AGENT_HELP = """\
 Notes Helper Agent — type a request in plain language and I'll do it for you.
 
 Examples:
+  import /path/to/note.md
+  import /path/to/note.md to meetings
+  import /path/to/note.md --dry-run
   analyze all notes
   analyze daily-logs/2026-03/2026-03-13.md
   sort by date
@@ -344,6 +563,7 @@ Examples:
 """
 
 _INTENT_PATTERNS: list[tuple[re.Pattern, str]] = [
+    (re.compile(r"\bimport\b|\bupload\b|\bingest\b|\badd\s+file\b", re.I), "import"),
     (re.compile(r"\banalyze\b", re.I), "analyze"),
     (re.compile(r"\bsort\b|\blist\b|\border\b", re.I), "sort"),
     (re.compile(r"\borganize\b|\bindex\b|\bmaster\b", re.I), "organize"),
@@ -368,6 +588,22 @@ def _parse_agent_input(text: str) -> argparse.Namespace | None:
         return None
 
     ns = argparse.Namespace()
+
+    if intent == "import":
+        # "import <file>" or "upload <file>"
+        m = re.search(r"\b(?:import|upload|ingest|add\s+file)\b\s+(\S+)", text, re.I)
+        file_arg = m.group(1).strip() if m else None
+        if not file_arg:
+            print("Please specify a file path, e.g.: import /path/to/note.md")
+            return None
+        dest_m = re.search(r"\b(?:to|into|dest(?:ination)?)\s+(\S+)", text, re.I)
+        ns.func = cmd_import
+        ns.file = file_arg
+        ns.dest = dest_m.group(1) if dest_m else None
+        ns.dry_run = bool(re.search(r"\bdry.?run\b", text, re.I))
+        ns.force = bool(re.search(r"\bforce\b|\boverwrite\b", text, re.I))
+        ns.organize = bool(re.search(r"\borganize\b|\bindex\b", text, re.I))
+        return ns
 
     if intent == "analyze":
         # "analyze <file>" or "analyze all"
@@ -478,6 +714,9 @@ Examples:
   python3 tools/notes_helper.py organize --output tools/index.md
   python3 tools/notes_helper.py search "action item"
   python3 tools/notes_helper.py search FERPA --context 3
+  python3 tools/notes_helper.py import /path/to/note.md
+  python3 tools/notes_helper.py import /path/to/note.md --dest meetings --organize
+  python3 tools/notes_helper.py import /path/to/note.md --dry-run
   python3 tools/notes_helper.py agent
         """,
     )
@@ -542,6 +781,42 @@ Examples:
         help="Limit search to a top-level folder",
     )
     p_search.set_defaults(func=cmd_search)
+
+    # import
+    p_import = sub.add_parser(
+        "import",
+        help="Import a note file: auto-detect its destination, rename, and copy it into the repo",
+    )
+    p_import.add_argument(
+        "file",
+        metavar="FILE",
+        help="Path to the file to import (absolute or relative to current directory)",
+    )
+    p_import.add_argument(
+        "--dest",
+        metavar="DIR",
+        help=(
+            "Override the auto-detected destination. "
+            "Can be a directory (e.g. meetings) or a full file path. "
+            "Relative paths are resolved from the repo root."
+        ),
+    )
+    p_import.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would happen without copying any files",
+    )
+    p_import.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite the destination file if it already exists",
+    )
+    p_import.add_argument(
+        "--organize",
+        action="store_true",
+        help="Refresh tools/index.md after a successful import",
+    )
+    p_import.set_defaults(func=cmd_import)
 
     # agent
     p_agent = sub.add_parser(
