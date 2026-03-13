@@ -67,15 +67,9 @@ If you earned a high school equivalency in North Carolina (GED® or HiSET), orde
 
 ### 4.3 Homeschool Transcripts
 
-Homeschool applicants must provide:
+Homeschool applicants must provide proof of DNPE listing and a complete, final transcript meeting specific content and formatting requirements. Emailed homeschool transcripts are accepted as official — an exception to CCCC's standard policy.
 
-- Proof of listing with the **N.C. Division of Non-Public Education (DNPE)**.
-- A complete, final transcript that includes:
-  - Course names and final grades
-  - An unweighted cumulative GPA on a 4.0 scale
-  - A grade scale (e.g., A = 90–100)
-  - The exact graduation date (MM/DD/YYYY)
-  - The homeschool administrator's signature
+> 📋 **See the full reference:** [Homeschool Transcript Requirements](./homeschool-transcripts.md) — covers required documentation, transcript content standards, standardized testing requirements, phone and email communication templates, and internal Colleague entry steps (XRDS, IASU >> HSA).
 
 ### 4.4 College Transcripts
 
@@ -151,13 +145,20 @@ Programs like Nursing, Dental Hygiene, Medical Sonography, and Veterinary Medica
 |---|---|
 | Application Period (2026 cohort) | Opens **November 1, 2025** — all steps must be completed by **May 15, 2026** |
 | How to Apply | After logging into the CCCC Portal, find the "Limited Enrollment Application" link in your Student Success Hub |
-| Notification Timeline | Notifications begin **December 1, 2025**, on a rolling basis |
+| Selection Method | **First-qualified, first-accepted** (rolling basis) — exception: the **PTA program** uses a ranked GPA system |
+| Notification | Decisions are posted in the student's **Success Hub** |
 
 ### 6.2 Key Changes for 2026 Applicants
 
 - **No TEAS Test** — the TEAS test is no longer required for most of these programs.
-- **New Acceptance Types** — "Fully Accepted" and "Provisionally Accepted" statuses give more students a clear path forward.
-- **GPA is Key** — admission is based on GPA in required general education courses: **B or better in all science courses**, **C or better in all other general education courses**.
+- **No TOEFL** — international students are no longer required to submit TOEFL scores.
+- **No Statement of Good Standing** — re-applicants no longer need to submit this.
+- **New Acceptance Types** — "Fully Accepted" and "Provisionally Accepted" statuses replace the old Alternate List.
+  - Fully Accepted students must confirm their seat within **two weeks**.
+  - Dental Hygiene and Medical Sonography do **not** offer Provisional Acceptance.
+- **Minimum GPA** — a cumulative **2.5 GPA** in program-specific general education courses is required; **"B" or better** in all science courses, **"C" or better** in all other general education courses.
+
+> 📋 **Full staff reference:** [Health Sciences Admissions Changes](./health-sciences-changes.md) — covers selection method, eligibility requirements, acceptance categories, staff talking points, and internal Colleague steps.
 
 ---
 

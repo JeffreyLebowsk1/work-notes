@@ -7,6 +7,7 @@ Notes and coordination related to the admissions process.
 - [Notes](./notes.md) — General admissions notes and reminders
 - [Requirements](./requirements.md) — Admissions requirements by program/term
 - [Application Guide](./application-guide.md) — Step-by-step guide to applying to CCCC (5 steps, student types, health sciences, paying for college)
+- [Homeschool Transcripts](./homeschool-transcripts.md) — Required documentation, transcript content standards, testing requirements, communication templates, and Colleague entry steps for homeschool applicants
 - [Early College & CCP](./early-college-ccp.md) — Early College procedures, application rules, Colleague quirks, and underage/gifted student guidance
 - [Foreign Students & Registration](./foreign-students-and-registration.md) — Foreign students/nationals, J-1/J-2 visas, nurse aide reciprocity, registration priority, foreign language placement
 - [Health Sciences Changes](./health-sciences-changes.md) — 2025-2026 / 2026 cohort Health Sciences admissions updates
