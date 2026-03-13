@@ -133,3 +133,57 @@ python3 tools/notes_helper.py search deadline --folder graduation
 | Get a full overview of all notes | `python3 tools/notes_helper.py organize` |
 | Find everything about a topic | `python3 tools/notes_helper.py search <keyword>` |
 | Refresh the master index file | `python3 tools/notes_helper.py organize --output tools/index.md` |
+| Use the tool without remembering commands | `python3 tools/notes_helper.py agent` |
+
+---
+
+## Running via GitHub Actions (no local commands required)
+
+If you can't run commands on your PC, you can trigger the helper tool directly from the **GitHub web interface** using the **Notes Helper** workflow.
+
+### How to use it
+
+1. Go to your repository on [github.com](https://github.com).
+2. Click the **Actions** tab.
+3. In the left sidebar, click **Notes Helper**.
+4. Click **Run workflow** (top-right of the run list).
+5. Fill in the inputs:
+
+| Input | Description |
+|-------|-------------|
+| **Command** | `analyze`, `sort`, `organize`, or `search` |
+| **File** | *(analyze only)* Path to a single note, or leave blank for all notes |
+| **Keyword** | *(search only)* Keyword or phrase to search for |
+| **Folder** | *(sort / search)* Limit to a top-level folder, e.g. `graduation` |
+| **Sort by** | *(sort only)* `name`, `date`, or `size` |
+| **Context** | *(search only)* Lines of context around matches (default: 2) |
+| **Output** | *(organize only)* File to write the index to, e.g. `tools/index.md` |
+
+6. Click **Run workflow** — the output appears in the workflow run log.
+
+> **Tip:** When you run `organize` with an **Output** file, the workflow automatically commits the refreshed index back to the repository.
+
+---
+
+## Interactive Agent Mode
+
+If you have access to a terminal but prefer not to memorise command syntax, use the **agent** subcommand:
+
+```bash
+python3 tools/notes_helper.py agent
+```
+
+You will see a prompt where you can type requests in plain language:
+
+```
+notes> analyze daily-logs/2026-03/2026-03-13.md
+notes> sort by date
+notes> sort by size in graduation
+notes> organize to tools/index.md
+notes> search FERPA
+notes> search deadline in graduation
+notes> help
+notes> quit
+```
+
+The agent interprets your request, runs the right command, and prints the result — no flags needed.
