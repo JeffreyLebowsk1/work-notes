@@ -7,11 +7,11 @@ Notes and coordination related to the admissions process.
 - [Notes](./notes.md) — General admissions notes and reminders
 - [Requirements](./requirements.md) — Admissions requirements by program/term
 - [Application Guide](./application-guide.md) — Step-by-step guide to applying to CCCC (5 steps, student types, health sciences, paying for college)
-- [Early College & CCP](./early-college-ccp.md) — Early College and Career & College Promise procedures, application rules, NULL date rules, Colleague quirks, and RGO1 HUSK CCPP error guidance
+- [Early College & CCP](./early-college-ccp.md) — Early College procedures, application rules, Colleague quirks, and underage/gifted student guidance
 - [Foreign Students & Registration](./foreign-students-and-registration.md) — Foreign students/nationals, J-1/J-2 visas, nurse aide reciprocity, registration priority, foreign language placement
 - [Health Sciences Changes](./health-sciences-changes.md) — 2025-2026 / 2026 cohort Health Sciences admissions updates
 - [ADN Program Requirements](./adn-program-requirements.md) — ADN (A45110) Humanities/Fine Arts elective pick list, grade requirements, and EVAL guidance
-- [CCP Procedures](./ccp-procedures.md) — Career & College Promise advisor contacts, program setup, ending procedures for graduates, student info, and cleanup guidance
+- [CCP Procedures](./ccp-procedures.md) — Comprehensive Career & College Promise reference: program overview, pathways, eligibility, advisor contacts, application rules, RGO1 HUSK CCPP error guidance, NULL date rules, ending procedures for graduates, and cleanup guidance
 - [Data](./data/) — Admissions data and spreadsheets
 
 ## Quick Notes
