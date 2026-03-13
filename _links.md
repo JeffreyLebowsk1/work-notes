@@ -14,6 +14,7 @@ A central index of important links, tools, and resources used in the Registrar's
 | Residency & Tuition Folder | <!-- paste link here --> |
 | Admissions Folder | <!-- paste link here --> |
 | Registrar Office File | [View File](https://drive.google.com/file/d/1pimrV4DOfIfIWj2-9RNf5IiW543Uyyhk/view?usp=drive_link) |
+| Google Slides Presentation | [View Slides](https://docs.google.com/presentation/d/1xWEYc9gotlLEd5tYxcvNSD5qjBaqTGn7jXGxsTJYyFA/edit?usp=drive_link) |
 
 ---
 
