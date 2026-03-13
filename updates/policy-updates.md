@@ -4,6 +4,29 @@ A log of changes to institutional, state, or federal policies that affect the Re
 
 > Add newest entries at the top. See [README](./README.md) for entry format.
 
+## 2026–2027 — Pell Grant & FAFSA Changes (OBBBA)
+
+**Category:** Policy
+**Affects:** Financial Aid, Student Records, Continuing Education
+
+### What Changed
+Per the *One Big Beautiful Bill Act* (OBBBA), the following changes take effect for the **2026–2027** award year:
+
+- **Asset Exclusions:** The Student Aid Index (SAI) now excludes the net worth of family-owned businesses (≤100 employees), farms on which the family resides, and family-controlled commercial fishing businesses.
+- **Pell Ineligibility Threshold:** Applicants with an SAI of **$14,790 or higher** (twice the maximum Pell award) are ineligible for a Pell Grant, unless they qualify under specific rules for dependents of deceased servicemembers or Public Safety Officers.
+- **Foreign Income:** Foreign earned income exclusions must now be **added back to the AGI** when determining eligibility.
+- **Workforce Pell:** Beginning **July 1, 2026**, students in select Continuing Education programs (150–600 clock hours) may become eligible for Pell funding.
+
+### What You Need to Do Differently
+- When advising students about Pell eligibility, be aware of the new $14,790 SAI threshold and the asset exclusion changes.
+- Refer students with foreign income questions to the Financial Aid Office (Amber Werkheiser).
+- For CE students asking about financial aid, note that Workforce Pell may become available July 1, 2026 — refer to the Financial Aid Office for the latest eligible program list.
+
+### Links / References
+[Financial Aid Notes](../financial-aid/README.md); One Big Beautiful Bill Act (OBBBA)
+
+---
+
 ## ADN Program — Humanities/Fine Arts Elective Pick List
 
 **Category:** Policy
