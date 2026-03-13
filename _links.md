@@ -48,6 +48,18 @@ A central index of important links, tools, and resources used in the Registrar's
 | Residency Policy Document | *(pending)* |
 | Tuition Rate Schedule | *(pending)* |
 | Residency Appeal Form | *(pending)* |
+| RDS — NC Community Colleges | [nccommunitycolleges.edu](https://www.nccommunitycolleges.edu/students/student-services/regulations-policies/residency-determination/) |
+| RDS — CFNC | [cfnc.org](https://www.cfnc.org/apply-to-college/residency-determination/) |
+| NC Residency Determination Service | [ncresidency.org](https://www.ncresidency.org/) |
+| RDS — Salem College | [salem.edu](https://www.salem.edu/financialaid/nc-residency-determination-rds/) |
+| Residency — NC State Graduate School | [grad.ncsu.edu](https://grad.ncsu.edu/admissions/residency/) |
+| RDS — James Sprunt Community College | [jamessprunt.edu](https://jamessprunt.edu/admissions-aid/nc-residency/residency-determination-service-rds/) |
+| NC RDS Residency Process | [ncresidency.org](https://www.ncresidency.org/residency-process/) |
+| NC RDS Guidebook (PDF) | [ncresidency.org](https://www.ncresidency.org/media/3safqses/rds_guidebook.pdf) |
+| NC DHHS — RDS Partner Agency | [ncdhhs.gov](https://www.ncdhhs.gov/) |
+| NC RDS FAQs | [ncresidency.org](https://www.ncresidency.org/faqs/) |
+| RDS — UNC Charlotte Niner Central | [ninercentral.charlotte.edu](https://ninercentral.charlotte.edu/article/Residency-Determination-Service) |
+| Health & Social Services — NC.gov (RDS context) | [nc.gov](https://www.nc.gov/living/health-social-services) |
 
 ---
 
