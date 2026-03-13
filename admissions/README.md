@@ -11,6 +11,7 @@ Notes and coordination related to the admissions process.
 - [Foreign Students & Registration](./foreign-students-and-registration.md) — Foreign students/nationals, J-1/J-2 visas, nurse aide reciprocity, registration priority, foreign language placement
 - [Health Sciences Changes](./health-sciences-changes.md) — 2025-2026 / 2026 cohort Health Sciences admissions updates
 - [ADN Program Requirements](./adn-program-requirements.md) — ADN (A45110) Humanities/Fine Arts elective pick list, grade requirements, and EVAL guidance
+- [CCP Procedures](./ccp-procedures.md) — Career & College Promise advisor contacts, program setup, ending procedures for graduates, student info, and cleanup guidance
 - [Data](./data/) — Admissions data and spreadsheets
 
 ## Quick Notes
