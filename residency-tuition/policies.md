@@ -3,8 +3,6 @@
 > **Reference only.** Always verify current policies with the official policy documents and/or your supervisor.
 > For the full RDS background, immigration categories, and appeals process, see [RDS Reference](./rds.md).
 
-> 🏛️ **NC-Specific:** For North Carolina's centralized RDS system (RCN workflow, interagency validation, appeals, and security), see [NC RDS Reference](./nc-rds.md).
-
 ## Residency Classification Criteria (NC / RDS)
 
 Students are classified as **in-state (resident)** or **out-of-state (non-resident)** for tuition purposes by the [Residency Determination Service (RDS)](https://www.ncresidency.org). Classification is based on:
