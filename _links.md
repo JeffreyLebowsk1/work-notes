@@ -22,10 +22,12 @@ A central index of important links, tools, and resources used in the Registrar's
 
 | Description | Link |
 |---|---|
+| CCCC Student Records & Registrar's Office | [cccc.edu](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office) |
+| Advising Hub (advisor degree audit upload portal) | [apply.cccc.edu](https://apply.cccc.edu/portal/advisor?tab=Home) |
+| Ceremony Venue — Dennis A. Wicker Civic & Conference Center | [cccc.edu](https://www.cccc.edu/about/locations/civic-center/) |
 | Graduation Application Portal | *(pending)* |
 | Commencement Program Template | *(pending)* |
 | Cap & Gown Vendor | *(pending)* |
-| Ceremony Venue Contact | *(pending)* |
 | Diploma Vendor | *(pending)* |
 | Graduation Candidate Tracking Sheet | *(pending)* |
 

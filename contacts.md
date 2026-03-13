@@ -30,7 +30,9 @@ People and offices you work with regularly.
 
 | Office | Contact Name | Email | Phone | Notes |
 |---|---|---|---|---|
-| Financial Aid | | | | |
+| Financial Aid | Amber Werkheiser (Director) | awerkheiser@cccc.edu | (919) 718-7311 | Director; R2T4 processing |
+| Financial Aid | Angie Estes (VA Benefits) | aestes@cccc.edu | (919) 718-7233 | VA Educational Benefits / GI Bill® |
+| Financial Aid | Financial Aid Office (general) | finaid@cccc.edu | (919) 718-7229 | General inquiries |
 | Bursar / Student Accounts | | | | |
 | Admissions | | | | |
 | IT Help Desk | | | | |
