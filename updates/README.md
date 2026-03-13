@@ -11,6 +11,7 @@ A running log of changes that affect how we work — policy updates, new softwar
 | [🔄 Workflow Changes](./workflow-changes.md) | Changes to office procedures and day-to-day workflows |
 | [🎓 Graduation Updates](./graduation-updates.md) | Changes specific to graduation coordination |
 | [📁 General Updates](./general-updates.md) | Everything else |
+| [⚠️ Conflicts Pending Resolution](./conflicts-pending.md) | Known conflicts between administrative decisions and the published catalog |
 
 ## How to Use This Section
 
