@@ -9,6 +9,7 @@
 | [📄 Transcripts](./transcripts/) | Transcript processing, procedures, and templates |
 | [🏠 Residency & Tuition](./residency-tuition/) | Residency determinations, tuition classifications, data |
 | [🎓 Admissions](./admissions/) | Admissions notes, requirements, and coordination |
+| [📚 Continuing Education](./continuing-education/) | CE scholarship processes, workforce programs, and Workforce Access Programs Office |
 | [🔒 Personal Data](./personal-data/) | FERPA, data handling guidelines, privacy procedures |
 | [🎓 Graduation](./graduation/) | **Graduation Coordinator** — ceremonies, checklists, timelines, and more |
 | [📅 Meetings](./meetings/) | Meeting notes by date |
