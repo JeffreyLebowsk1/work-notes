@@ -13,6 +13,7 @@ Reference notes and staff guidance for Financial Aid policies, eligibility, and 
 - [Satisfactory Academic Progress (SAP)](#-satisfactory-academic-progress-sap)
 - [Staff Workflow & System Mnemonics](#-staff-workflow--system-mnemonics)
 - [GED Transcript Note](#-ged-transcript-note)
+- [Foundation Scholarships](./foundation-scholarships.md) — K14 Promise, Chatham Adult Promise, general scholarships, regalia assistance
 - [Support Contacts](#-support-contacts)
 
 ---
@@ -109,10 +110,12 @@ When a student needs to submit a GED/HSE transcript for aid eligibility:
 | Role / Topic | Contact | Phone | Email |
 |---|---|---|---|
 | Director of Financial Aid | Amber Werkheiser | (919) 718-7311 | awerkheiser@cccc.edu |
-| Scholarships (Foundation) | Abby Walker | (919) 718-7332 | awalker@cccc.edu |
+| Foundation Scholarships (Asst. Director) | Abby Walker | (919) 718-7332 | awalker@cccc.edu |
+| Scholarship Disbursement | Nichelle Lariviere | | nlariviere@cccc.edu |
 | VA Educational Benefits | Angie Estes | (919) 718-7233 | aestes@cccc.edu |
 | General Financial Aid Office | Financial Aid Office | (919) 718-7229 | finaid@cccc.edu |
 
+For Foundation scholarship details, see [Foundation Scholarships](./foundation-scholarships.md).
 For more details, refer staff and students to the [CCCC Financial Aid page](https://www.cccc.edu/paying-college).
 
 ---
