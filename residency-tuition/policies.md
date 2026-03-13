@@ -2,6 +2,8 @@
 
 > **Reference only.** Always verify current policies with the official policy documents and/or your supervisor.
 
+> 🏛️ **NC-Specific:** For North Carolina's centralized RDS system (RCN workflow, interagency validation, appeals, and security), see [NC RDS Reference](./nc-rds.md).
+
 ## Residency Classification Criteria
 
 Students are generally classified as **in-state (resident)** or **out-of-state (non-resident)** for tuition purposes. Classification is based on:
