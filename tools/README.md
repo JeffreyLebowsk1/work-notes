@@ -8,7 +8,20 @@ This folder contains helper scripts for managing your work notes.
 
 A command-line tool to **analyze**, **sort**, **organize**, **search**, and **import** your notes.
 
-**Requirements:** Python 3.8+ (no extra packages needed — uses the standard library only)
+**Requirements:** Python 3.10+ (no extra packages needed — uses the standard library only)
+
+> **Note:** Python 3.10+ is required because the source uses the `X | Y` union-type syntax
+> (e.g. `str | None`) introduced in that version.
+
+**Module layout** — the tool is split across several files to keep each one readable:
+
+| File | Contents |
+|------|----------|
+| `notes_helper.py` | Entry point — argument parser and `main()` |
+| `_helpers.py` | Core utilities: file discovery, metadata extraction |
+| `_commands.py` | Subcommands: `analyze`, `sort`, `organize`, `search` |
+| `_importer.py` | Subcommands: `import`, `process-inbox`; folder-detection logic |
+| `_agent.py` | Interactive agent mode |
 
 ### Usage
 
