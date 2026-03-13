@@ -14,11 +14,15 @@
 | [📅 Meetings](./meetings/) | Meeting notes by date |
 | [📓 Daily Logs](./daily-logs/) | Day-to-day logs and notes |
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |
+| [📣 Updates & Changes](./updates/) | Policy, technology, workflow, and graduation updates log |
 
 ## 📌 Quick Links
 - [Today's Log](./daily-logs/)
 - [Graduation Checklists](./graduation/checklists/)
 - [Upcoming Ceremonies](./graduation/ceremonies/)
+- [Latest Updates](./updates/)
+- [All Links & Resources](./_links.md)
+- [Setup Guide](./SETUP.md)
 
 ---
 *Last updated: 2026-03-13*
