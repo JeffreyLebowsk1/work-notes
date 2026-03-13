@@ -67,15 +67,9 @@ If you earned a high school equivalency in North Carolina (GED® or HiSET), orde
 
 ### 4.3 Homeschool Transcripts
 
-Homeschool applicants must provide:
+Homeschool applicants must provide proof of DNPE listing and a complete, final transcript meeting specific content and formatting requirements. Emailed homeschool transcripts are accepted as official — an exception to CCCC's standard policy.
 
-- Proof of listing with the **N.C. Division of Non-Public Education (DNPE)**.
-- A complete, final transcript that includes:
-  - Course names and final grades
-  - An unweighted cumulative GPA on a 4.0 scale
-  - A grade scale (e.g., A = 90–100)
-  - The exact graduation date (MM/DD/YYYY)
-  - The homeschool administrator's signature
+> 📋 **See the full reference:** [Homeschool Transcript Requirements](./homeschool-transcripts.md) — covers required documentation, transcript content standards, standardized testing requirements, phone and email communication templates, and internal Colleague entry steps (XRDS, IASU >> HSA).
 
 ### 4.4 College Transcripts
 
