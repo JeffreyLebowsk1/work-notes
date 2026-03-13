@@ -76,7 +76,7 @@ Non-credit/CE transcript handling is split by record date. **Always ask the stud
 CCCC does not maintain official NC High School Equivalency records. Direct students to:
 
 - **DiplomaSender** — (855) 313-5799
-- Standard fee: **$20.00 per document** *(see [Conflicts Pending — CONFLICT 4](./updates/conflicts-pending.md) for a noted fee discrepancy)*
+- Standard fee: **$20.00 per document** *(see [Conflicts Pending — CONFLICT 4](../updates/conflicts-pending.md) for a noted fee discrepancy)*
 - Records must be sent directly to CCCC at **admissions@cccc.edu** to be considered official.
 
-See also: [Continuing Education — Programs, Policies & Records](./continuing-education/programs-and-policies.md)
+See also: [Continuing Education — Programs, Policies & Records](../continuing-education/programs-and-policies.md)
