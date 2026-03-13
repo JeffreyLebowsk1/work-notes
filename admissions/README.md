@@ -12,6 +12,8 @@ Notes and coordination related to the admissions process.
 - [Health Sciences Changes](./health-sciences-changes.md) — 2025-2026 / 2026 cohort Health Sciences admissions updates
 - [ADN Program Requirements](./adn-program-requirements.md) — ADN (A45110) Humanities/Fine Arts elective pick list, grade requirements, and EVAL guidance
 - [CCP Procedures](./ccp-procedures.md) — Comprehensive Career & College Promise reference: program overview, pathways, eligibility, advisor contacts, application rules, RGO1 HUSK CCPP error guidance, NULL date rules, ending procedures for graduates, and cleanup guidance
+- [Department Chairs & Deans](./department-chairs.md) — Table of department chairs, departments, course prefixes, and deans for all CCCC programs
+- [Section Numbers](./section-numbers.md) — Curriculum course section identification codes and section number assignment guide (effective 2022SP)
 - [Data](./data/) — Admissions data and spreadsheets
 
 ## Quick Notes
