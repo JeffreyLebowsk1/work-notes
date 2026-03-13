@@ -13,6 +13,7 @@ A central index of important links, tools, and resources used in the Registrar's
 | Transcripts Folder | <!-- paste link here --> |
 | Residency & Tuition Folder | <!-- paste link here --> |
 | Admissions Folder | <!-- paste link here --> |
+| Registrar Office File | [View File](https://drive.google.com/file/d/1pimrV4DOfIfIWj2-9RNf5IiW543Uyyhk/view?usp=drive_link) |
 
 ---
 
