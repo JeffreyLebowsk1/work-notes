@@ -20,7 +20,7 @@
 
 | Tool | Description |
 |---|---|
-| [📋 Notes Helper](./tools/README.md) | Analyze, sort, organize, and search your notes from the command line |
+| [📋 Notes Helper](./tools/README.md) | Analyze, sort, organize, and search your notes from the command line or GitHub Actions |
 
 ## 📌 Quick Links
 - [Today's Log](./daily-logs/)
@@ -29,6 +29,7 @@
 - [Latest Updates](./updates/)
 - [All Links & Resources](./_links.md)
 - [Setup Guide](./SETUP.md)
+- [Master Notes Index](./tools/index.md)
 
 ---
 *Last updated: 2026-03-13*
