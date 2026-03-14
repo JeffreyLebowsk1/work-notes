@@ -16,6 +16,7 @@ import re
 import sys
 import threading
 import time
+import urllib.parse
 import webbrowser
 from pathlib import Path
 
@@ -209,6 +210,95 @@ def _render_markdown(text: str) -> Markup:
         flags=re.DOTALL,
     )
     return Markup(html)
+
+
+def _parse_email_templates() -> list[dict]:
+    """Parse email templates from email-templates.md and return structured list.
+    
+    Returns a list of template dicts:
+    {
+        'section': '📄 Transcripts',
+        'category': 'Transcript Request Received',
+        'subject': 'Your Transcript Request Has Been Received',
+        'body': 'Dear [Student Name],...',
+        'mailto_url': 'mailto:?subject=...&body=....'
+    }
+    """
+    templates = []
+    templates_file = REPO_ROOT / "email-templates.md"
+    
+    if not templates_file.exists():
+        return templates
+    
+    content = templates_file.read_text(encoding="utf-8")
+    lines = content.split("\n")
+    
+    current_section = None
+    current_category = None
+    current_subject = None
+    body_lines = []
+    in_body = False
+    
+    for i, line in enumerate(lines):
+        # Section header (##)
+        if line.startswith("## "):
+            current_section = line[3:].strip()
+            current_category = None
+            continue
+        
+        # Category header (###)
+        if line.startswith("### "):
+            # Save previous template if exists
+            if current_category and current_subject and body_lines:
+                body_text = "\n".join(body_lines).strip()
+                body_text = re.sub(r"\n+", "\n", body_text)  # Normalize newlines
+                
+                mailto_url = f"mailto:?subject={urllib.parse.quote(current_subject)}&body={urllib.parse.quote(body_text)}"
+                templates.append({
+                    "section": current_section,
+                    "category": current_category,
+                    "subject": current_subject,
+                    "body": body_text,
+                    "mailto_url": mailto_url,
+                })
+            
+            current_category = line[4:].strip()
+            current_subject = None
+            body_lines = []
+            in_body = False
+            continue
+        
+        # Subject line (starts with "Subject:")
+        if line.startswith("Subject:"):
+            current_subject = line[8:].strip()
+            continue
+        
+        # Separator (---)
+        if line.strip() == "---":
+            if current_subject:
+                in_body = True
+            continue
+        
+        # Body collection
+        if in_body and current_subject:
+            if line.strip() and not line.startswith("["):  # Skip metadata lines
+                body_lines.append(line)
+    
+    # Save last template
+    if current_category and current_subject and body_lines:
+        body_text = "\n".join(body_lines).strip()
+        body_text = re.sub(r"\n+", "\n", body_text)  # Normalize newlines
+        
+        mailto_url = f"mailto:?subject={urllib.parse.quote(current_subject)}&body={urllib.parse.quote(body_text)}"
+        templates.append({
+            "section": current_section,
+            "category": current_category,
+            "subject": current_subject,
+            "body": body_text,
+            "mailto_url": mailto_url,
+        })
+    
+    return templates
 
 
 @app.context_processor
@@ -609,6 +699,30 @@ def api_ask():
     except Exception:
         app.logger.exception("Unexpected error in /api/ask")
         return jsonify({"error": "An internal error occurred. Please try again."}), 500
+
+
+# ---------------------------------------------------------------------------
+# Routes — Email templates
+# ---------------------------------------------------------------------------
+
+
+@app.route("/email-templates")
+def email_templates():
+    """Display all email templates with mailto: send buttons."""
+    templates = _parse_email_templates()
+    # Group by section for display
+    grouped = {}
+    for tpl in templates:
+        section = tpl["section"]
+        if section not in grouped:
+            grouped[section] = []
+        grouped[section].append(tpl)
+    
+    return render_template(
+        "email-templates.html",
+        sections=SECTIONS,
+        templates_by_section=grouped,
+    )
 
 
 # ---------------------------------------------------------------------------

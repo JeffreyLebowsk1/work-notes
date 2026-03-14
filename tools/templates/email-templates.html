@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Email Templates — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>📧 Email Templates</h1>
+        <p>Quick-send templates for common registrar communications. Click "Send" to open your default email client with the template pre-filled.</p>
+    </div>
+
+    {% if templates_by_section %}
+        {% for section, templates in templates_by_section.items() %}
+            <section class="template-section">
+                <h2 class="template-section-title">{{ section }}</h2>
+                
+                {% for template in templates %}
+                    <div class="template-card">
+                        <div class="template-header">
+                            <h3>{{ template.category }}</h3>
+                            <a href="{{ template.mailto_url }}" class="btn btn-primary" title="Send this template">
+                                📬 Send
+                            </a>
+                        </div>
+                        
+                        <div class="template-preview">
+                            <div class="template-subject">
+                                <strong>Subject:</strong> {{ template.subject }}
+                            </div>
+                            <div class="template-body">
+                                <pre>{{ template.body }}</pre>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <p>No email templates found. Add templates to <code>email-templates.md</code> to get started.</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.template-section {
+    margin-bottom: 2.5rem;
+}
+
+.template-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.template-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: box-shadow .2s, border-color .2s;
+}
+
+.template-card:hover {
+    border-color: var(--blue);
+    box-shadow: 0 4px 12px rgba(29, 53, 87, 0.08);
+}
+
+.template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.template-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text);
+    flex: 1;
+}
+
+.btn {
+    display: inline-block;
+    padding: .5rem .85rem;
+    border: none;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: .9rem;
+    font-weight: 600;
+    transition: all .15s;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+}
+
+.btn-primary {
+    background: var(--blue);
+    color: white;
+    border-color: var(--blue);
+}
+
+.btn-primary:hover {
+    background: #0c4a99;
+    border-color: #0c4a99;
+}
+
+.template-preview {
+    background: var(--bg);
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+.template-subject {
+    margin-bottom: .75rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--border);
+    font-size: .95rem;
+    color: var(--text-muted);
+}
+
+.template-subject strong {
+    color: var(--text);
+}
+
+.template-body pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: .85rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+}
+
+@media (max-width: 900px) {
+    .template-header {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+[data-theme="dark"] .template-card {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .template-card:hover {
+    border-color: var(--blue);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+}
+
+[data-theme="dark"] .template-preview {
+    background: var(--bg);
+    border-color: var(--border);
+}
+</style>
+{% endblock %}
