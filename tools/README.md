@@ -4,6 +4,54 @@ This folder contains helper scripts for managing your work notes.
 
 ---
 
+## linux-setup.sh
+
+A one-shot setup and launch script for the web app on any Linux machine.
+
+```bash
+# Run from the repository root:
+bash tools/linux-setup.sh              # default port 420
+bash tools/linux-setup.sh --port 8080  # use a different port
+```
+
+What it does:
+1. Checks for Python 3.10+ and git
+2. Creates a Python virtual environment at `.venv/`
+3. Installs all dependencies from `tools/requirements-web.txt`
+4. Scaffolds `tools/.env` from `tools/.env.example` (if not already present)
+5. Checks that the chosen port is not already in use — errors with a helpful message if it is
+6. Starts the web app at `http://localhost:<PORT>`
+
+Options:
+
+| Flag | Purpose |
+|---|---|
+| `--port PORT`, `-p PORT` | Port to run on (default: `420`) |
+| `--help`, `-h` | Show usage |
+
+Optional environment variables:
+
+| Variable | Purpose |
+|---|---|
+| `APP_USERNAME` | HTTP Basic Auth username (strongly recommended for shared machines) |
+| `APP_PASSWORD` | HTTP Basic Auth password |
+| `PORT` | Alternative to `--port`; `--port` flag takes precedence |
+
+```bash
+# Example — launch with password protection on port 8080:
+APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --port 8080
+```
+
+See the **🐧 Run the Web App Locally on Linux** section of [SETUP.md](../SETUP.md) for the full walkthrough, including how to use ngrok to create a public link.
+
+---
+
+## auto-sync.sh
+
+A background watcher that commits and pushes every change automatically.  Designed for a Linux machine (e.g. Jetson Orin Nano) where the repo lives inside a Google Drive folder mounted via rclone.  See the **🐧 Linux / Jetson Orin Nano Setup (Automatic Sync)** section of [SETUP.md](../SETUP.md) for full instructions.
+
+---
+
 ## notes_helper.py
 
 A command-line tool to **analyze**, **sort**, **organize**, **search**, and **import** your notes.
@@ -380,7 +428,7 @@ Get a free Perplexity API key at <https://www.perplexity.ai/settings/api>.
 python3 tools/app.py
 ```
 
-Then open **http://localhost:5000** in your browser.
+Then open **http://localhost:420** in your browser.
 
 ### New files added
 
