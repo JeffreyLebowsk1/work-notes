@@ -112,6 +112,138 @@ Make your commit messages descriptive so you can find things later:
 
 ---
 
+## 🐧 Run the Web App Locally on Linux
+
+Use these steps to clone the repo and launch the browser UI on any Linux machine (Ubuntu, Debian, Fedora, etc.) — no cloud hosting required.
+
+---
+
+### Prerequisites
+
+- **Git** — check with `git --version`; install with `sudo apt-get install git` if missing
+- **Python 3.10+** — check with `python3 --version`; install with `sudo apt-get install python3 python3-pip python3-venv` if missing
+
+---
+
+### Step 1 — Clone the repository
+
+```bash
+git clone https://github.com/JeffreyLebowsk1/work-notes.git
+cd work-notes
+```
+
+---
+
+### Step 2 — Install dependencies
+
+Using a **virtual environment** is recommended so the packages don't affect your system Python:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r tools/requirements-web.txt
+```
+
+> 💡 Skip the `venv` lines if you prefer to install globally — just run `pip install -r tools/requirements-web.txt` directly.
+
+---
+
+### Step 3 — (Optional) Configure an AI key
+
+Browsing and search work without any API key. The **AI Assistant** tab requires one.
+
+```bash
+cp tools/.env.example tools/.env
+# Open tools/.env in a text editor and add your key:
+#   PERPLEXITY_API_KEY=...   or   GEMINI_API_KEY=...
+```
+
+Get an API key at <https://www.perplexity.ai/settings/api> (Perplexity) or <https://aistudio.google.com/app/apikey> (Gemini) — check each platform for current availability and pricing.
+
+---
+
+### Step 4 — Run the app
+
+```bash
+python3 tools/app.py
+```
+
+Then open **http://localhost:5000** in your browser.
+
+---
+
+### Step 5 — (Optional) Set a password
+
+If other users share your machine or network, protect the app with HTTP Basic Auth:
+
+```bash
+export APP_USERNAME=registrar
+export APP_PASSWORD=choose-a-strong-password
+python3 tools/app.py
+```
+
+The browser will prompt for the username and password before showing any notes.
+
+---
+
+### Step 6 — (Optional) Share publicly with ngrok
+
+By default the app is only reachable at `http://localhost:5000` on your own machine. **ngrok** creates a temporary public `https://` URL that tunnels to it — useful for accessing your notes from another device or sharing with a colleague without deploying to Render.
+
+> ⚠️ **Always set `APP_USERNAME` and `APP_PASSWORD` before exposing the app publicly.** Without a password, anyone with the ngrok URL can read your notes.
+
+**1. Install ngrok**
+
+```bash
+# Snap (Ubuntu/Debian):
+sudo snap install ngrok
+
+# Or download directly from https://ngrok.com/download and unzip to /usr/local/bin
+```
+
+**2. Authenticate ngrok** *(one-time setup — free account required)*
+
+Sign up at <https://ngrok.com>, copy your authtoken from the dashboard, then run:
+
+```bash
+ngrok config add-authtoken <YOUR_AUTHTOKEN>
+```
+
+**3. Start the app with a password, then tunnel it**
+
+Open two terminals (or use `&` to background the app):
+
+```bash
+# Terminal 1 — start the app with password protection
+export APP_USERNAME=registrar
+export APP_PASSWORD=choose-a-strong-password
+python3 tools/app.py
+```
+
+```bash
+# Terminal 2 — expose it publicly
+ngrok http 5000
+```
+
+ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link in any browser on any device.
+
+> 💡 **The URL changes every time** you restart ngrok on the free plan. Upgrade to a paid plan for a stable custom subdomain — check current pricing at <https://ngrok.com/pricing>.
+
+---
+
+### Quick Reference (Linux local)
+
+| Goal | Command |
+|---|---|
+| Activate the virtual environment | `source .venv/bin/activate` |
+| Start the app | `python3 tools/app.py` |
+| Start with password protection | `APP_USERNAME=registrar APP_PASSWORD=secret python3 tools/app.py` |
+| Pull latest notes from GitHub | `git pull` |
+| Stop the app | Press `Ctrl+C` in the terminal |
+| Expose publicly via ngrok | `ngrok http 5000` *(app must already be running)* |
+
+---
+
 ## 🐧 Linux / Jetson Orin Nano Setup (Automatic Sync)
 
 Use your home Jetson Orin Nano (or any Linux machine) to keep the repo in sync
