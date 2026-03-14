@@ -305,6 +305,99 @@ systemctl --user daemon-reload && systemctl --user restart auto-sync.service
 
 ---
 
+## 📱 Android Setup
+
+Access your work notes on your Android phone or tablet. Three options are available depending on how much you need to do.
+
+---
+
+### Option A — GitHub Mobile App (Read-Only Browsing — Easiest)
+
+Best for quickly looking up a note when you're away from your desk. No extra setup needed beyond a GitHub account.
+
+1. Install the **[GitHub](https://play.google.com/store/apps/details?id=com.github.android)** app from the Google Play Store.
+2. Sign in with your GitHub account.
+3. Open the **JeffreyLebowsk1/work-notes** repository.
+4. Browse and read any `.md` file directly in the app.
+
+> ⚠️ The GitHub app is **read-only** for viewing files — you cannot commit or push changes from it.
+
+---
+
+### Option B — Google Drive App (View & Edit Synced Files)
+
+If you already use Google Drive to sync this repo from your work PC (see [Day-to-Day Workflow](#-day-to-day-workflow) above), the files are already on your Drive. You can read and even edit them from your phone.
+
+1. Install the **[Google Drive](https://play.google.com/store/apps/details?id=com.google.android.apps.docs)** app from the Google Play Store (usually pre-installed).
+2. Open the app and navigate to the `work-notes` folder inside **My Drive**.
+3. Tap any `.md` file to preview it.
+4. To edit, tap the three-dot menu → **Open with** → choose a plain-text or Markdown editor (e.g. **[Markor](https://play.google.com/store/apps/details?id=net.gsantner.markor)**).
+
+> 💡 Edits saved in Google Drive will sync back to your work PC automatically. From there, the Jetson auto-sync service (if enabled) will push the changes to GitHub.
+
+---
+
+### Option C — Termux (Full Git Workflow — Most Powerful)
+
+For committing and pushing changes directly from your Android device.
+
+1. Install **[Termux](https://f-droid.org/en/packages/com.termux/)** from **F-Droid** (recommended) or the Google Play Store.
+
+   > ⚠️ The Play Store version of Termux is outdated. Use the **F-Droid** version for the most up-to-date packages.
+
+2. Open Termux and install Git:
+
+   ```bash
+   pkg update && pkg upgrade -y
+   pkg install git -y
+   ```
+
+3. Set up your Git identity:
+
+   ```bash
+   git config --global user.name "Your Name"
+   git config --global user.email "your@email.com"
+   ```
+
+4. Clone the repository:
+
+   ```bash
+   mkdir -p ~/storage/shared && termux-setup-storage
+   cd ~
+   git clone https://github.com/JeffreyLebowsk1/work-notes.git
+   ```
+
+5. Configure a **Personal Access Token (PAT)** so you can push without a password prompt (see [Step 4 of the Linux setup](#step-4--configure-git-credentials) for how to create a PAT):
+
+   ```bash
+   git config --global credential.helper store
+   cd ~/work-notes
+   git pull   # enter your GitHub username and PAT when prompted
+   ```
+
+After that, the day-to-day workflow is the same as on any other machine:
+
+```bash
+cd ~/work-notes
+git add .
+git commit -m "describe what you changed"
+git push
+```
+
+---
+
+### Troubleshooting (Android)
+
+| Problem | Solution |
+|---|---|
+| Can't find the repo in the GitHub app | Make sure you are signed in with the correct GitHub account |
+| `.md` files open as a download instead of previewing in Drive | Tap **Open with** and choose a text/Markdown editor app |
+| `pkg: command not found` in Termux | Termux environment is not set up — run `pkg update` first |
+| `git push` fails with "Authentication failed" | Re-run `git pull` inside the repo and re-enter your PAT |
+| Termux can't access internal storage | Run `termux-setup-storage` and grant the permission in the system prompt |
+
+---
+
 ## 📁 Repo Structure Reference
 
 ```
