@@ -4,6 +4,7 @@
 # Run this script from the repository root:
 #   bash tools/linux-setup.sh
 #   bash tools/linux-setup.sh --port 8080
+#   bash tools/linux-setup.sh --ngrok
 #
 # What it does:
 #   1. Verifies prerequisites (Python 3.10+, pip, git)
@@ -12,9 +13,11 @@
 #   4. Scaffolds tools/.env from tools/.env.example (skipped if it already exists)
 #   5. Checks that the chosen port is free
 #   6. Starts the web app at http://localhost:<PORT>
+#   7. (--ngrok only) Runs `ngrok http <PORT>` to create a public HTTPS tunnel
 #
 # Options:
 #   --port PORT, -p PORT   Port to run the web app on (default: 4200)
+#   --ngrok                After starting the app, expose it via ngrok on the same port
 #   --help, -h             Show this help message
 #
 # Environment variables (alternative to flags):
@@ -25,6 +28,8 @@
 # Examples:
 #   bash tools/linux-setup.sh
 #   bash tools/linux-setup.sh --port 8080
+#   bash tools/linux-setup.sh --ngrok
+#   APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --ngrok
 #   APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --port 8080
 # ---------------------------------------------------------------------------
 
@@ -49,6 +54,7 @@ error()   { echo -e "${RED}[setup] ERROR:${RESET} $*" >&2; }
 # Parse CLI arguments
 # ---------------------------------------------------------------------------
 PORT="${PORT:-4200}"  # default; can be overridden by env var or --port flag
+USE_NGROK=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -60,17 +66,22 @@ while [[ $# -gt 0 ]]; do
       PORT="$2"
       shift 2
       ;;
+    --ngrok)
+      USE_NGROK=1
+      shift
+      ;;
     --help|-h)
-      echo "Usage: bash tools/linux-setup.sh [--port PORT]"
+      echo "Usage: bash tools/linux-setup.sh [--port PORT] [--ngrok]"
       echo ""
       echo "Options:"
       echo "  --port PORT, -p PORT   Port to run the web app on (default: 4200)"
+      echo "  --ngrok                Expose the app publicly via ngrok after starting"
       echo "  --help, -h             Show this help message"
       exit 0
       ;;
     *)
       error "Unknown argument: $1"
-      echo "Usage: bash tools/linux-setup.sh [--port PORT]" >&2
+      echo "Usage: bash tools/linux-setup.sh [--port PORT] [--ngrok]" >&2
       exit 1
       ;;
   esac
@@ -174,6 +185,32 @@ if [ -z "${APP_USERNAME:-}" ] || [ -z "${APP_PASSWORD:-}" ]; then
 fi
 
 # ---------------------------------------------------------------------------
+# 5a. Check ngrok prerequisites (only when --ngrok was passed)
+# ---------------------------------------------------------------------------
+if [ "$USE_NGROK" -eq 1 ]; then
+  if ! command -v ngrok &>/dev/null; then
+    error "ngrok is not installed (or not on your PATH)."
+    error "Install it with one of the following:"
+    error "  curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \\"
+    error "    | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \\"
+    error "    && echo \"deb https://ngrok-agent.s3.amazonaws.com buster main\" \\"
+    error "    | sudo tee /etc/apt/sources.list.d/ngrok.list \\"
+    error "    && sudo apt update && sudo apt install ngrok"
+    error "  # or:  sudo snap install ngrok"
+    error "See SETUP.md Step 7 for full instructions."
+    exit 1
+  fi
+  success "ngrok $(ngrok version 2>/dev/null | head -1)"
+
+  if [ -z "${APP_USERNAME:-}" ] || [ -z "${APP_PASSWORD:-}" ]; then
+    warn "⚠️  No APP_USERNAME/APP_PASSWORD set — your notes will be publicly"
+    warn "   readable once the ngrok tunnel is open.  Set them before continuing:"
+    warn "     export APP_USERNAME=registrar"
+    warn "     export APP_PASSWORD=choose-a-strong-password"
+  fi
+fi
+
+# ---------------------------------------------------------------------------
 # 6. Check the chosen port is not already in use
 # ---------------------------------------------------------------------------
 port_in_use() {
@@ -196,7 +233,7 @@ if port_in_use; then
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Start the app
+# 7. Start the app (and optionally ngrok)
 # ---------------------------------------------------------------------------
 
 echo ""
@@ -208,6 +245,10 @@ echo -e "   ${BOLD}Local:${RESET}              http://localhost:${PORT}"
 LAN_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
 if [ -n "$LAN_IP" ]; then
   echo -e "   ${BOLD}On your network:${RESET}    http://${LAN_IP}:${PORT}"
+fi
+
+if [ "$USE_NGROK" -eq 1 ]; then
+  echo -e "   ${BOLD}ngrok:${RESET}              tunnel will open after the app starts"
 fi
 
 echo -e "   Press ${BOLD}Ctrl+C${RESET} to stop."
@@ -229,4 +270,31 @@ echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 export PORT
-python3 "$REPO_ROOT/tools/app.py"
+if [ "$USE_NGROK" -eq 1 ]; then
+  # Start the Flask app in the background, then bring ngrok to the foreground
+  # so that Ctrl+C stops ngrok first; the app is then cleaned up on EXIT.
+  python3 "$REPO_ROOT/tools/app.py" &
+  APP_PID=$!
+  # Wait until Flask is actually listening on PORT (up to 15 s) before tunnelling.
+  WAITED=0
+  until ss -tlnp 2>/dev/null | awk '{print $4}' | grep -qE ":${PORT}$" || \
+        lsof -ti ":${PORT}" &>/dev/null 2>&1; do
+    sleep 1
+    WAITED=$((WAITED + 1))
+    if [ "$WAITED" -ge 15 ]; then
+      error "Flask did not start within 15 seconds — aborting ngrok."
+      kill "$APP_PID" 2>/dev/null || true
+      exit 1
+    fi
+  done
+  # Trap Ctrl+C / EXIT so the background Flask process is always cleaned up.
+  cleanup() {
+    kill "$APP_PID" 2>/dev/null || true
+    wait "$APP_PID" 2>/dev/null || true
+  }
+  trap cleanup EXIT INT TERM
+  info "Starting ngrok tunnel on port ${PORT} …"
+  ngrok http "${PORT}"
+else
+  python3 "$REPO_ROOT/tools/app.py"
+fi
