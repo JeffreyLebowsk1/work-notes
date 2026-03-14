@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Search{% if query %}: {{ query }}{% endif %} — Work Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <span>Search</span>
+    </div>
+
+    <h1 class="search-heading">🔍 Search Notes</h1>
+
+    <form class="search-form" action="{{ url_for('search') }}" method="get">
+        <div class="search-row">
+            <input
+                type="text"
+                name="q"
+                class="search-input"
+                placeholder="Search for keywords, policy names, dates…"
+                value="{{ query }}"
+                autofocus
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if query %}
+        {% if results %}
+        <p class="search-summary">
+            Found <strong>{{ results|length }}</strong> file{{ 's' if results|length != 1 else '' }}
+            matching <strong>{{ query }}</strong>
+        </p>
+        <div class="search-results">
+            {% for r in results %}
+            <div class="search-result-card">
+                <div class="result-header">
+                    <a href="{{ url_for('note', note_path=r.meta.relative) }}" class="result-title">
+                        {{ r.meta.title }}
+                    </a>
+                    <span class="result-path">{{ r.meta.relative }}</span>
+                </div>
+                {% for match in r.matches %}
+                <pre class="result-snippet">{{ match.snippet }}</pre>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>😕 No results found for <strong>{{ query }}</strong>.</p>
+            <p>Try a different keyword or browse the <a href="{{ url_for('index') }}">sections</a>.</p>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

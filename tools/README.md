@@ -340,3 +340,60 @@ notes> quit
 
 The agent interprets your request, runs the right command, and prints the result — no flags needed.
 
+---
+
+## Web GUI (`app.py`)
+
+A **Flask web application** that lets you browse, read, search, and ask AI questions about your work notes — all in a clean browser UI using the same visual design as the `linuxnlearn` project.
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Home** | Grid of all sections with live note counts |
+| **Section view** | Scrollable list of every note in a section, with word count and open action item badges |
+| **Note view** | Full markdown rendering, open action items highlighted at the top, prev/next navigation |
+| **Search** | Full-text keyword search across all notes with highlighted snippets |
+| **AI Assistant** | Chat interface powered by Perplexity (default), OpenAI, or Google Gemini — context-aware per section |
+
+### Setup
+
+**1. Install dependencies**
+
+```bash
+pip install -r tools/requirements-web.txt
+```
+
+**2. Configure your AI key** *(optional — browsing and search work without it)*
+
+```bash
+cp tools/.env.example tools/.env
+# Edit tools/.env and add your PERPLEXITY_API_KEY
+```
+
+Get a free Perplexity API key at <https://www.perplexity.ai/settings/api>.
+
+**3. Run the app**
+
+```bash
+# From the repo root:
+python3 tools/app.py
+```
+
+Then open **http://localhost:5000** in your browser.
+
+### New files added
+
+| File | Purpose |
+|------|---------|
+| `tools/app.py` | Flask application — routes for browse, note view, search, and AI |
+| `tools/config.py` | Flask + AI provider settings (reads from `tools/.env`) |
+| `tools/ai_providers.py` | Perplexity / OpenAI / Gemini abstraction layer |
+| `tools/templates/` | Jinja2 HTML templates (base, index, section, note, search, assistant, 404) |
+| `tools/static/css/style.css` | Adapted `linuxnlearn` stylesheet |
+| `tools/static/js/main.js` | Shared JS placeholder |
+| `tools/requirements-web.txt` | Python dependencies for the web app |
+| `tools/.env.example` | API key template — copy to `tools/.env` and fill in |
+
+> **Note:** `tools/.env` is in `.gitignore` — your API keys will never be committed.
+
