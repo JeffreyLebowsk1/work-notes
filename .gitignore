@@ -4,6 +4,7 @@
 # Windows
 Thumbs.db
 desktop.ini
+__pycache__/
 tools/__pycache__
 
 # Web app secrets — never commit the real .env
