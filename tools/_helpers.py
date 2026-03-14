@@ -10,14 +10,14 @@ from datetime import datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-IGNORED_DIRS = {".git", "tools", "assets", "inbox"}
+IGNORED_DIRS = {".git", ".github", "tools", "assets", "inbox"}
 
 
 def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
     """Return all Markdown files in the repository, sorted by path."""
     notes = []
     for path in root.rglob("*.md"):
-        if not any(part in IGNORED_DIRS for part in path.parts):
+        if not any(part in IGNORED_DIRS for part in path.relative_to(root).parts):
             notes.append(path)
     return sorted(notes)
 
@@ -114,7 +114,7 @@ def _parse_note(path: Path) -> dict:
 
     # All headings
     headings = [
-        (len(m.group(1)), line.lstrip("# ").strip())
+        (len(m.group(1)), line[len(m.group(1)):].strip())
         for line in lines
         if (m := re.match(r"^(#{1,6})\s", line))
     ]

@@ -26,7 +26,7 @@ sys.path.insert(0, str(_TOOLS_DIR))
 
 import ai_providers  # noqa: E402
 import config  # noqa: E402
-from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
+from _helpers import REPO_ROOT, _all_notes, _parse_note  # noqa: E402
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
