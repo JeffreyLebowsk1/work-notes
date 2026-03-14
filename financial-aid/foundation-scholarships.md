@@ -6,6 +6,23 @@ Staff reference for Foundation scholarship programs and the student referral pro
 
 ---
 
+## Scholarship Eligibility Quick Reference
+
+<div class="mermaid">
+flowchart TD
+    A["Is student a recent HS graduate?"] -->|Yes| B["From Chatham, Harnett, or Lee County?"]
+    A -->|No| C["Chatham County resident & no degree?"]
+    B -->|Yes| D["✅ ELIGIBLE: Central Carolina Promise K14"]
+    B -->|No| E{"Check other foundations"}
+    C -->|Yes| F["✅ ELIGIBLE: Chatham Adult Promise"]
+    C -->|No| E
+    E -->|Qualified by merit/need| G["✅ ELIGIBLE: General Foundation Scholarships"]
+    E -->|Other situations| H["Contact Abby Walker<br/>awalker@cccc.edu"]
+    G --> I["Complete Foundation Scholarship Application<br/>cccc.edu/scholarships"]
+    D --> I
+    F --> I
+</div>
+
 ## 📋 Scholarship Programs
 
 ### Central Carolina Promise (K14)

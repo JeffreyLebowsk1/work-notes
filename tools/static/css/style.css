@@ -537,7 +537,7 @@ code, pre { font-family: "Fira Code", "Cascadia Code", ui-monospace, monospace; 
 .example-questions ul { list-style: none; display: flex; flex-direction: column; gap: .25rem; }
 .example-q { border: none; background: none; padding: 0; font-size: .82rem; color: var(--blue); cursor: pointer; text-align: left; line-height: 1.4; }
 .example-q:hover { text-decoration: underline; }
-.chat-main { display: flex; flex-direction: column; min-height: 500px; }
+.chat-main { display: flex; flex-direction: column; min-height: 350px; max-width: 950px; }
 .chat-messages {
   flex: 1;
   overflow-y: auto;

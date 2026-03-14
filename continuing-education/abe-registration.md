@@ -6,6 +6,22 @@ Reference guide for walk-in registration for Adult Basic Education (ABE), Adult 
 
 ---
 
+<div class="mermaid">
+flowchart TD
+    A["Student seeks ABE/CCR registration"] --> B{"Age?"}
+    B -->|Under 16| C["❌ Ineligible<br/>Minimum age: 16"]
+    B -->|16-17| D{"Completed Minor<br/>Release Packet?"}
+    B -->|18+| E{"Out of school<br/>6+ months?"}
+    D -->|No| F["⚠️ REQUIRED before<br/>walk-in session"]
+    D -->|Yes| E
+    F --> E
+    E -->|No| C
+    E -->|Yes| G["✅ ELIGIBLE"]
+    G --> H["Attend walk-in<br/>registration session"]
+    H --> I["Program options:<br/>ABE/Adult HS/GED-HiSET"]
+    I --> J["Cost: FREE"]
+</div>
+
 ## Eligibility & Cost
 
 - **Age:** Students must be at least **16 years old**.

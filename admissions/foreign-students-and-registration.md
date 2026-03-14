@@ -1,5 +1,18 @@
 # Foreign Students, Foreign Nationals & Registration Notes
 
+<div class="mermaid">
+flowchart TD
+    A["Student status?"] --> B["Foreign Student<br/>HS outside USA"]
+    A --> C["Foreign National<br/>Non-immigrant visa"]
+    B --> B1["Requirements:<br/>1. CKDOC hold in SPRO<br/>2. Cannot enter Allied Health<br/>3. Transcript evaluation<br/>required from NACES/AICE"]
+    C --> C1{"Program type?"}
+    C1 -->|Allied Health| C2{"Green Card or<br/>Permanent Residency?"}
+    C1 -->|AA/AS/T90990| C3["✅ Can enroll<br/>May need FA restrictions"]
+    C2 -->|Yes| C4["✅ Can enter<br/>Allied Health"]
+    C2 -->|No| C5["❌ Cannot enter<br/>Allied Health"]
+    C5 --> C6["Note: J-1/J-2 visas<br/>are temporary only"]
+</div>
+
 ## Foreign Students
 
 - Put a **CKDOC** doc hold in SPRO for foreign students.

@@ -6,6 +6,26 @@
 
 ## Application Process — 2026 Cohort
 
+<div class="mermaid">
+flowchart TD
+    A["Health Sciences Program Application"] --> B{"Program type?"}
+    B -->|Medical Assisting or HIT| C["Minimum GPA: 2.0"]
+    B -->|Other programs| D{"Program?"}
+    D -->|Dental Hygiene, Sonography, PTA| E["Minimum GPA: 3.0"]
+    D -->|Nursing ADN| F["Minimum GPA: 2.8"]
+    D -->|Practical Nursing, VMT| G["Minimum GPA: 2.5"]
+    D -->|Dental Assisting| H["Minimum GPA: 2.5"]
+    C --> I{"Meet GPA requirement?"}
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+    I -->|Yes| J["✅ ELIGIBLE for Rolling<br/>Limited Enrollment"]
+    I -->|No| K["❌ Alternate List ELIMINATED<br/>Student ineligible"]
+    J --> L["Note: Early completion of<br/>gen-ed has better seat chance"]
+    K --> M["Contact advising hub<br/>for alternative programs"]
+</div>
+
 **Effective:** 2026 Cohort
 
 ### What Changed

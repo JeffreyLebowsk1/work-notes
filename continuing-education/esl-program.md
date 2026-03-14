@@ -6,6 +6,21 @@ Reference notes for the English as a Second Language (ESL) program at CCCC, offe
 
 ---
 
+<div class="mermaid">
+flowchart TD
+    A["ESL Program Registry"] --> B{"Primary Language: English?"}
+    B -->|Yes| C["❌ Not appropriate for<br/>ESL program"]
+    B -->|No| D{"Age 16+?<br/>Out of school 6+ months?"}
+    D -->|No| C
+    D -->|Yes| E{"Ages 16-17:<br/>Minor packet complete?"}
+    E -->|No| F["⚠️ Complete before<br/>walk-in session"]
+    E -->|Yes| G["✅ ELIGIBLE"]
+    F --> G
+    G --> H["Attendance-based<br/>placement via CASAS<br/>or instructor assessment"]
+    H --> I["Enroll in ESL Level<br/>Beginning through Advanced"]
+    I --> J["Cost: FREE"]
+</div>
+
 ## Eligibility & Cost
 
 - **Age:** Students must be at least **16 years old**.
