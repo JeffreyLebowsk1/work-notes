@@ -2,6 +2,21 @@
 
 Email templates, announcements, and messaging for graduation coordination.
 
+## Communication Timeline
+
+<div class="mermaid">
+timeline
+    title Graduation Communication Cycle
+    4-5 months before ceremony : Open graduation applications : Communicate deadlines
+    3 months before ceremony : Close applications : Send preliminary candidate list to advisors
+    2 months before ceremony : Share degree audit results : Send ceremony details
+    1 month before ceremony : Confirm regalia details : Send final requirements check
+    2 weeks before ceremony : Send arrival & parking info : Confirm final headcount
+    1 week before ceremony : Send rehearsal details : Complete registration check
+    Day before ceremony : Send day-of logistics : Confirm student line-up
+    After ceremony : Diploma notification : Request course evaluations
+</div>
+
 ## Templates
 
 - [Graduation Application Campaign](./graduation-application-campaign.md) — Strategic communications plan for the final-term graduation application campaign

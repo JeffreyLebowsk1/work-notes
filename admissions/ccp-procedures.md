@@ -2,6 +2,21 @@
 
 > CCP is a tuition-free dual enrollment program allowing qualified NC high school juniors and seniors to earn college credit while still in high school. This is the comprehensive CCP reference covering program overview, pathways, eligibility, advisor contacts, application rules, Colleague procedures, NULL date rules, and cleanup guidance.
 
+## CCP Enrollment Flow
+
+<div class="mermaid">
+flowchart TD
+    A[Student identifies pathway] --> B{Meets eligibility?}
+    B -- No --> C[Refer to Education Navigator]
+    B -- Yes --> D[High school approves enrollment]
+    D --> E[Student applies to CCCC]
+    E --> F[CCP advisor assigns courses]
+    F --> G[Student registers for classes]
+    G --> H{Maintains 2.0 GPA?}
+    H -- Yes --> I[Continues CCP enrollment]
+    H -- No --> J[Academic Warning — may lose CCP eligibility]
+</div>
+
 ---
 
 ## What Is CCP?

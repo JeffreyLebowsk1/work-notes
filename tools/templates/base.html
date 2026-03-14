@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>/* Prevent flash: apply saved theme before render */
+    (function(){var t=localStorage.getItem('cccc-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}());
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1d3557">
@@ -15,7 +18,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{{ url_for('index') }}" class="nav-brand">
+            <a href="https://www.cccc.edu/" class="nav-brand" target="_blank" rel="noopener" title="Central Carolina Community College">
                 {% if cccc_logo_url %}
                 <img src="{{ cccc_logo_url }}" alt="CCCC" class="nav-logo">
                 {% else %}
@@ -29,6 +32,7 @@
                 <a href="{{ url_for('assets_browser') }}" class="nav-hide-mobile">📁 Assets</a>
                 <a href="{{ url_for('search') }}" class="btn-search">🔍 Search</a>
                 <a href="{{ url_for('assistant') }}" class="btn-ai">🤖 AI</a>
+                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
             </div>
         </div>
     </nav>
@@ -65,6 +69,11 @@
     </nav>
 
     <script src="{{ static_asset_url('js/main.js') }}"></script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+      mermaid.initialize({ startOnLoad: true, theme: theme });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -8,6 +8,38 @@ Semester-by-semester timelines and key deadlines.
 
 ### Spring 2026
 
+```mermaid
+gantt
+    title Spring 2026 Graduation Timeline
+    dateFormat YYYY-MM-DD
+    axisFormat %b %d
+
+    section Applications
+    Applications open               :done, 2026-02-01, 2026-03-09
+    Applications close (recommended):milestone, done, 2026-03-09, 0d
+    Final cutoff                    :milestone, done, 2026-03-13, 0d
+
+    section Audits & Review
+    Degree audits                   :audit, 2026-03-14, 30d
+    Advisor review period           :2026-03-14, 21d
+
+    section Preparation
+    Cap & gown orders deadline      :milestone, 2026-04-01, 0d
+    Commencement program draft      :2026-03-28, 14d
+    Program to printer              :milestone, 2026-04-11, 0d
+
+    section Events
+    Graduation Practice 1           :milestone, 2026-04-07, 0d
+    Graduation Practice 2           :milestone, 2026-04-08, 0d
+    Ceremony details sent           :2026-04-14, 7d
+    Final headcount confirmed       :milestone, 2026-05-07, 0d
+
+    section Graduation
+    Official Graduation Date        :milestone, crit, 2026-05-07, 0d
+    Ceremony                        :milestone, crit, 2026-05-14, 0d
+    Records updated & diplomas mailed :2026-05-15, 14d
+```
+
 | Task | Target Date | Status | Notes |
 |---|---|---|---|
 | Graduation applications open | | ✅ | |

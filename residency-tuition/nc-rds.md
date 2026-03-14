@@ -2,7 +2,7 @@
 
 > **Reference only.** Always verify current policies and procedures at [ncresidency.org](https://www.ncresidency.org) or with your supervisor.
 
-The NC Residency Determination Service (RDS) is the **single, centralized statewide authority** for determining a student's residency status for in-state tuition and state financial aid eligibility at all North Carolina public universities (UNC System), community colleges (NCCCS), and private institutions (NCICU). It is administered by the **NC State Education Assistance Authority (NCSEAA)**.
+The NC Residency Determination Service (RDS) is the **single, centralized statewide authority** for determining a student's residency status for in-state tuition and state financial aid eligibility at all North Carolina public universities (UNC System), community colleges (NCCCS), and private institutions (NCICU). It is administered by the **[NC State Education Assistance Authority (NCSEAA)](https://www.ncseaa.edu)**.
 
 Centralization guarantees that an applicant's residency classification is **identical regardless of which NC institution they attend** — eliminating inconsistencies and "system shopping."
 
@@ -66,10 +66,10 @@ The **RCN** is the unique identifier issued to a student upon completion of the 
 
 | Organization | Role |
 |---|---|
-| **NCSEAA** | Administers and manages NC residency law through RDS. |
+| **[NCSEAA](https://www.ncseaa.edu)** | Administers and manages NC residency law through RDS. |
 | **UNC System** | 4-year public institutions — uses RDS determination for tuition. |
-| **NCCCS** | 2-year public community colleges — uses RDS determination for tuition. |
-| **NCICU** | Private colleges — uses RDS determination for **state financial aid eligibility** (not subsidized tuition). |
+| **[NCCCS](https://www.nccommunitycolleges.edu)** | 2-year public community colleges — uses RDS determination for tuition. |
+| **[NCICU](https://ncicu.org)** | Private colleges — uses RDS determination for **state financial aid eligibility** (not subsidized tuition). |
 
 ---
 
@@ -94,7 +94,7 @@ RDS cross-checks applicant claims electronically against a wide network of state
 |---|---|
 | US DHS / USCIS | Immigration documents, ITINs, Alien Registration Numbers |
 | US Department of Defense (DOD) | Military service and dependent status for statutory exceptions |
-| National Student Clearinghouse | Enrollment history at other institutions |
+| [National Student Clearinghouse](https://www.studentclearinghouse.org) | Enrollment history at other institutions |
 | Third-party data aggregators | Supplemental background data checks |
 
 ---

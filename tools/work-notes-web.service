@@ -1,0 +1,60 @@
+# work-notes-web.service — systemd unit for the CCCC Notes web app.
+#
+# Runs gunicorn behind ngrok to serve the app at https://cccc.ngrok.app
+#
+# INSTALLATION (one-time, as your normal user — not root):
+#
+#   1.  Copy the file into your user systemd directory:
+#         mkdir -p ~/.config/systemd/user
+#         cp tools/work-notes-web.service ~/.config/systemd/user/work-notes-web.service
+#
+#   2.  Reload systemd and enable the service:
+#         systemctl --user daemon-reload
+#         systemctl --user enable --now work-notes-web.service
+#
+#   3.  Check that it is running:
+#         systemctl --user status work-notes-web.service
+#
+#   4.  Follow live logs:
+#         journalctl --user -u work-notes-web.service -f
+#
+# To restart after code changes:
+#   systemctl --user restart work-notes-web.service
+#
+# To stop temporarily:
+#   systemctl --user stop work-notes-web.service
+#
+# To disable permanently:
+#   systemctl --user disable work-notes-web.service
+# -------------------------------------------------------------------------
+
+[Unit]
+Description=CCCC Notes — Registrar's Office web app (gunicorn)
+Documentation=https://github.com/JeffreyLebowsk1/work-notes
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/madmatter/work-notes
+ExecStart=/home/madmatter/work-notes/.venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:4200 \
+    --access-logfile - \
+    --error-logfile - \
+    --timeout 120 \
+    tools.app:app
+
+# Restart automatically on failure
+Restart=on-failure
+RestartSec=10
+
+# Keep stdout/stderr in the journal
+StandardOutput=journal
+StandardError=journal
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

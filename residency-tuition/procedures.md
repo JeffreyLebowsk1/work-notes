@@ -2,6 +2,24 @@
 
 > For RDS contact information, immigration category rules, and the reconsideration/appeals process, see [RDS Reference](./rds.md).
 
+## Residency Determination Flow
+
+<div class="mermaid">
+flowchart TD
+    A[Student completes RDS interview at ncresidency.org] --> B{Valid RCN issued?}
+    B -- Yes --> C{In-state determination?}
+    B -- No --> D[Classified as non-resident — bill out-of-state]
+    C -- Yes --> E[Student provides RCN to CCCC]
+    C -- No --> F{Appeal?}
+    F -- Yes --> G[Reconsideration with documentation]
+    G --> H{Approved?}
+    H -- Yes --> E
+    H -- No --> I[Formal appeal to statewide committee]
+    F -- No --> D
+    E --> J[Campus downloads RDS data via RCN]
+    J --> K[Bill at in-state rate]
+</div>
+
 ## Colleague Screens for Residency
 
 | Screen | Purpose |

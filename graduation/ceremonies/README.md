@@ -2,6 +2,25 @@
 
 Planning, logistics, and notes for commencement ceremonies.
 
+## Ceremony Day Flow
+
+<div class="mermaid">
+flowchart TD
+    A[Students arrive 45 minutes early] --> B[Check in & distribute regalia]
+    B --> C[Conduct final rehearsal]
+    C --> D[Line up by Career Community]
+    D --> E[Ceremony begins]
+    E --> F[President opens remarks]
+    F --> G[Degrees conferred by program]
+    G --> H[Name reader calls students]
+    H --> I[Students cross stage]
+    I --> J[Receive diploma cover]
+    J --> K[Closing remarks]
+    K --> L[Dismiss to reception]
+    L --> M[Photos & celebration]
+    M --> N[Official diplomas mailed 7-10 days]
+</div>
+
 ---
 
 ## Ceremony Log
@@ -25,7 +44,7 @@ Planning, logistics, and notes for commencement ceremonies.
 - Graduates should attend **only one** practice session.
 
 ### Regalia
-- Graduates must wear **black caps and gowns** ordered through **Herff Jones**.
+- Graduates must wear **black caps and gowns** ordered through **[Herff Jones](https://www.herffjones.com)**.
 - No personal stoles or cords are permitted.
 - **Allowed:** Official honors stoles (3.5+ GPA) and pre-approved program cords.
 - **Cost assistance:** If a student cannot afford regalia, refer them to the **CCCC Foundation** (Abby Walker) as early as possible — emergency assistance or scholarship funds may be available. See [Foundation Scholarships](../../../financial-aid/foundation-scholarships.md).
@@ -42,7 +61,7 @@ Planning, logistics, and notes for commencement ceremonies.
 | Graduation Coordinator | Matt Dilworth | (919) 718-7063; mdilw269@cccc.edu |
 | Student Records / Policy | Student Records and Registrar's Office | (919) 718-7201; admissions@cccc.edu |
 | Advisor Hub Issues | Jim Johnson | (919) 718-7349; jjohn087@cccc.edu |
-| Cap & Gown Vendor Rep | Herff Jones | *(pending — confirm ordering portal link)* |
+| Cap & Gown Vendor Rep | [Herff Jones](https://www.herffjones.com) | *(pending — confirm ordering portal link)* |
 | Venue Coordinator | | |
 | Photography / Videography | | |
 | AV / Sound Vendor | | |
