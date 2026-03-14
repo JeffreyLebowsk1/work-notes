@@ -17,7 +17,7 @@ from pathlib import Path
 
 import markdown as md
 from flask import Flask, jsonify, render_template, request, url_for
-from markupsafe import Markup
+from markupsafe import Markup, escape as html_escape
 
 # Ensure tools/ is on sys.path so sibling modules resolve correctly.
 _TOOLS_DIR = Path(__file__).resolve().parent
@@ -129,6 +129,18 @@ def _render_markdown(text: str) -> Markup:
     return Markup(html)
 
 
+def _highlight_line(line: str, pattern: re.Pattern) -> Markup:
+    """Return the line HTML-escaped with matched text wrapped in <mark>."""
+    parts = []
+    last = 0
+    for m in pattern.finditer(line):
+        parts.append(str(html_escape(line[last:m.start()])))
+        parts.append(f"<mark>{html_escape(m.group())}</mark>")
+        last = m.end()
+    parts.append(str(html_escape(line[last:])))
+    return Markup("".join(parts))
+
+
 @app.context_processor
 def inject_static_asset_url():
     """Provide a cache-busted static asset URL helper for templates."""
@@ -168,7 +180,10 @@ def section(section_key):
 
 @app.route("/note/<path:note_path>")
 def note(note_path):
-    full_path = REPO_ROOT / note_path
+    full_path = (REPO_ROOT / note_path).resolve()
+    # Guard against path traversal outside the repo
+    if not full_path.is_relative_to(REPO_ROOT):
+        return render_template("404.html"), 404
     if not full_path.exists() or full_path.suffix != ".md":
         return render_template("404.html"), 404
 
@@ -235,15 +250,13 @@ def search():
                     end = min(len(lines), i + 2)
                     snippet_lines = lines[start:end]
                     highlighted = [
-                        pattern.sub(
-                            lambda m: f"<mark>{m.group()}</mark>", ln
-                        )
+                        _highlight_line(ln, pattern)
                         if pattern.search(ln)
-                        else ln
+                        else html_escape(ln)
                         for ln in snippet_lines
                     ]
                     matches.append(
-                        {"lineno": i + 1, "snippet": "\n".join(highlighted)}
+                        {"lineno": i + 1, "snippet": Markup("\n").join(highlighted)}
                     )
                     if len(matches) >= 3:
                         break
@@ -289,7 +302,7 @@ def api_ask():
             {
                 "answer": (
                     "No AI provider is configured. "
-                    "Add your PERPLEXITY_API_KEY (or OPENAI_API_KEY / GEMINI_API_KEY) "
+                    "Add your GEMINI_API_KEY (or OPENAI_API_KEY / PERPLEXITY_API_KEY) "
                     "to tools/.env to enable AI responses."
                 )
             }
