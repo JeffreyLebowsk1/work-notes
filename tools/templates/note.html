@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}{{ note.title }} — {{ meta.title }} — Work Notes{% endblock %}
+
+{% block content %}
+<div class="page-container note-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <a href="{{ url_for('section', section_key=section_key) }}">{{ meta.title }}</a>
+        <span>›</span>
+        <span>{{ note.title }}</span>
+    </div>
+
+    <div class="lesson-header">
+        <span class="lesson-badge category-{{ meta.color }}">{{ meta.icon }} {{ meta.title }}</span>
+        <h1>{{ note.title }}</h1>
+        <p class="lesson-summary">
+            Last modified {{ note.modified.strftime('%Y-%m-%d %H:%M') }} · {{ note.words }} words
+        </p>
+    </div>
+
+    {% if note.open_items %}
+    <div class="open-items-box">
+        <h3>🔲 Open Action Items ({{ note.open_items|length }})</h3>
+        <ul>
+            {% for item in note.open_items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="lesson-section">
+        <div class="section-content note-content">{{ content_html }}</div>
+    </div>
+
+    <div class="note-ai-prompt">
+        <div class="ai-prompt-content">
+            <span>🤖</span>
+            <div>
+                <strong>Have a question about this note?</strong>
+                <p>Ask the AI assistant for guidance, summaries, or follow-up help.</p>
+            </div>
+            <a href="{{ url_for('assistant') }}?context={{ section_key }}" class="btn btn-ai-small">Ask AI</a>
+        </div>
+    </div>
+
+    <div class="lesson-nav">
+        <div class="lesson-nav-prev">
+            {% if prev_note %}
+            <a href="{{ url_for('note', note_path=prev_note.relative) }}" class="btn btn-nav">
+                ← {{ prev_note.title }}
+            </a>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('section', section_key=section_key) }}" class="btn btn-outline">
+            📂 All {{ meta.title }} Notes
+        </a>
+        <div class="lesson-nav-next">
+            {% if next_note %}
+            <a href="{{ url_for('note', note_path=next_note.relative) }}" class="btn btn-nav">
+                {{ next_note.title }} →
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
