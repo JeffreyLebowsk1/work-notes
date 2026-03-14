@@ -5,3 +5,23 @@
 Thumbs.db
 desktop.ini
 tools/__pycache__
+
+# Prevent binary/document files from being committed to the inbox.
+# Only .md and .txt files belong there; everything else goes in assets/.
+inbox/*.pdf
+inbox/*.docx
+inbox/*.xlsx
+inbox/*.xls
+inbox/*.pptx
+inbox/*.ppt
+inbox/*.doc
+inbox/*.png
+inbox/*.jpg
+inbox/*.jpeg
+inbox/*.bmp
+inbox/*.gif
+inbox/*.tiff
+inbox/*.tif
+inbox/*.svg
+inbox/*.heic
+inbox/*.webp
