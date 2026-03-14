@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block title %}AI Assistant — Work Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <span>AI Assistant</span>
+    </div>
+
+    <div class="assistant-header">
+        <h1>🤖 AI Notes Assistant</h1>
+        <p>
+            Ask questions about registrar procedures, FERPA, graduation requirements,
+            transcripts, residency, financial aid, or anything else in your notes.
+            {% if available_providers %}
+            Powered by <strong>{{ provider_labels[available_providers[0]] }}</strong>.
+            {% else %}
+            <span class="no-provider-warning">
+                ⚠️ No AI provider configured — add your API key to <code>tools/.env</code> to enable responses.
+            </span>
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="assistant-layout">
+        <div class="chat-sidebar">
+            <h3>Context</h3>
+            <p>Focus responses on a specific section:</p>
+            <div class="context-buttons">
+                <button class="context-btn active" data-context="general">🌟 General</button>
+                {% for key, sec in sections.items() %}
+                <button class="context-btn" data-context="{{ key }}">{{ sec.icon }} {{ sec.title }}</button>
+                {% endfor %}
+            </div>
+
+            <div class="example-questions">
+                <h3>Example Questions</h3>
+                <ul>
+                    <li><button class="example-q" data-q="What are the FERPA guidelines for releasing student records?">FERPA release guidelines</button></li>
+                    <li><button class="example-q" data-q="What are the steps to process a graduation application?">Graduation application steps</button></li>
+                    <li><button class="example-q" data-q="How do I determine residency for tuition purposes?">Residency determination</button></li>
+                    <li><button class="example-q" data-q="What is the process for ordering an official transcript?">Official transcript process</button></li>
+                    <li><button class="example-q" data-q="What documents are required for NC residency?">NC residency documents</button></li>
+                    <li><button class="example-q" data-q="How do I handle a late graduation application?">Late graduation application</button></li>
+                    <li><button class="example-q" data-q="What are the deadlines for the next graduation ceremony?">Graduation ceremony deadlines</button></li>
+                    <li><button class="example-q" data-q="How do continuing education courses affect financial aid?">CE and financial aid</button></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chat-main">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-message assistant-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your Work Notes AI assistant.</p>
+                        <p>
+                            Ask me anything about registrar procedures, FERPA, graduation,
+                            transcripts, residency, financial aid, or other topics you work with.
+                        </p>
+                        <p>Select a section context on the left to get more focused answers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="context-indicator" id="context-indicator">
+                    Context: <span id="current-context-label">General</span>
+                </div>
+                <div class="chat-input-row">
+                    <textarea
+                        id="chat-input"
+                        placeholder="Ask a question about your work notes…"
+                        rows="2"
+                    ></textarea>
+                    <button id="send-btn" class="btn btn-primary" onclick="sendMessage()">Send</button>
+                </div>
+                <p class="chat-hint">Press Ctrl+Enter to send</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentContext = "general";
+const contextLabels = {
+    "general": "General",
+    {% for key, sec in sections.items() %}
+    "{{ key }}": "{{ sec.title }}",
+    {% endfor %}
+};
+
+// Pick up ?context= from URL (set when clicking "Ask AI" from a section/note page)
+const urlParams = new URLSearchParams(window.location.search);
+const urlContext = urlParams.get("context");
+if (urlContext && contextLabels[urlContext]) {
+    currentContext = urlContext;
+    document.querySelectorAll(".context-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.context === urlContext);
+    });
+    document.getElementById("current-context-label").textContent = contextLabels[urlContext];
+}
+
+document.querySelectorAll(".context-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".context-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentContext = btn.dataset.context;
+        document.getElementById("current-context-label").textContent =
+            contextLabels[currentContext] || currentContext;
+    });
+});
+
+document.querySelectorAll(".example-q").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("chat-input").value = btn.dataset.q;
+        document.getElementById("chat-input").focus();
+    });
+});
+
+document.getElementById("chat-input").addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.ctrlKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+async function sendMessage() {
+    const input = document.getElementById("chat-input");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage("user", message);
+    input.value = "";
+
+    const loadingId = appendLoadingMessage();
+    document.getElementById("send-btn").disabled = true;
+
+    try {
+        const response = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message, context: currentContext }),
+        });
+        const data = await response.json();
+        removeLoadingMessage(loadingId);
+        if (data.error) {
+            appendMessage("assistant", "⚠️ " + data.error, true);
+        } else {
+            appendMessage("assistant", data.answer || "No response.");
+        }
+    } catch (err) {
+        removeLoadingMessage(loadingId);
+        appendMessage("assistant", "⚠️ Network error. Please try again.", true);
+    } finally {
+        document.getElementById("send-btn").disabled = false;
+    }
+}
+
+function appendMessage(role, text, isError = false) {
+    const container = document.getElementById("chat-messages");
+    const div = document.createElement("div");
+    div.className = `chat-message ${role}-message${isError ? " error-message" : ""}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = "message-avatar";
+    avatar.textContent = role === "user" ? "👤" : "🤖";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+    content.innerHTML = formatMessage(text);
+
+    div.appendChild(avatar);
+    div.appendChild(content);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function appendLoadingMessage() {
+    const id = "loading-" + Date.now();
+    const container = document.getElementById("chat-messages");
+    const div = document.createElement("div");
+    div.id = id;
+    div.className = "chat-message assistant-message loading-message";
+    div.innerHTML = `
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+            <span class="typing-indicator"><span></span><span></span><span></span></span>
+        </div>`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return id;
+}
+
+function removeLoadingMessage(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+}
+
+function formatMessage(text) {
+    const codeBlocks = [];
+    const inlineCodes = [];
+    let content = String(text);
+
+    // 1. Extract fenced code blocks before any escaping
+    content = content.replace(/```(?:\w+)?[ \t]*\n?([\s\S]*?)```/g, (_, code) => {
+        const token = `\x00BLOCK${codeBlocks.length}\x00`;
+        codeBlocks.push(`<pre><code>${escapeHtml(code.trim())}</code></pre>`);
+        return token;
+    });
+
+    // 2. Extract inline code before any escaping
+    content = content.replace(/`([^`\n]+)`/g, (_, code) => {
+        const token = `\x00INLINE${inlineCodes.length}\x00`;
+        inlineCodes.push(`<code class="inline-code">${escapeHtml(code)}</code>`);
+        return token;
+    });
+
+    // 3. Escape all remaining text so bold/italic can't inject HTML
+    content = escapeHtml(content);
+
+    // 4. Apply safe markdown transforms on escaped text
+    content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    // 5. Restore code tokens
+    codeBlocks.forEach((block, i) => {
+        content = content.split(`\x00BLOCK${i}\x00`).join(block);
+    });
+    inlineCodes.forEach((code, i) => {
+        content = content.split(`\x00INLINE${i}\x00`).join(code);
+    });
+
+    // 6. Wrap in paragraphs
+    return content.split(/\n\n+/).map(p => {
+        p = p.trim();
+        if (!p) return "";
+        if (p.startsWith("<pre>") || p.startsWith("<code>")) return p;
+        return `<p>${p.replace(/\n/g, "<br>")}</p>`;
+    }).join("");
+}
+
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+</script>
+{% endblock %}

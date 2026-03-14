@@ -6,6 +6,9 @@ Thumbs.db
 desktop.ini
 tools/__pycache__
 
+# Web app secrets — never commit the real .env
+tools/.env
+
 # Prevent binary/document files from being committed to the inbox.
 # Only .md and .txt files belong there; everything else goes in assets/.
 inbox/*.pdf
