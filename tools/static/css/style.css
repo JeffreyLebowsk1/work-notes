@@ -746,6 +746,11 @@ code, pre { font-family: "Fira Code", "Cascadia Code", ui-monospace, monospace; 
   margin-bottom: 1.25rem;
   overflow: hidden;
 }
+.commit-panel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
 .upload-panel-toggle {
   display: flex;
   align-items: center;

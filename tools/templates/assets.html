@@ -50,10 +50,20 @@
                 </div>
             </div>
             <p class="form-hint" style="margin-top:.25rem">
-                💡 Files are saved to disk. Commit and <code>git push</code> to sync them to GitHub.
+                💡 After uploading, click <strong>Commit to Git</strong> below to push your files to GitHub.
             </p>
         </form>
     </details>
+
+    {# Commit panel #}
+    <div class="commit-panel">
+        <form method="post" action="{{ url_for('asset_commit') }}" style="display:inline">
+            <button type="submit" class="btn btn-secondary">
+                🔁 Commit to Git
+            </button>
+        </form>
+        <span class="form-hint" style="margin-left:.75rem">Stages all new assets and pushes them to GitHub in one click.</span>
+    </div>
 
     {% if groups %}
         {% for folder, files in groups.items() %}

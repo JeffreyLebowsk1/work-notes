@@ -13,6 +13,7 @@ Then open http://localhost:4200 in your browser.
 import mimetypes
 import os
 import re
+import subprocess
 import sys
 import threading
 import time
@@ -656,6 +657,58 @@ def asset_upload():
     _reload_indexes()
     return redirect(
         url_for("assets_browser") + f"?msg={safe_name}+uploaded+successfully&msg_type=success"
+    )
+
+
+@app.route("/assets/commit", methods=["POST"])
+def asset_commit():
+    """Stage all pending changes in assets/ and push them to the remote.
+
+    This is the one-click alternative to running ``git add assets/ && git commit
+    && git push`` from the terminal after uploading files through the web UI.
+    """
+    repo = str(REPO_ROOT)
+    try:
+        # Stage everything inside assets/
+        subprocess.run(
+            ["git", "-C", repo, "add", "assets/"],
+            capture_output=True, check=True, timeout=30,
+        )
+
+        # Check whether there is actually anything to commit
+        status = subprocess.run(
+            ["git", "-C", repo, "diff", "--cached", "--quiet"],
+            capture_output=True, timeout=10,
+        )
+        if status.returncode == 0:
+            # Exit code 0 → no staged changes
+            return redirect(
+                url_for("assets_browser") + "?msg=Nothing+to+commit+—+assets+already+up+to+date&msg_type=success"
+            )
+
+        # Commit
+        subprocess.run(
+            ["git", "-C", repo, "commit", "-m", "chore: commit uploaded assets via web app"],
+            capture_output=True, check=True, timeout=30,
+        )
+
+        # Push
+        subprocess.run(
+            ["git", "-C", repo, "push"],
+            capture_output=True, check=True, timeout=60,
+        )
+
+    except subprocess.CalledProcessError:
+        return redirect(
+            url_for("assets_browser") + "?msg=Git+commit+or+push+failed.+Check+server+logs.&msg_type=error"
+        )
+    except subprocess.TimeoutExpired:
+        return redirect(
+            url_for("assets_browser") + "?msg=Git+operation+timed+out.+Try+again.&msg_type=error"
+        )
+
+    return redirect(
+        url_for("assets_browser") + "?msg=Assets+committed+and+pushed+to+GitHub&msg_type=success"
     )
 
 
