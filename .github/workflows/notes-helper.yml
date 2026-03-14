@@ -80,58 +80,69 @@ jobs:
       - name: Build command arguments
         id: build_args
         shell: bash
+        env:
+          INPUT_COMMAND: ${{ inputs.command }}
+          INPUT_FILE: ${{ inputs.file }}
+          INPUT_KEYWORD: ${{ inputs.keyword }}
+          INPUT_FOLDER: ${{ inputs.folder }}
+          INPUT_SORT_BY: ${{ inputs.sort_by }}
+          INPUT_CONTEXT: ${{ inputs.context }}
+          INPUT_OUTPUT: ${{ inputs.output }}
+          INPUT_IMPORT_DEST: ${{ inputs.import_dest }}
+          INPUT_IMPORT_DRY_RUN: ${{ inputs.import_dry_run }}
+          INPUT_IMPORT_ORGANIZE: ${{ inputs.import_organize }}
         run: |
-          CMD="${{ inputs.command }}"
+          CMD="$INPUT_COMMAND"
           ARGS=""
 
-          if [[ "$CMD" == "analyze" && -n "${{ inputs.file }}" ]]; then
-            ARGS="${{ inputs.file }}"
+          if [[ "$CMD" == "analyze" && -n "$INPUT_FILE" ]]; then
+            ARGS="$INPUT_FILE"
           fi
 
           if [[ "$CMD" == "sort" ]]; then
-            ARGS="--by ${{ inputs.sort_by }}"
-            if [[ -n "${{ inputs.folder }}" ]]; then
-              ARGS="$ARGS --folder ${{ inputs.folder }}"
+            ARGS="--by $INPUT_SORT_BY"
+            if [[ -n "$INPUT_FOLDER" ]]; then
+              ARGS="$ARGS --folder $INPUT_FOLDER"
             fi
           fi
 
-          if [[ "$CMD" == "organize" && -n "${{ inputs.output }}" ]]; then
-            ARGS="--output ${{ inputs.output }}"
+          if [[ "$CMD" == "organize" && -n "$INPUT_OUTPUT" ]]; then
+            ARGS="--output $INPUT_OUTPUT"
           fi
 
           if [[ "$CMD" == "search" ]]; then
-            if [[ -z "${{ inputs.keyword }}" ]]; then
+            if [[ -z "$INPUT_KEYWORD" ]]; then
               echo "::error::A keyword is required for the 'search' command."
               exit 1
             fi
-            ARGS="${{ inputs.keyword }} --context ${{ inputs.context }}"
-            if [[ -n "${{ inputs.folder }}" ]]; then
-              ARGS="$ARGS --folder ${{ inputs.folder }}"
+            ARGS="$INPUT_KEYWORD --context $INPUT_CONTEXT"
+            if [[ -n "$INPUT_FOLDER" ]]; then
+              ARGS="$ARGS --folder $INPUT_FOLDER"
             fi
           fi
 
           if [[ "$CMD" == "import" ]]; then
-            if [[ -z "${{ inputs.file }}" ]]; then
+            if [[ -z "$INPUT_FILE" ]]; then
               echo "::error::A file path is required for the 'import' command."
               exit 1
             fi
-            ARGS="${{ inputs.file }}"
-            if [[ -n "${{ inputs.import_dest }}" ]]; then
-              ARGS="$ARGS --dest ${{ inputs.import_dest }}"
+            ARGS="$INPUT_FILE"
+            if [[ -n "$INPUT_IMPORT_DEST" ]]; then
+              ARGS="$ARGS --dest $INPUT_IMPORT_DEST"
             fi
-            if [[ "${{ inputs.import_dry_run }}" == "true" ]]; then
+            if [[ "$INPUT_IMPORT_DRY_RUN" == "true" ]]; then
               ARGS="$ARGS --dry-run"
             fi
-            if [[ "${{ inputs.import_organize }}" == "true" ]]; then
+            if [[ "$INPUT_IMPORT_ORGANIZE" == "true" ]]; then
               ARGS="$ARGS --organize"
             fi
           fi
 
           if [[ "$CMD" == "process-inbox" ]]; then
-            if [[ "${{ inputs.import_dry_run }}" == "true" ]]; then
+            if [[ "$INPUT_IMPORT_DRY_RUN" == "true" ]]; then
               ARGS="$ARGS --dry-run"
             fi
-            if [[ "${{ inputs.import_organize }}" == "true" ]]; then
+            if [[ "$INPUT_IMPORT_ORGANIZE" == "true" ]]; then
               ARGS="$ARGS --organize"
             fi
           fi
@@ -139,14 +150,19 @@ jobs:
           echo "args=$ARGS" >> "$GITHUB_OUTPUT"
 
       - name: Run notes_helper.py
+        env:
+          INPUT_COMMAND: ${{ inputs.command }}
+          BUILD_ARGS: ${{ steps.build_args.outputs.args }}
         run: |
-          python3 tools/notes_helper.py ${{ inputs.command }} ${{ steps.build_args.outputs.args }}
+          python3 tools/notes_helper.py "$INPUT_COMMAND" $BUILD_ARGS
 
       - name: Commit generated files (organize with output, import, or process-inbox)
         if: |
           (inputs.command == 'organize' && inputs.output != '') ||
           (inputs.command == 'import' && inputs.import_dry_run != 'true') ||
           (inputs.command == 'process-inbox' && inputs.import_dry_run != 'true')
+        env:
+          INPUT_COMMAND: ${{ inputs.command }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -154,9 +170,9 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            if [[ "${{ inputs.command }}" == "import" ]]; then
+            if [[ "$INPUT_COMMAND" == "import" ]]; then
               git commit -m "chore: import note via Notes Helper workflow"
-            elif [[ "${{ inputs.command }}" == "process-inbox" ]]; then
+            elif [[ "$INPUT_COMMAND" == "process-inbox" ]]; then
               git commit -m "chore: process inbox via Notes Helper workflow"
             else
               git commit -m "chore: refresh notes index via Notes Helper workflow"
