@@ -101,7 +101,7 @@ def ask(message, system_prompt=None, provider=None):
 
 
 # ---------------------------------------------------------------------------
-# Perplexity  (OpenAI-compatible REST API)  — default
+# Perplexity  (OpenAI-compatible REST API)
 # ---------------------------------------------------------------------------
 
 _PERPLEXITY_BASE_URL = "https://api.perplexity.ai"
