@@ -1,4 +1,4 @@
-# 📚 Work Notes — Registrar's Office
+# 📚 Registrar's Office Notes
 
 > Personal work notes, references, and resources for the Student Records Registrar's Office.
 
