@@ -255,23 +255,24 @@ export NGROK_AUTHTOKEN=<YOUR_AUTHTOKEN>
 
 > 💡 The environment variable is named **`NGROK_AUTHTOKEN`** (no underscore between AUTH and TOKEN).
 
-**3. Start the app with a password, then tunnel it**
-
-Open two terminals (or use `&` to background the app):
+**3. Start the app with a password and open the ngrok tunnel — one command**
 
 ```bash
-# Terminal 1 — start the app with password protection
-export APP_USERNAME=registrar
-export APP_PASSWORD=choose-a-strong-password
-python3 tools/app.py
+APP_USERNAME=registrar APP_PASSWORD=choose-a-strong-password \
+  bash tools/linux-setup.sh --ngrok
 ```
 
+The script starts the web app in the background and then runs `ngrok http 4200` in the foreground. ngrok prints a public URL like `https://abc123.ngrok-free.app` — open that link in any browser on any device.
+
+> 💡 **Manual alternative:** If you prefer two separate terminals, start the app first, then run `ngrok http 4200` in a second terminal.
+
 ```bash
-# Terminal 2 — expose it publicly
+# Terminal 1
+APP_USERNAME=registrar APP_PASSWORD=choose-a-strong-password python3 tools/app.py
+
+# Terminal 2
 ngrok http 4200
 ```
-
-ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link in any browser on any device.
 
 > 💡 **The URL changes every time** you restart ngrok on the free plan. Upgrade to a paid plan for a stable custom subdomain — check current pricing at <https://ngrok.com/pricing>.
 
@@ -294,7 +295,8 @@ ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link i
 | Remove LAN firewall rule | `sudo ufw delete allow 4200/tcp && sudo ufw reload` |
 | Pull latest notes from GitHub | `git pull` |
 | Stop the app | Press `Ctrl+C` in the terminal |
-| Expose publicly via ngrok | `ngrok http <PORT>` *(app must already be running)* |
+| Expose publicly via ngrok (one command) | `APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --ngrok` |
+| Expose publicly via ngrok (manual) | `ngrok http 4200` *(app must already be running)* |
 
 ---
 

@@ -12,6 +12,7 @@ A one-shot setup and launch script for the web app on any Linux machine.
 # Run from the repository root:
 bash tools/linux-setup.sh              # default port 4200
 bash tools/linux-setup.sh --port 8080  # use a different port
+bash tools/linux-setup.sh --ngrok      # start the app AND open an ngrok tunnel
 ```
 
 What it does:
@@ -21,12 +22,14 @@ What it does:
 4. Scaffolds `tools/.env` from `tools/.env.example` (if not already present)
 5. Checks that the chosen port is not already in use — errors with a helpful message if it is
 6. Starts the web app at `http://localhost:<PORT>`
+7. *(--ngrok only)* Runs `ngrok http <PORT>` to expose the app via a public HTTPS URL
 
 Options:
 
 | Flag | Purpose |
 |---|---|
 | `--port PORT`, `-p PORT` | Port to run on (default: `4200`) |
+| `--ngrok` | After starting the app, open an ngrok tunnel on the same port |
 | `--help`, `-h` | Show usage |
 
 Optional environment variables:
@@ -38,7 +41,10 @@ Optional environment variables:
 | `PORT` | Alternative to `--port`; `--port` flag takes precedence |
 
 ```bash
-# Example — launch with password protection on port 8080:
+# Example — launch with password protection on port 4200 and expose via ngrok:
+APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --ngrok
+
+# Example — launch with password protection on a custom port:
 APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --port 8080
 ```
 
