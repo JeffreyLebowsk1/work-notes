@@ -667,13 +667,21 @@ def asset_commit():
     This is the one-click alternative to running ``git add assets/ && git commit
     && git push`` from the terminal after uploading files through the web UI.
     """
+    import logging
+    from datetime import datetime, timezone
+
     repo = str(REPO_ROOT)
     try:
         # Stage everything inside assets/
-        subprocess.run(
+        result = subprocess.run(
             ["git", "-C", repo, "add", "assets/"],
-            capture_output=True, check=True, timeout=30,
+            capture_output=True, text=True, timeout=30,
         )
+        if result.returncode != 0:
+            logging.error("git add failed: %s", result.stderr.strip())
+            return redirect(
+                url_for("assets_browser") + "?msg=git+add+failed.+Check+server+logs.&msg_type=error"
+            )
 
         # Check whether there is actually anything to commit
         status = subprocess.run(
@@ -681,27 +689,37 @@ def asset_commit():
             capture_output=True, timeout=10,
         )
         if status.returncode == 0:
-            # Exit code 0 → no staged changes
+            # Exit code 0 -> no staged changes
             return redirect(
-                url_for("assets_browser") + "?msg=Nothing+to+commit+—+assets+already+up+to+date&msg_type=success"
+                url_for("assets_browser") + "?msg=Nothing+to+commit+-+assets+already+up+to+date&msg_type=success"
             )
 
+        # Build a commit message that includes a UTC timestamp
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        commit_msg = f"chore: commit uploaded assets via web app ({ts})"
+
         # Commit
-        subprocess.run(
-            ["git", "-C", repo, "commit", "-m", "chore: commit uploaded assets via web app"],
-            capture_output=True, check=True, timeout=30,
+        result = subprocess.run(
+            ["git", "-C", repo, "commit", "-m", commit_msg],
+            capture_output=True, text=True, timeout=30,
         )
+        if result.returncode != 0:
+            logging.error("git commit failed: %s", result.stderr.strip())
+            return redirect(
+                url_for("assets_browser") + "?msg=git+commit+failed.+Check+server+logs.&msg_type=error"
+            )
 
         # Push
-        subprocess.run(
+        result = subprocess.run(
             ["git", "-C", repo, "push"],
-            capture_output=True, check=True, timeout=60,
+            capture_output=True, text=True, timeout=60,
         )
+        if result.returncode != 0:
+            logging.error("git push failed: %s", result.stderr.strip())
+            return redirect(
+                url_for("assets_browser") + "?msg=Committed+locally+but+git+push+failed.+Check+server+logs.&msg_type=error"
+            )
 
-    except subprocess.CalledProcessError:
-        return redirect(
-            url_for("assets_browser") + "?msg=Git+commit+or+push+failed.+Check+server+logs.&msg_type=error"
-        )
     except subprocess.TimeoutExpired:
         return redirect(
             url_for("assets_browser") + "?msg=Git+operation+timed+out.+Try+again.&msg_type=error"
