@@ -14,6 +14,8 @@ import mimetypes
 import os
 import re
 import sys
+import threading
+import webbrowser
 from pathlib import Path
 
 import markdown as md
@@ -35,6 +37,10 @@ from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_UPLOAD_BYTES
+
+# Seconds to wait before opening the browser after the dev server starts.
+# The delay lets Flask finish binding to the port before the browser hits it.
+_BROWSER_OPEN_DELAY = 1.0
 
 # ---------------------------------------------------------------------------
 # Section definitions — top-level folders with display metadata
@@ -585,5 +591,10 @@ def not_found(e):
 if __name__ == "__main__":
     port = config.PORT
     debug = config.DEBUG or os.environ.get("FLASK_DEBUG", "0") == "1"
-    print(f"\n📋 Work Notes — starting on http://localhost:{port}\n")
+    url = f"http://localhost:{port}"
+    print(f"\n📋 Work Notes — starting on {url}\n")
+    # Open the browser automatically unless the Werkzeug reloader's child process
+    # would do it a second time (only the parent/initial process should open it).
+    if not debug or os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        threading.Timer(_BROWSER_OPEN_DELAY, lambda: webbrowser.open(url)).start()
     app.run(debug=debug, host="0.0.0.0", port=port)
