@@ -43,6 +43,35 @@
 
 ---
 
+## 🐧 Linux Quick Start
+
+Run the web app on your local Linux machine in three steps:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/JeffreyLebowsk1/work-notes.git
+cd work-notes
+
+# 2. Install Python dependencies
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r tools/requirements-web.txt
+
+# 3. Launch the app
+python3 tools/app.py
+```
+
+Then open **http://localhost:420** in your browser.
+
+> ⚡ **One-liner shortcut** — `bash tools/linux-setup.sh` handles steps 2 and 3 automatically (creates the venv, installs deps, checks the port, and starts the app):
+> ```bash
+> bash tools/linux-setup.sh              # default port 420
+> bash tools/linux-setup.sh --port 8080  # use a different port
+> ```
+
+For password protection, ngrok public sharing, and the automatic-sync service (Jetson / rclone), see the **[🐧 Linux sections of SETUP.md](./SETUP.md#-run-the-web-app-locally-on-linux)**.
+
+---
+
 ## 🔄 How It Works
 
 The repository is a **living knowledge base** for the Registrar's Office. Here's how all the pieces fit together:
