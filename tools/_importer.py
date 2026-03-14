@@ -176,8 +176,8 @@ def cmd_import(args: argparse.Namespace) -> None:
 
     # Print analysis
     print(f"\n{'='*60}")
-    print(f"  📥 Import Analysis")
-    print(f"{'='*60}")
+    print("  📥 Import Analysis")
+    print("=" * 60)
     print(f"  Source     : {source}")
     print(f"  Detected   : {detected_folder}  (confidence: {confidence:.0%})")
     try:
@@ -196,7 +196,7 @@ def cmd_import(args: argparse.Namespace) -> None:
     print()
 
     if args.dry_run:
-        print(f"  DRY RUN — no changes made.")
+        print("  DRY RUN — no changes made.")
         print(f"  Would copy to: {dest_display}")
         print()
         return
@@ -204,7 +204,7 @@ def cmd_import(args: argparse.Namespace) -> None:
     if dest_path.exists() and not args.force:
         sys.exit(
             f"Destination already exists: {dest_display}\n"
-            f"Use --force to overwrite."
+            "Use --force to overwrite."
         )
 
     dest_dir.mkdir(parents=True, exist_ok=True)
@@ -229,13 +229,7 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
     if not inbox_dir.exists():
         sys.exit("inbox/ folder not found. Create it at the repository root first.")
 
-    candidates = sorted(
-        p for p in inbox_dir.iterdir()
-        if p.is_file()
-        and not p.name.startswith(".")
-        and p.name.lower() != "readme.md"
-        and p.suffix.lower() in (".md", ".txt")
-    )
+    candidates = pending_inbox_files()
 
     if not candidates:
         print("\n📭 No files found in inbox/ to process.\n")
@@ -243,7 +237,7 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
 
     print(f"\n{'='*60}")
     print(f"  📬 Processing inbox/ ({len(candidates)} file(s))")
-    print(f"{'='*60}\n")
+    print("=" * 60 + "\n")
 
     imported: list[str] = []
     skipped: list[str] = []
@@ -276,7 +270,7 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
             continue
 
         if dest_path.exists() and not args.force:
-            print(f"     ⚠️  Destination already exists — skipped (use --force to overwrite)\n")
+            print("     ⚠️  Destination already exists — skipped (use --force to overwrite)\n")
             skipped.append(source.name)
             continue
 
@@ -286,10 +280,10 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
         print(f"     ✅ Imported → {dest_display}\n")
         imported.append(source.name)
 
-    print(f"{'='*60}")
+    print("=" * 60)
     verb = "previewed" if args.dry_run else "imported"
     print(f"  Done: {len(imported)} {verb}, {len(skipped)} skipped")
-    print(f"{'='*60}\n")
+    print("=" * 60 + "\n")
 
     if not args.dry_run and args.organize and imported:
         idx_path = REPO_ROOT / "tools" / "index.md"
