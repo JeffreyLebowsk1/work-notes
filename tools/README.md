@@ -354,7 +354,7 @@ A **Flask web application** that lets you browse, read, search, and ask AI quest
 | **Section view** | Scrollable list of every note in a section, with word count and open action item badges |
 | **Note view** | Full markdown rendering, open action items highlighted at the top, prev/next navigation |
 | **Search** | Full-text keyword search across all notes with highlighted snippets |
-| **AI Assistant** | Chat interface powered by Perplexity (default), OpenAI, or Google Gemini — context-aware per section |
+| **AI Assistant** | Chat interface powered by Perplexity or Google Gemini — context-aware per section |
 
 ### Setup
 
@@ -388,7 +388,7 @@ Then open **http://localhost:5000** in your browser.
 |------|---------|
 | `tools/app.py` | Flask application — routes for browse, note view, search, and AI |
 | `tools/config.py` | Flask + AI provider settings (reads from `tools/.env`) |
-| `tools/ai_providers.py` | Perplexity / OpenAI / Gemini abstraction layer |
+| `tools/ai_providers.py` | Perplexity / Gemini abstraction layer |
 | `tools/templates/` | Jinja2 HTML templates (base, index, section, note, search, assistant, 404) |
 | `tools/static/css/style.css` | Adapted `linuxnlearn` stylesheet |
 | `tools/static/js/main.js` | Shared JS placeholder |

@@ -552,7 +552,7 @@ def api_ask():
             {
                 "answer": (
                     "No AI provider is configured. "
-                    "Add your GEMINI_API_KEY (or OPENAI_API_KEY / PERPLEXITY_API_KEY) "
+                    "Add your GEMINI_API_KEY (or PERPLEXITY_API_KEY) "
                     "to tools/.env to enable AI responses."
                 )
             }
