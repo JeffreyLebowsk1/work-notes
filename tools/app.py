@@ -17,8 +17,12 @@ import sys
 from pathlib import Path
 
 import markdown as md
-from flask import Flask, Response, jsonify, render_template, request, send_from_directory, url_for
+from flask import (
+    Flask, Response, jsonify, redirect, render_template,
+    request, send_from_directory, url_for,
+)
 from markupsafe import Markup
+from werkzeug.utils import secure_filename
 
 # Ensure tools/ is on sys.path so sibling modules resolve correctly.
 _TOOLS_DIR = Path(__file__).resolve().parent
@@ -30,6 +34,7 @@ from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
+app.config["MAX_CONTENT_LENGTH"] = config.MAX_UPLOAD_BYTES
 
 # ---------------------------------------------------------------------------
 # Section definitions — top-level folders with display metadata
@@ -221,6 +226,45 @@ _NOTE_INDEX: dict[str, Path] = {
 }
 
 # ---------------------------------------------------------------------------
+# Write helpers — used by the note-creation and asset-upload routes.
+# ---------------------------------------------------------------------------
+
+# Allowed subfolders for asset uploads — validated server-side.
+_ASSET_SUBFOLDERS: frozenset[str] = frozenset(
+    {"images", "documents", "spreadsheets", "screenshots"}
+)
+
+# Regex that a safe note filename must fully match.
+_NOTE_FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*\.md$")
+
+
+def _safe_note_filename(raw: str) -> str | None:
+    """Return a sanitised .md filename, or None if the input is not safe."""
+    name = raw.strip().lower()
+    if not _NOTE_FILENAME_RE.match(name):
+        return None
+    if ".." in name:
+        return None
+    return name
+
+
+def _reload_indexes() -> None:
+    """Rebuild _NOTE_INDEX and _ASSET_INDEX in-place after a write operation."""
+    _NOTE_INDEX.clear()
+    _NOTE_INDEX.update(
+        {
+            str(p.relative_to(REPO_ROOT)).replace("\\", "/"): p
+            for p in _all_notes()
+        }
+    )
+    _ASSET_INDEX.clear()
+    if _ASSETS_DIR.is_dir():
+        for _ap in _ASSETS_DIR.rglob("*"):
+            if _ap.is_file() and _ap.name not in _ASSET_SKIP:
+                _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
+                _ASSET_INDEX[_rel] = _ap
+
+# ---------------------------------------------------------------------------
 # Routes — note browser
 # ---------------------------------------------------------------------------
 
@@ -306,17 +350,22 @@ def assets_browser():
     """Asset browser — lists all files in the repo assets/ folder by sub-folder."""
     groups: dict[str, list[dict]] = {}
     for rel, path in sorted(_ASSET_INDEX.items()):
+        try:
+            size = path.stat().st_size
+        except FileNotFoundError:
+            continue  # file removed from disk since last index rebuild — skip silently
         parts = rel.split("/")
         folder = parts[0] if len(parts) > 1 else "root"
         groups.setdefault(folder, []).append(
             {
                 "rel": rel,
                 "name": path.name,
-                "size": path.stat().st_size,
+                "size": size,
                 "mime": mimetypes.guess_type(path.name)[0] or "application/octet-stream",
             }
         )
-    return render_template("assets.html", groups=groups)
+    return render_template("assets.html", groups=groups,
+                           subfolders=sorted(_ASSET_SUBFOLDERS))
 
 
 @app.route("/repo-assets/<path:asset_path>")
@@ -326,6 +375,107 @@ def repo_asset(asset_path):
     if full_path is None:
         return render_template("404.html"), 404
     return send_from_directory(str(full_path.parent), full_path.name)
+
+
+# ---------------------------------------------------------------------------
+# Routes — note creation
+# ---------------------------------------------------------------------------
+
+
+@app.route("/note/new", methods=["GET", "POST"])
+def note_new():
+    """Render and handle the new-note creation form."""
+    error: str | None = None
+    form_data: dict = {}
+
+    if request.method == "POST":
+        section_key = request.form.get("section", "").strip()
+        filename = request.form.get("filename", "").strip()
+        content = request.form.get("content", "")
+        form_data = {"section": section_key, "filename": filename, "content": content}
+
+        if section_key not in _SECTION_DIRS:
+            error = "Please select a valid section."
+        else:
+            safe_name = _safe_note_filename(filename)
+            if safe_name is None:
+                error = (
+                    "Invalid filename. Use lowercase letters, digits, hyphens, "
+                    "and end with .md (e.g. 2026-03-14-topic.md)."
+                )
+            else:
+                section_dir = _SECTION_DIRS[section_key]
+                # Daily-log notes live in a YYYY-MM/ sub-folder — auto-create it.
+                if section_key == "daily-logs":
+                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}\.md$", safe_name)
+                    dest = (
+                        section_dir / date_match.group(1) / safe_name
+                        if date_match
+                        else section_dir / safe_name
+                    )
+                else:
+                    dest = section_dir / safe_name
+
+                if dest.exists():
+                    error = (
+                        f"A note named \"{safe_name}\" already exists in "
+                        f"{SECTIONS[section_key]['title']}."
+                    )
+                else:
+                    dest.parent.mkdir(parents=True, exist_ok=True)
+                    dest.write_text(content, encoding="utf-8")
+                    _reload_indexes()
+                    note_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
+                    return redirect(url_for("note", note_path=note_path))
+
+    preselect = request.args.get("section", "daily-logs")
+    if preselect not in SECTIONS:
+        preselect = "daily-logs"
+
+    return render_template(
+        "note_new.html",
+        sections=SECTIONS,
+        preselect=form_data.get("section", preselect),
+        error=error,
+        form_data=form_data,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Routes — asset upload
+# ---------------------------------------------------------------------------
+
+
+@app.route("/assets/upload", methods=["POST"])
+def asset_upload():
+    """Accept a multipart file upload and store it in the assets folder."""
+    subfolder = request.form.get("subfolder", "").strip()
+    if subfolder not in _ASSET_SUBFOLDERS:
+        return redirect(url_for("assets_browser") + "?msg=Invalid+subfolder&msg_type=error")
+
+    uploaded = request.files.get("file")
+    if not uploaded or not uploaded.filename:
+        return redirect(url_for("assets_browser") + "?msg=No+file+selected&msg_type=error")
+
+    safe_name = secure_filename(uploaded.filename)
+    if not safe_name:
+        return redirect(url_for("assets_browser") + "?msg=Invalid+filename&msg_type=error")
+
+    dest_dir = _ASSETS_DIR / subfolder
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / safe_name
+
+    if dest.exists():
+        return redirect(
+            url_for("assets_browser")
+            + f"?msg={safe_name}+already+exists&msg_type=error"
+        )
+
+    uploaded.save(str(dest))
+    _reload_indexes()
+    return redirect(
+        url_for("assets_browser") + f"?msg={safe_name}+uploaded+successfully&msg_type=success"
+    )
 
 
 # ---------------------------------------------------------------------------

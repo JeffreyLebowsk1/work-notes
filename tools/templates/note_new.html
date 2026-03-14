@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}New Note — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        {% if preselect in sections %}
+        <a href="{{ url_for('section', section_key=preselect) }}">{{ sections[preselect].title }}</a>
+        <span>›</span>
+        {% endif %}
+        <span>New Note</span>
+    </div>
+
+    <div class="section-header">
+        <div class="section-header-icon">✏️</div>
+        <div>
+            <h1>New Note</h1>
+            <p>Write a new Markdown note and save it directly to your notes.</p>
+        </div>
+    </div>
+
+    {% if error %}
+    <div class="notify-banner notify-error" role="alert">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="notify-banner notify-info">
+        💡 Notes are saved to disk. Commit and <code>git push</code> to make them permanent in GitHub.
+    </div>
+
+    <form method="post" action="{{ url_for('note_new') }}" class="note-form-card">
+
+        <div class="form-group">
+            <label class="form-label" for="section">Section</label>
+            <select id="section" name="section" class="form-select" required>
+                {% for key, sec in sections.items() %}
+                <option value="{{ key }}" {% if key == preselect %}selected{% endif %}>
+                    {{ sec.icon }} {{ sec.title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="filename">Filename</label>
+            <input
+                id="filename"
+                name="filename"
+                type="text"
+                class="form-input"
+                placeholder="2026-03-14.md"
+                value="{{ form_data.get('filename', '') }}"
+                required
+                autocomplete="off"
+                spellcheck="false"
+            >
+            <p class="form-hint" id="filename-hint">
+                Lowercase letters, digits, hyphens, and <code>.md</code> extension.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="content">Content <span class="form-label-muted">(Markdown)</span></label>
+            <textarea
+                id="content"
+                name="content"
+                class="form-textarea"
+                rows="22"
+                placeholder="# Note title&#10;&#10;Write your note here…"
+                spellcheck="true"
+            >{{ form_data.get('content', '') }}</textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">💾 Save Note</button>
+            <a href="{{ url_for('section', section_key=preselect) if preselect in sections else url_for('index') }}"
+               class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // Per-section filename hints and starter templates
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm   = String(today.getMonth() + 1).padStart(2, '0');
+    var dd   = String(today.getDate()).padStart(2, '0');
+    var dateStr = yyyy + '-' + mm + '-' + dd;
+
+    var hints = {
+        'daily-logs':          dateStr + '.md',
+        'meetings':            dateStr + '-topic.md',
+        'graduation':          'topic-name.md',
+        'transcripts':         'topic-name.md',
+        'admissions':          'topic-name.md',
+        'residency-tuition':   'topic-name.md',
+        'continuing-education':'topic-name.md',
+        'personal-data':       'topic-name.md',
+        'updates':             'topic-name.md',
+        'financial-aid':       'topic-name.md',
+    };
+
+    var templates = {
+        'daily-logs': '# ' + dateStr + '\n\n## Today\'s Focus\n\n## Completed\n\n## In Progress\n\n## Blockers / Questions\n\n## Notes\n',
+        'meetings':   '# Meeting: Title\n\n**Date:** ' + dateStr + '\n**Attendees:**\n\n## Agenda\n\n## Discussion\n\n## Action Items\n\n- [ ] \n\n## Notes\n',
+    };
+
+    var sectionEl  = document.getElementById('section');
+    var filenameEl = document.getElementById('filename');
+    var hintEl     = document.getElementById('filename-hint');
+    var contentEl  = document.getElementById('content');
+
+    function updateHints() {
+        var key = sectionEl.value;
+        var ph  = hints[key] || 'topic-name.md';
+        filenameEl.placeholder = ph;
+        hintEl.innerHTML = 'e.g. <code>' + ph + '</code> — lowercase, hyphens, ends with <code>.md</code>';
+    }
+
+    function prefillTemplate() {
+        // Only pre-fill if the content textarea is empty (new note, not re-render after error)
+        if (contentEl.value.trim() !== '') return;
+        var key = sectionEl.value;
+        if (templates[key]) contentEl.value = templates[key];
+    }
+
+    // Also pre-fill filename if blank when section changes
+    function prefillFilename() {
+        if (filenameEl.value.trim() !== '') return;
+        var key = sectionEl.value;
+        var ph  = hints[key] || '';
+        if (ph && ph !== 'topic-name.md') filenameEl.value = ph;
+    }
+
+    sectionEl.addEventListener('change', function () {
+        updateHints();
+        prefillTemplate();
+        prefillFilename();
+    });
+
+    // Run once on page load
+    updateHints();
+    {% if not form_data.get('content') %}
+    prefillTemplate();
+    {% endif %}
+    {% if not form_data.get('filename') %}
+    prefillFilename();
+    {% endif %}
+}());
+</script>
+{% endblock %}
