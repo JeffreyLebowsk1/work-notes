@@ -5,6 +5,26 @@
 
 ## Residency Classification Criteria (NC / RDS)
 
+<div class="mermaid">
+flowchart TD
+    A["Student Residency Determination"] --> B{"Non-immigrant visa status?<br/>F-1, J-1, B-1/B-2, etc."}
+    B -->|Yes| C["❌ INELIGIBLE for in-state rates"]
+    B -->|No| D{"Special category?<br/>Military, Green Card, DECA?"}
+    D -->|Yes| E["✅ May Qualify for In-State"]
+    D -->|No| F{"12+ months domicile<br/>in NC prior to term start?"}
+    F -->|No| G["❌ OUT-OF-STATE"]
+    F -->|Yes| H{"Primary reason for NC<br/>NOT attending school?"}
+    H -->|No| G
+    H -->|Yes| I{"Dependent or<br/>Financially Independent?"}
+    I -->|Dependent - Parents in-state| J["✅ IN-STATE RESIDENT"]
+    I -->|Independent| J
+    I -->|Dependent - Parents out-of-state| G
+    E --> K["See RDS Reference for details"]
+    J --> K
+    C --> K
+    G --> K
+</div>
+
 Students are classified as **in-state (resident)** or **out-of-state (non-resident)** for tuition purposes by the [Residency Determination Service (RDS)](https://www.ncresidency.org). Classification is based on:
 
 - **Domicile:** The student's permanent, fixed home — where they intend to remain indefinitely.
