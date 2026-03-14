@@ -10,13 +10,14 @@ Or from the tools/ directory:
 Then open http://localhost:5000 in your browser.
 """
 
+import mimetypes
 import os
 import re
 import sys
 from pathlib import Path
 
 import markdown as md
-from flask import Flask, jsonify, render_template, request, url_for
+from flask import Flask, jsonify, render_template, request, send_from_directory, url_for
 from markupsafe import Markup
 
 # Ensure tools/ is on sys.path so sibling modules resolve correctly.
@@ -145,16 +146,43 @@ def _render_markdown(text: str) -> Markup:
 
 @app.context_processor
 def inject_static_asset_url():
-    """Provide a cache-busted static asset URL helper for templates."""
+    """Provide a cache-busted static asset URL helper and global UI vars."""
     def static_asset_url(filename):
         static_path = os.path.join(app.static_folder, filename)
         if os.path.isfile(static_path):
             version = int(os.path.getmtime(static_path))
             return url_for("static", filename=filename, v=version)
         return url_for("static", filename=filename)
-    return {"static_asset_url": static_asset_url}
+
+    cccc_logo_url = (
+        url_for("repo_asset", asset_path=_CCCC_LOGO_REL)
+        if _CCCC_LOGO_REL
+        else None
+    )
+
+    return {"static_asset_url": static_asset_url, "cccc_logo_url": cccc_logo_url}
 
 
+
+# ---------------------------------------------------------------------------
+# Asset index — whitelist of all files in the repo assets/ folder.
+# Keyed by POSIX-style path relative to assets/ (e.g. "images/logo.png").
+# Used by /repo-assets/ to serve files without trusting user input.
+# ---------------------------------------------------------------------------
+
+_ASSETS_DIR: Path = REPO_ROOT / "assets"
+_ASSET_INDEX: dict[str, Path] = {}
+if _ASSETS_DIR.is_dir():
+    for _ap in _ASSETS_DIR.rglob("*"):
+        if _ap.is_file() and _ap.name != ".gitkeep":
+            _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
+            _ASSET_INDEX[_rel] = _ap
+
+# Relative path to the CCCC logo within the asset index
+_CCCC_LOGO_REL = next(
+    (r for r in _ASSET_INDEX if r.lower().startswith("images/cccc")),
+    None,
+)
 
 # ---------------------------------------------------------------------------
 # Note index — whitelist of all known .md files, built once at startup.
@@ -247,6 +275,38 @@ def note(note_path):
         prev_note=prev_note,
         next_note=next_note,
     )
+
+
+@app.route("/assets")
+def assets_browser():
+    """Asset browser — lists all files in the repo assets/ folder by sub-folder."""
+    groups: dict[str, list[dict]] = {}
+    for rel, path in sorted(_ASSET_INDEX.items()):
+        parts = rel.split("/")
+        folder = parts[0] if len(parts) > 1 else "root"
+        groups.setdefault(folder, []).append(
+            {
+                "rel": rel,
+                "name": path.name,
+                "size": path.stat().st_size,
+                "mime": mimetypes.guess_type(path.name)[0] or "application/octet-stream",
+            }
+        )
+    return render_template("assets.html", groups=groups)
+
+
+@app.route("/repo-assets/<path:asset_path>")
+def repo_asset(asset_path):
+    """Serve a file from the repo assets/ folder, guarded by the whitelist."""
+    full_path = _ASSET_INDEX.get(asset_path)
+    if full_path is None:
+        return render_template("404.html"), 404
+    return send_from_directory(str(full_path.parent), full_path.name)
+
+
+# ---------------------------------------------------------------------------
+# Routes — search
+# ---------------------------------------------------------------------------
 
 
 @app.route("/search")
