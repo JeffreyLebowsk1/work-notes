@@ -7,7 +7,7 @@ Run from the repo root:
 Or from the tools/ directory:
     python3 app.py
 
-Then open http://localhost:420 in your browser.
+Then open http://localhost:4200 in your browser.
 """
 
 import mimetypes

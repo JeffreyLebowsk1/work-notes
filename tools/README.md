@@ -10,7 +10,7 @@ A one-shot setup and launch script for the web app on any Linux machine.
 
 ```bash
 # Run from the repository root:
-bash tools/linux-setup.sh              # default port 420
+bash tools/linux-setup.sh              # default port 4200
 bash tools/linux-setup.sh --port 8080  # use a different port
 ```
 
@@ -26,7 +26,7 @@ Options:
 
 | Flag | Purpose |
 |---|---|
-| `--port PORT`, `-p PORT` | Port to run on (default: `420`) |
+| `--port PORT`, `-p PORT` | Port to run on (default: `4200`) |
 | `--help`, `-h` | Show usage |
 
 Optional environment variables:
@@ -428,7 +428,7 @@ Get a free Perplexity API key at <https://www.perplexity.ai/settings/api>.
 python3 tools/app.py
 ```
 
-Then open **http://localhost:420** in your browser.
+Then open **http://localhost:4200** in your browser.
 
 ### New files added
 
