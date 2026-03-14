@@ -138,8 +138,8 @@ def _ask_perplexity(message, system_prompt):
         raise ProviderError(
             "Perplexity rate limit exceeded. Try again in a moment.", 429
         )
-    except openai.OpenAIError as exc:
-        raise ProviderError(f"Perplexity error: {exc}", 500)
+    except openai.OpenAIError:
+        raise ProviderError("Perplexity request failed. Please try again.", 500)
 
 
 # ---------------------------------------------------------------------------
@@ -176,8 +176,8 @@ def _ask_openai(message, system_prompt):
         raise ProviderError(
             "OpenAI rate limit exceeded. Try again in a moment.", 429
         )
-    except openai.OpenAIError as exc:
-        raise ProviderError(f"OpenAI error: {exc}", 500)
+    except openai.OpenAIError:
+        raise ProviderError("OpenAI request failed. Please try again.", 500)
 
 
 # ---------------------------------------------------------------------------
@@ -222,4 +222,4 @@ def _raise_gemini_error(exc):
         raise ProviderError(
             "Gemini quota exceeded. Try again in a moment.", 429
         )
-    raise ProviderError(f"Gemini error: {exc}", 500)
+    raise ProviderError("Gemini request failed. Please try again.", 500)
