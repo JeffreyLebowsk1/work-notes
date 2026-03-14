@@ -55,3 +55,39 @@
     {% endif %}
 </div>
 {% endblock %}
+
+{% block scripts %}
+{% if query and results %}
+<script>
+(function () {
+    var query = {{ query | tojson }};
+    if (!query) return;
+
+    // Highlight matching text using safe DOM APIs (no innerHTML with user data)
+    function highlightInElement(el) {
+        // Create a fresh regex for each element to avoid lastIndex drift with /g flag
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        var rx = new RegExp(escaped, "gi");
+        var text = el.textContent;
+        el.textContent = "";
+        var last = 0, match;
+        while ((match = rx.exec(text)) !== null) {
+            if (match.index > last) {
+                el.appendChild(document.createTextNode(text.slice(last, match.index)));
+            }
+            var mark = document.createElement("mark");
+            mark.textContent = match[0];
+            el.appendChild(mark);
+            last = match.index + match[0].length;
+            if (match[0].length === 0) break; // safety: avoid infinite loop on zero-width match
+        }
+        if (last < text.length) {
+            el.appendChild(document.createTextNode(text.slice(last)));
+        }
+    }
+
+    document.querySelectorAll(".result-snippet").forEach(highlightInElement);
+}());
+</script>
+{% endif %}
+{% endblock %}
