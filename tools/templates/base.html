@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Work Notes{% endblock %}</title>
+    <meta name="theme-color" content="#1d3557">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CCCC Notes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>{% block title %}CCCC Notes{% endblock %}</title>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="stylesheet" href="{{ static_asset_url('css/style.css') }}">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-brand">
-                📋 Work Notes
+                {% if cccc_logo_url %}
+                <img src="{{ cccc_logo_url }}" alt="CCCC" class="nav-logo">
+                {% else %}
+                <span class="nav-logo-text">CCCC Notes</span>
+                {% endif %}
             </a>
             <div class="nav-links">
-                <a href="{{ url_for('index') }}">Home</a>
-                <a href="{{ url_for('section', section_key='graduation') }}">🎓 Graduation</a>
-                <a href="{{ url_for('section', section_key='meetings') }}">📅 Meetings</a>
-                <a href="{{ url_for('section', section_key='daily-logs') }}">📓 Daily Logs</a>
-                <a href="{{ url_for('section', section_key='transcripts') }}">📄 Transcripts</a>
+                <a href="{{ url_for('section', section_key='graduation') }}" class="nav-hide-mobile">🎓 Graduation</a>
+                <a href="{{ url_for('section', section_key='meetings') }}" class="nav-hide-mobile">📅 Meetings</a>
+                <a href="{{ url_for('section', section_key='daily-logs') }}" class="nav-hide-mobile">📓 Daily Logs</a>
+                <a href="{{ url_for('assets_browser') }}" class="nav-hide-mobile">📁 Assets</a>
                 <a href="{{ url_for('search') }}" class="btn-search">🔍 Search</a>
-                <a href="{{ url_for('assistant') }}" class="btn-ai">🤖 AI Assistant</a>
+                <a href="{{ url_for('assistant') }}" class="btn-ai">🤖 AI</a>
             </div>
         </div>
     </nav>
@@ -30,10 +39,30 @@
 
     <footer class="footer">
         <div class="footer-container">
-            <p>Work Notes — Registrar's Office, Central Carolina Community College</p>
-            <p>Browse, search, and manage your work notes 📋</p>
+            <p>CCCC Notes · Registrar's Office · <a href="https://www.cccc.edu" target="_blank" rel="noopener">Central Carolina Community College</a></p>
         </div>
     </footer>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+        <div class="bottom-nav-items">
+            <a href="{{ url_for('index') }}" class="bottom-nav-item" data-path="/">
+                <span class="bottom-nav-icon">🏠</span>
+                <span class="bottom-nav-label">Home</span>
+            </a>
+            <a href="{{ url_for('search') }}" class="bottom-nav-item" data-path="/search">
+                <span class="bottom-nav-icon">🔍</span>
+                <span class="bottom-nav-label">Search</span>
+            </a>
+            <a href="{{ url_for('assets_browser') }}" class="bottom-nav-item" data-path="/assets">
+                <span class="bottom-nav-icon">📁</span>
+                <span class="bottom-nav-label">Assets</span>
+            </a>
+            <a href="{{ url_for('assistant') }}" class="bottom-nav-item" data-path="/assistant">
+                <span class="bottom-nav-icon">🤖</span>
+                <span class="bottom-nav-label">AI</span>
+            </a>
+        </div>
+    </nav>
 
     <script src="{{ static_asset_url('js/main.js') }}"></script>
     {% block scripts %}{% endblock %}

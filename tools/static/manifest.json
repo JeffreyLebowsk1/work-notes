@@ -1,0 +1,18 @@
+{
+  "name": "CCCC Notes",
+  "short_name": "CCCC Notes",
+  "description": "Registrar's Office reference notes — Central Carolina Community College",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1d3557",
+  "background_color": "#1d3557",
+  "icons": [
+    {
+      "src": "/static/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
