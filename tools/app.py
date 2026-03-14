@@ -213,24 +213,51 @@ def _render_markdown(text: str) -> Markup:
 
 
 def _parse_email_templates() -> list[dict]:
-    """Parse email templates from email-templates.md and return structured list.
+    """Parse email templates from all template files in the repo.
     
-    Returns a list of template dicts:
-    {
-        'section': '📄 Transcripts',
-        'category': 'Transcript Request Received',
-        'subject': 'Your Transcript Request Has Been Received',
-        'body': 'Dear [Student Name],...',
-        'mailto_url': 'mailto:?subject=...&body=....'
-    }
+    Scans multiple locations:
+    - email-templates.md (main)
+    - graduation/communications/*.md
+    - transcripts/templates/*.md
+    - continuing-education/personal-enrichment.md
+    - admissions/homeschool-transcripts.md
+    
+    Returns a list of template dicts with mailto_url for quick sending.
     """
     templates = []
-    templates_file = REPO_ROOT / "email-templates.md"
+    template_files = [
+        REPO_ROOT / "email-templates.md",
+        REPO_ROOT / "graduation" / "communications" / "internal-communications.md",
+        REPO_ROOT / "graduation" / "communications" / "student-announcements.md",
+        REPO_ROOT / "transcripts" / "templates" / "attendance-roster-audit-emails.md",
+        REPO_ROOT / "transcripts" / "templates" / "never-attended-letter.md",
+        REPO_ROOT / "transcripts" / "templates" / "withdrawal-instructions.md",
+        REPO_ROOT / "continuing-education" / "personal-enrichment.md",
+        REPO_ROOT / "admissions" / "homeschool-transcripts.md",
+    ]
     
-    if not templates_file.exists():
-        return templates
+    for template_file in template_files:
+        if not template_file.exists():
+            continue
+        
+        try:
+            content = template_file.read_text(encoding="utf-8")
+            file_templates = _parse_template_file(content, template_file.name)
+            templates.extend(file_templates)
+        except Exception as e:
+            app.logger.warning(f"Error parsing {template_file}: {e}")
     
-    content = templates_file.read_text(encoding="utf-8")
+    return templates
+
+
+def _parse_template_file(content: str, source_filename: str) -> list[dict]:
+    """Parse templates from a single file content string.
+    
+    Handles both:
+    - Subject: line format
+    - **Subject:** format (markdown bold)
+    """
+    templates = []
     lines = content.split("\n")
     
     current_section = None
@@ -250,17 +277,11 @@ def _parse_email_templates() -> list[dict]:
         if line.startswith("### "):
             # Save previous template if exists
             if current_category and current_subject and body_lines:
-                body_text = "\n".join(body_lines).strip()
-                body_text = re.sub(r"\n+", "\n", body_text)  # Normalize newlines
-                
-                mailto_url = f"mailto:?subject={urllib.parse.quote(current_subject)}&body={urllib.parse.quote(body_text)}"
-                templates.append({
-                    "section": current_section,
-                    "category": current_category,
-                    "subject": current_subject,
-                    "body": body_text,
-                    "mailto_url": mailto_url,
-                })
+                template = _build_template(
+                    current_section, current_category, current_subject, body_lines, source_filename
+                )
+                if template:
+                    templates.append(template)
             
             current_category = line[4:].strip()
             current_subject = None
@@ -268,9 +289,16 @@ def _parse_email_templates() -> list[dict]:
             in_body = False
             continue
         
-        # Subject line (starts with "Subject:")
+        # Subject line — plain format: "Subject: ..."
         if line.startswith("Subject:"):
             current_subject = line[8:].strip()
+            in_body = False
+            continue
+        
+        # Subject line — markdown bold format: "**Subject:** ..."
+        if line.startswith("**Subject:**"):
+            current_subject = line[12:].strip()
+            in_body = False
             continue
         
         # Separator (---)
@@ -279,26 +307,50 @@ def _parse_email_templates() -> list[dict]:
                 in_body = True
             continue
         
+        # Also treat "---" at start of line or end as section break? Let's be more careful
         # Body collection
         if in_body and current_subject:
-            if line.strip() and not line.startswith("["):  # Skip metadata lines
+            # Skip metadata lines, empty lines at start
+            if line.strip():  # Non-empty line
                 body_lines.append(line)
     
     # Save last template
     if current_category and current_subject and body_lines:
-        body_text = "\n".join(body_lines).strip()
-        body_text = re.sub(r"\n+", "\n", body_text)  # Normalize newlines
-        
-        mailto_url = f"mailto:?subject={urllib.parse.quote(current_subject)}&body={urllib.parse.quote(body_text)}"
-        templates.append({
-            "section": current_section,
-            "category": current_category,
-            "subject": current_subject,
-            "body": body_text,
-            "mailto_url": mailto_url,
-        })
+        template = _build_template(
+            current_section, current_category, current_subject, body_lines, source_filename
+        )
+        if template:
+            templates.append(template)
     
     return templates
+
+
+def _build_template(section: str | None, category: str, subject: str, body_lines: list[str], source: str) -> dict | None:
+    """Build a single template dict with mailto URL."""
+    if not category or not subject or not body_lines:
+        return None
+    
+    # Clean up body
+    body_text = "\n".join(body_lines).strip()
+    body_text = re.sub(r"\n\n+", "\n\n", body_text)  # Normalize multiple newlines
+    
+    # Truncate very long bodies (mailto has URL length limits)
+    if len(body_text) > 1800:
+        body_text = body_text[:1800] + "\n\n[… template truncated in email client …]"
+    
+    # Create mailto URL with proper encoding
+    subject_encoded = urllib.parse.quote(subject)
+    body_encoded = urllib.parse.quote(body_text)
+    mailto_url = f"mailto:?subject={subject_encoded}&body={body_encoded}"
+    
+    return {
+        "section": section or "Templates",
+        "category": category,
+        "subject": subject,
+        "body": body_text,
+        "source": source,
+        "mailto_url": mailto_url,
+    }
 
 
 @app.context_processor

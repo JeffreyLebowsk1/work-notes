@@ -37,7 +37,15 @@
         {% endfor %}
     {% else %}
         <div class="empty-state">
-            <p>No email templates found. Add templates to <code>email-templates.md</code> to get started.</p>
+            <p>No email templates found. Add templates to the following files to get started:</p>
+            <ul style="text-align: left; margin-top: 1rem; color: var(--text-muted);">
+                <li>email-templates.md</li>
+                <li>graduation/communications/student-announcements.md</li>
+                <li>graduation/communications/internal-communications.md</li>
+                <li>transcripts/templates/*.md</li>
+                <li>continuing-education/personal-enrichment.md</li>
+                <li>admissions/homeschool-transcripts.md</li>
+            </ul>
         </div>
     {% endif %}
 </div>

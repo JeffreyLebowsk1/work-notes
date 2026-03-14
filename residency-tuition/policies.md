@@ -78,7 +78,7 @@ The sustained integrity and authority of RDS as the sole arbiter of residency cl
 
 | Document | Description | Link |
 |---|---|---|
-| State Residency Statutes | Legal definition of residency for tuition purposes | <!-- link --> |
-| Institutional Residency Policy | Internal policy governing classification decisions | <!-- link --> |
-| Tuition Rate Schedule | Current rates by category | <!-- link --> |
-| Residency Appeal Form | Form for students to appeal classification | <!-- link --> |
+| State Residency Statutes | Legal definition of residency for tuition purposes | [ncresidency.org](https://www.ncresidency.org) |
+| Institutional Residency Policy | Internal policy governing classification decisions | [RDS Reference](./rds.md) |
+| Tuition Rate Schedule | Current rates by category | [Contact Registrar's Office](../../contacts.md) |
+| Residency Appeal Form | Form for students to appeal classification | [NCresidency.org — Appeals](https://www.ncresidency.org) |
