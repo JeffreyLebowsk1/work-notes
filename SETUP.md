@@ -119,7 +119,7 @@ Use these steps to clone the repo and launch the browser UI on any Linux machine
 > ⚡ **Shortcut — automated setup script:**
 > Once you have the repo cloned, a single script handles everything below (venv, dependencies, `.env` scaffold, port check, and app launch):
 > ```bash
-> bash tools/linux-setup.sh              # default port 420
+> bash tools/linux-setup.sh              # default port 4200
 > bash tools/linux-setup.sh --port 8080  # use a different port
 > ```
 > The manual steps are documented below if you prefer to run them yourself or need to troubleshoot.
@@ -176,7 +176,7 @@ Get an API key at <https://www.perplexity.ai/settings/api> (Perplexity) or <http
 python3 tools/app.py
 ```
 
-Then open **http://localhost:420** in your browser.
+Then open **http://localhost:4200** in your browser.
 
 ---
 
@@ -196,7 +196,7 @@ The browser will prompt for the username and password before showing any notes.
 
 ### Step 6 — (Optional) Share publicly with ngrok
 
-By default the app is only reachable at `http://localhost:420` on your own machine. **ngrok** creates a temporary public `https://` URL that tunnels to it — useful for accessing your notes from another device or sharing with a colleague without deploying to Render.
+By default the app is only reachable at `http://localhost:4200` on your own machine. **ngrok** creates a temporary public `https://` URL that tunnels to it — useful for accessing your notes from another device or sharing with a colleague without deploying to Render.
 
 > ⚠️ **Always set `APP_USERNAME` and `APP_PASSWORD` before exposing the app publicly.** Without a password, anyone with the ngrok URL can read your notes.
 
@@ -230,7 +230,7 @@ python3 tools/app.py
 
 ```bash
 # Terminal 2 — expose it publicly
-ngrok http 420
+ngrok http 4200
 ```
 
 ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link in any browser on any device.
@@ -244,7 +244,7 @@ ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link i
 | Goal | Command |
 |---|---|
 | Activate the virtual environment | `source .venv/bin/activate` |
-| Start the app (default port 420) | `python3 tools/app.py` |
+| Start the app (default port 4200) | `python3 tools/app.py` |
 | Start on a different port | `bash tools/linux-setup.sh --port 8080` |
 | Run setup script (default port) | `bash tools/linux-setup.sh` |
 | Run setup script on a different port | `bash tools/linux-setup.sh --port 8080` |
