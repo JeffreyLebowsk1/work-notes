@@ -14,13 +14,13 @@
 #   6. Starts the web app at http://localhost:<PORT>
 #
 # Options:
-#   --port PORT, -p PORT   Port to run the web app on (default: 5000)
+#   --port PORT, -p PORT   Port to run the web app on (default: 420)
 #   --help, -h             Show this help message
 #
 # Environment variables (alternative to flags):
 #   APP_USERNAME   — set a login username (recommended for shared/public machines)
 #   APP_PASSWORD   — set a login password (required when using ngrok or Render)
-#   PORT           — override the default port (default: 5000; --port takes precedence)
+#   PORT           — override the default port (default: 420; --port takes precedence)
 #
 # Examples:
 #   bash tools/linux-setup.sh
@@ -48,7 +48,7 @@ error()   { echo -e "${RED}[setup] ERROR:${RESET} $*" >&2; }
 # ---------------------------------------------------------------------------
 # Parse CLI arguments
 # ---------------------------------------------------------------------------
-PORT="${PORT:-5000}"  # default; can be overridden by env var or --port flag
+PORT="${PORT:-420}"  # default; can be overridden by env var or --port flag
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -64,7 +64,7 @@ while [[ $# -gt 0 ]]; do
       echo "Usage: bash tools/linux-setup.sh [--port PORT]"
       echo ""
       echo "Options:"
-      echo "  --port PORT, -p PORT   Port to run the web app on (default: 5000)"
+      echo "  --port PORT, -p PORT   Port to run the web app on (default: 420)"
       echo "  --help, -h             Show this help message"
       exit 0
       ;;
