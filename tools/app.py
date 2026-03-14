@@ -15,6 +15,7 @@ import os
 import re
 import sys
 import threading
+import time
 import webbrowser
 from pathlib import Path
 
@@ -23,6 +24,7 @@ from flask import (
     Flask, Response, jsonify, redirect, render_template,
     request, send_from_directory, url_for,
 )
+from flask_compress import Compress
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
 
@@ -37,6 +39,14 @@ from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_UPLOAD_BYTES
+
+# Gzip compression for all responses > 500 bytes
+Compress(app)
+app.config["COMPRESS_MIMETYPES"] = [
+    "text/html", "text/css", "application/javascript",
+    "application/json", "image/svg+xml",
+]
+app.config["COMPRESS_MIN_SIZE"] = 500
 
 # Seconds to wait before opening the browser after the dev server starts.
 # The delay lets Flask finish binding to the port before the browser hits it.
@@ -116,6 +126,21 @@ _SECTION_DIRS: dict[str, Path] = {
     key: REPO_ROOT / key for key in SECTIONS
 }
 
+@app.after_request
+def _add_cache_headers(response):
+    """Set cache headers to reduce redundant fetches over the tunnel."""
+    if request.path.startswith("/static/"):
+        # Static assets: cache 1 hour (cache-busted via ?v= query param)
+        response.headers["Cache-Control"] = "public, max-age=3600, immutable"
+    elif request.path.startswith("/repo-assets/"):
+        # Repo assets (images, docs): cache 10 minutes
+        response.headers["Cache-Control"] = "public, max-age=600"
+    else:
+        # HTML pages: allow browser back/forward cache, revalidate on navigate
+        response.headers["Cache-Control"] = "private, no-cache"
+    return response
+
+
 @app.before_request
 def _basic_auth_check():
     """Enforce HTTP Basic Auth when APP_USERNAME is configured.
@@ -175,6 +200,14 @@ def _render_markdown(text: str) -> Markup:
     html = html.replace(
         "<table>", '<div class="table-wrapper"><table>'
     ).replace("</table>", "</table></div>")
+    # Convert fenced mermaid code blocks to <pre class="mermaid"> for Mermaid.js
+    import re
+    html = re.sub(
+        r'<pre><code class="language-mermaid">(.*?)</code></pre>',
+        r'<pre class="mermaid">\1</pre>',
+        html,
+        flags=re.DOTALL,
+    )
     return Markup(html)
 
 

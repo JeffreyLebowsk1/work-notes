@@ -1,5 +1,39 @@
 # Master Graduation Checklist
 
+## Graduation Timeline
+
+<div class="mermaid">
+gantt
+    title Graduation Planning & Execution Timeline
+    dateFormat YYYY-MM-DD
+    axisFormat %b
+    
+    section Applications
+    Open/Close Applications :app1, 2026-03-01, 60d
+    
+    section Audits & Lists
+    Degree Audit Review :aud1, after app1, 45d
+    Finalize Candidate List :cand1, after aud1, 30d
+    
+    section Commencement Program
+    Begin Draft :prog1, after cand1, 20d
+    Submit for Printing :prog2, after prog1, 30d
+    
+    section Ceremony Coordination
+    Confirm Venue & Vendors :coord1, 2026-03-01, 90d
+    Faculty Marshals & Platform :coord2, after prog2, 20d
+    Student Line-up :coord3, after coord2, 10d
+    
+    section Final Preparations
+    Rehearsal & Logistics :final1, 7d
+    
+    section Ceremony
+    Ceremony Day :crit final2, 1d
+    
+    section Post-Ceremony
+    Diplomas & Evaluations :post1, after final2, 10d
+</div>
+
 ## 4–5 Months Before Ceremony
 - [ ] Open graduation applications
 - [ ] Communicate deadlines to students and advisors

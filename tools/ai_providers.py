@@ -4,7 +4,7 @@ AI provider abstraction for Work Notes.
 Supported providers
 -------------------
   perplexity  – Perplexity Sonar (REST API)
-  gemini      – Google Gemini 2.0 Flash (google-generativeai)  ← default
+  gemini      – Google Gemini 2.5 Flash (google-genai)  ← default
 
 The active provider is chosen by:
   1. The ``provider`` argument passed to ask()
@@ -21,7 +21,7 @@ import config
 # ---------------------------------------------------------------------------
 
 PROVIDER_LABELS = {
-    "gemini": "Google Gemini 2.0 Flash",
+    "gemini": "Google Gemini 2.5 Flash",
     "perplexity": "Perplexity Sonar",
 }
 
@@ -124,7 +124,7 @@ def _ask_perplexity(message, system_prompt):
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": message},
                 ],
-                "max_tokens": 1024,
+                "max_tokens": 4096,
                 "temperature": 0.7,
             },
             timeout=30,
@@ -147,11 +147,12 @@ def _ask_perplexity(message, system_prompt):
 # Google Gemini
 # ---------------------------------------------------------------------------
 
-_GEMINI_MODEL = "gemini-2.0-flash"
+_GEMINI_MODEL = "gemini-2.5-flash"
 
 
 def _ask_gemini(message, system_prompt):
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 
     if not config.GEMINI_API_KEY:
         raise ProviderError(
@@ -160,15 +161,13 @@ def _ask_gemini(message, system_prompt):
             503,
         )
     try:
-        genai.configure(api_key=config.GEMINI_API_KEY)
-        model = genai.GenerativeModel(
-            model_name=_GEMINI_MODEL,
-            system_instruction=system_prompt,
-        )
-        response = model.generate_content(
-            message,
-            generation_config=genai.GenerationConfig(
-                max_output_tokens=1024,
+        client = genai.Client(api_key=config.GEMINI_API_KEY)
+        response = client.models.generate_content(
+            model=_GEMINI_MODEL,
+            contents=message,
+            config=types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                max_output_tokens=4096,
                 temperature=0.7,
             ),
         )

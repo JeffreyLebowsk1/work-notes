@@ -3,6 +3,27 @@
 > All data requests involving student records must comply with **FERPA**.  
 > See [FERPA Quick Reference](./ferpa-reference.md) and [Handling Guidelines](./handling-guidelines.md).
 
+## Data Request Decision Tree
+
+<div class="mermaid">
+flowchart TD
+    A[Request received] --> B{Request type?}
+    B -- Internal --> C[Verify legitimate educational interest]
+    B -- External --> D{FERPA release signed?}
+    B -- Student's own record --> E[Provide within 45 days]
+    B -- Subpoena/Legal --> F[Notify supervisor & legal]
+    C --> G[Provide minimum info]
+    D -- Yes --> H[Verify scope & provide]
+    D -- No --> I{Directory info exception?}
+    I -- Yes --> J[May release if no opt-out]
+    I -- No --> K[Do not release]
+    F --> L[Confirm validity & notify student]
+    G --> M[Document request]
+    H --> M
+    J --> M
+    E --> M
+</div>
+
 ---
 
 ## Internal Requests

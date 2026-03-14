@@ -35,7 +35,7 @@ Non-credit/Continuing Education transcript responsibilities are split between th
 | **Post-2007 CE records** | Student Records and Registrar's Office — (919) 718-7201 / admissions@cccc.edu |
 | **Pre-2007 CE records** | Nutan Varma, Harnett Main Campus (CE Building) — (910) 814-8975 / nvarma@cccc.edu |
 | **Personal Enrichment / Short-Term Training** | Requires the **"Personal Enrichment & Short-Term Training Transcript Request"** form; handled by Registrar's Office (post-2007) |
-| **GED / HSE records** | CCCC does not maintain these — students must order through **DiplomaSender** at (855) 313-5799 |
+| **GED / HSE records** | CCCC does not maintain these — students must order through **[DiplomaSender](https://www.diplomasender.com)** at (855) 313-5799 |
 
 > ⚠️ **Always confirm the year first.** Ask the student whether their CE courses were before or after 2007 before routing the request.
 
@@ -52,7 +52,7 @@ Non-credit/Continuing Education transcript responsibilities are split between th
 
 CCCC does not maintain official North Carolina High School Equivalency (GED/HiSET) records. If a student asks for these, remind them:
 
-- Records must be ordered through **DiplomaSender** at (855) 313-5799.
+- Records must be ordered through **[DiplomaSender](https://www.diplomasender.com)** at (855) 313-5799.
 - The standard fee is **$20.00 per document**.
 - Transcripts must be sent directly to CCCC at **admissions@cccc.edu** to be considered official.
 

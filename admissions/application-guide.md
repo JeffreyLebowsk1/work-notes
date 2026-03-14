@@ -2,6 +2,24 @@
 
 > This guide covers the full admissions process for prospective CCCC students. Internal staff can use it as a reference when advising applicants or answering questions.
 
+## Admissions Process Overview
+
+<div class="mermaid">
+flowchart TD
+    A[Submit CFNC application] --> B[Request official transcripts]
+    B --> C{Residency determination\nrequired?}
+    C -- Yes --> D[Complete RDS interview]
+    C -- No --> E[Admissions review]
+    D --> E
+    E --> F{Application\napproved?}
+    F -- Yes --> G[Receive admission letter]
+    F -- No --> H[Appeal or reapply]
+    G --> I[Set up student accounts]
+    I --> J[Meet with advisor]
+    J --> K[Register for classes]
+    K --> L[Attend orientation]
+</div>
+
 ---
 
 ## 1.0 Your Journey to Becoming a Cougar: The 5 Key Steps
@@ -18,7 +36,7 @@ The entire admissions process can be broken down into five essential steps:
 
 ## 2.0 Step 1: Submitting Your Application
 
-The primary application route is through the **College Foundation of North Carolina (CFNC)** website.
+The primary application route is through the **[College Foundation of North Carolina (CFNC)](https://www.cfnc.org)** website.
 
 ### 2.1 The NC College Connect Program
 
@@ -63,7 +81,7 @@ Request that your high school send the official, final transcript. North Carolin
 
 ### 4.2 GED® or High School Equivalency Transcripts
 
-If you earned a high school equivalency in North Carolina (GED® or HiSET), order your official transcript through **Diploma Sender** via the NC Community College System website.
+If you earned a high school equivalency in North Carolina (GED® or HiSET), order your official transcript through **[DiplomaSender](https://www.diplomasender.com)** via the NC Community College System website.
 
 ### 4.3 Homeschool Transcripts
 
@@ -73,13 +91,13 @@ Homeschool applicants must provide proof of DNPE listing and a complete, final t
 
 ### 4.4 College Transcripts
 
-Request official transcripts from all previously attended colleges. CCCC accepts official electronic transcripts sent directly from the institution or through services like **Parchment** and the **National Student Clearinghouse**.
+Request official transcripts from all previously attended colleges. CCCC accepts official electronic transcripts sent directly from the institution or through services like **[Parchment](https://www.parchment.com)** and the **[National Student Clearinghouse](https://www.studentclearinghouse.org)**.
 
 > **Insight:** For prior college coursework to transfer to CCCC, the institution must be **regionally accredited**.
 
 | Credits Typically Accepted | Credits Not Accepted |
 |---|---|
-| Institutions accredited by SACSCOC, HLC, MSCHE, NECHE, NWCCU, or WASC | Credits from institutions such as Miller-Motte, ITT Technical Institute, Study.com, Sophia Learning, and Penn Foster |
+| Institutions accredited by [SACSCOC](https://www.sacscoc.org), HLC, MSCHE, NECHE, NWCCU, or WASC | Credits from institutions such as Miller-Motte, ITT Technical Institute, Study.com, Sophia Learning, and Penn Foster |
 
 ### 4.5 International (Foreign) Transcripts
 
@@ -144,7 +162,7 @@ Programs like Nursing, Dental Hygiene, Medical Sonography, and Veterinary Medica
 | Item | Details |
 |---|---|
 | Application Period (2026 cohort) | Opens **November 1, 2025** — all steps must be completed by **May 15, 2026** |
-| How to Apply | After logging into the CCCC Portal, find the "Limited Enrollment Application" link in your Student Success Hub |
+| How to Apply | After logging into the [CCCC Portal](https://www.cccc.edu), find the "Limited Enrollment Application" link in your **Student Success Hub** |
 | Selection Method | **First-qualified, first-accepted** (rolling basis) — exception: the **PTA program** uses a ranked GPA system |
 | Notification | Decisions are posted in the student's **Success Hub** |
 
@@ -188,7 +206,7 @@ Complete the **FAFSA** at [studentaid.gov](https://studentaid.gov). This determi
 
 | Option | Details |
 |---|---|
-| Payment Plans | Set up a deferred payment plan through **NELNET** |
+| Payment Plans | Set up a deferred payment plan through **[Nelnet](https://www.nelnet.com)** |
 | Employer Sponsorships | Employer tuition assistance may be available |
 | Private Loans | CCCC accepts private educational loans from the lender of your choice |
 
@@ -207,12 +225,12 @@ Complete the **FAFSA** at [studentaid.gov](https://studentaid.gov). This determi
 
 ### Key Contacts
 
-| Department | Contact |
-|---|---|
-| Admissions / Registrar's Office | (919) 718-7201 |
-| Financial Aid Office | (919) 718-7229 |
-| Business Office (Payments) | (919) 718-7517 |
-| NC Residency (RDS) Help Desk | (844) 319-3640 / rdsinfo@ncresidency.org |
+| Department | Contact | Link |
+|---|---|---|
+| Admissions / Registrar's Office | (919) 718-7201 | [cccc.edu](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office) |
+| Financial Aid Office | (919) 718-7229 | [cccc.edu/paying-college](https://www.cccc.edu/paying-college) |
+| Business Office (Payments) | (919) 718-7517 | [payment plans](https://www.nelnet.com) |
+| NC Residency (RDS) Help Desk | (844) 319-3640 / rdsinfo@ncresidency.org | [ncresidency.org](https://www.ncresidency.org) |
 
 ### Glossary
 

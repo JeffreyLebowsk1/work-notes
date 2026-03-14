@@ -19,7 +19,7 @@ Quick reference for advising students on North Carolina High School Equivalency 
 |---|---|
 | **Content** | Same core academic content areas — demonstrates proficiency equivalent to a high school graduate |
 | **Credential issued** | North Carolina High School Equivalency Diploma, issued by the NC State Board of Community Colleges |
-| **Record ordering** | Official transcripts and diplomas managed exclusively through **DiplomaSender** |
+| **Record ordering** | Official transcripts and diplomas managed exclusively through **[DiplomaSender](https://www.diplomasender.com)** |
 | **Direct delivery** | Must be sent directly to CCCC at **admissions@cccc.edu** to be considered official |
 | **Cost for records** | **$20.00 per document** — see conflict note below |
 

@@ -101,16 +101,16 @@ A student may request an appeal **within 10 calendar days** of their determinati
 - Cannot be completed before the RDS Appeal
 - No additional documentation or information is permitted
 - Conducted by a statewide committee comprised of representatives from:
-  - NC Community College System
-  - NC Independent Colleges and Universities
-  - State Education Assistance Authority (SEAA)
+  - [NC Community College System](https://www.nccommunitycolleges.edu)
+  - [NC Independent Colleges and Universities](https://ncicu.org)
+  - [State Education Assistance Authority (SEAA)](https://www.ncseaa.edu)
   - University of North Carolina System
 
 ---
 
 ## Purpose & Background
 
-In 2013, the NC General Assembly directed UNC General Administration, the NC Community College System (NCCCS), the NC State Education Assistance Authority (SEAA), and the NC Independent Colleges and Universities (NCICU) to create a centralized, uniform process for determining residency for tuition purposes and for administration of state financial aid.
+In 2013, the NC General Assembly directed UNC General Administration, the [NC Community College System (NCCCS)](https://www.nccommunitycolleges.edu), the [NC State Education Assistance Authority (SEAA)](https://www.ncseaa.edu), and the [NC Independent Colleges and Universities (NCICU)](https://ncicu.org) to create a centralized, uniform process for determining residency for tuition purposes and for administration of state financial aid.
 
 The state of North Carolina partially subsidizes the cost of tuition for students whose domicile (permanent legal residence) is in North Carolina. Article IX, Section 9, of the State Constitution states:
 

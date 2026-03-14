@@ -2,6 +2,22 @@
 
 > To reduce financial barriers to education, the **Workforce Access Programs Office**, part of Central Carolina Community College's **Workforce Continuing Education Department**, offers and administers several scholarships and grants to help students enroll in short-term occupational training programs.
 
+## Scholarship Application Flow
+
+<div class="mermaid">
+flowchart TD
+    A["1. Review scholarships & classes"] --> B["2. Complete Online Scholarship Inquiry"]
+    B --> C["3. Check email for correspondence"]
+    C --> D["4. Fill out & sign all forms"]
+    D --> E{"Documents returned within 14 days?"}
+    E -- No --> F[Marked as no longer requesting funds]
+    E -- Yes --> G["5. Receive award letter via email"]
+    G --> H["6. Register for awarded class"]
+    H --> I{Registered in time?}
+    I -- No --> J[Award rescinded]
+    I -- Yes --> K[Attend class — scholarship applied]
+</div>
+
 ---
 
 ## Process Steps

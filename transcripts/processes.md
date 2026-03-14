@@ -1,5 +1,20 @@
 # Transcript Processes
 
+## Official Transcript Request Flow
+
+<div class="mermaid">
+flowchart TD
+    A[Student submits request] --> B{Hold on account?}
+    B -- Yes --> C[Notify student — do not release]
+    B -- No --> D[Verify identity & request details]
+    D --> E[Process in SIS]
+    E --> F{Delivery method?}
+    F -- Electronic --> G[Upload to Parchment / NSC]
+    F -- Mail --> H[Print, seal, and mail]
+    G --> I[Log request & notify student]
+    H --> I
+</div>
+
 ## Official Transcript Requests
 
 1. Student submits request via the [Transcript Request Portal](_links.md) (online) or completes a paper request form in person.
@@ -11,7 +26,7 @@
    - Generate/export the official transcript.
    - Apply the official seal / registrar signature as required.
 6. Send via the requested delivery method:
-   - **Electronic:** Upload to third-party service (e.g., Parchment/National Student Clearinghouse) or send securely to the recipient.
+   - **Electronic:** Upload to third-party service (e.g., [Parchment](https://www.parchment.com)/[National Student Clearinghouse](https://www.studentclearinghouse.org)) or send securely to the recipient.
    - **Mail:** Print, seal in an official envelope with the registrar's stamp across the seal, and mail.
 7. Log the request and mark as completed. See [`templates/request-log.md`](./templates/request-log.md).
 8. Notify the student when the transcript has been sent (if electronic, the platform may do this automatically).
@@ -34,7 +49,7 @@ Third parties (employers, other institutions, licensing boards) must receive **o
    - Verify the signature and that consent is current and specific.
    - Follow the Official Transcript Request steps above with the third party as the recipient.
 3. If a **subpoena or court order** is received — see [Data Requests — Subpoenas](../personal-data/data-requests.md).
-4. For **National Student Clearinghouse** or similar verification services — follow the enrollment verification procedure (not a transcript release).
+4. For **[National Student Clearinghouse](https://www.studentclearinghouse.org)** or similar verification services — follow the enrollment verification procedure (not a transcript release).
 
 ## Rush / Expedited Requests
 
@@ -75,7 +90,7 @@ Non-credit/CE transcript handling is split by record date. **Always ask the stud
 
 CCCC does not maintain official NC High School Equivalency records. Direct students to:
 
-- **DiplomaSender** — (855) 313-5799
+- **[DiplomaSender](https://www.diplomasender.com)** — (855) 313-5799
 - Standard fee: **$20.00 per document** *(see [Conflicts Pending — CONFLICT 4](../updates/conflicts-pending.md) for a noted fee discrepancy)*
 - Records must be sent directly to CCCC at **admissions@cccc.edu** to be considered official.
 
