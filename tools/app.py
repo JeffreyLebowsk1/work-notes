@@ -97,15 +97,26 @@ SECTIONS = {
     },
 }
 
+# Pre-computed section directories — keyed by section name.
+# Values are built from SECTIONS (a module-level constant) and REPO_ROOT,
+# so no path ever depends on user-supplied input.
+_SECTION_DIRS: dict[str, Path] = {
+    key: REPO_ROOT / key for key in SECTIONS
+}
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 
 def _notes_in_section(section_key: str) -> list[dict]:
-    """Return parsed metadata for every note in a section folder, sorted by path."""
-    section_dir = REPO_ROOT / section_key
-    if not section_dir.is_dir():
+    """Return parsed metadata for every note in a section folder, sorted by path.
+
+    ``section_key`` is validated against the pre-computed ``_SECTION_DIRS``
+    dict so the resulting path never depends on user-supplied input.
+    """
+    section_dir = _SECTION_DIRS.get(section_key)
+    if section_dir is None or not section_dir.is_dir():
         return []
     paths = sorted(
         p for p in section_dir.rglob("*.md")
@@ -142,6 +153,7 @@ def inject_static_asset_url():
             return url_for("static", filename=filename, v=version)
         return url_for("static", filename=filename)
     return {"static_asset_url": static_asset_url}
+
 
 
 # ---------------------------------------------------------------------------
