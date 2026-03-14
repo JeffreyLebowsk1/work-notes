@@ -39,19 +39,24 @@ jobs:
       - name: Build command arguments
         id: build_args
         shell: bash
+        env:
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          INPUT_FORCE: ${{ inputs.force }}
         run: |
           ARGS="--organize"
-          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+          if [[ "$INPUT_DRY_RUN" == "true" ]]; then
             ARGS="$ARGS --dry-run"
           fi
-          if [[ "${{ inputs.force }}" == "true" ]]; then
+          if [[ "$INPUT_FORCE" == "true" ]]; then
             ARGS="$ARGS --force"
           fi
           echo "args=$ARGS" >> "$GITHUB_OUTPUT"
 
       - name: Process inbox
+        env:
+          BUILD_ARGS: ${{ steps.build_args.outputs.args }}
         run: |
-          python3 tools/notes_helper.py process-inbox ${{ steps.build_args.outputs.args }}
+          python3 tools/notes_helper.py process-inbox $BUILD_ARGS
 
       - name: Commit imported files and updated index
         if: inputs.dry_run != 'true'
