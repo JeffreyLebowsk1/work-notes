@@ -61,7 +61,7 @@ def resolve_provider(requested=None):
     """
     Determine which provider to use.
 
-    Priority: explicitly requested → config default → first with a key → 'perplexity'
+    Priority: explicitly requested → config default → first with a key → 'gemini'
     """
     valid = set(PROVIDER_LABELS)
     if requested and requested in valid:
@@ -69,7 +69,7 @@ def resolve_provider(requested=None):
     if config.AI_PROVIDER in valid:
         return config.AI_PROVIDER
     available = get_available_providers()
-    return available[0] if available else "perplexity"
+    return available[0] if available else "gemini"
 
 
 def ask(message, system_prompt=None, provider=None):

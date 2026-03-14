@@ -16,5 +16,5 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
 
-# Which provider to use by default: "openai" | "gemini" | "perplexity"
-AI_PROVIDER = os.environ.get("AI_PROVIDER", "perplexity").lower()
+# Which provider to use by default: "gemini" | "openai" | "perplexity"
+AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
