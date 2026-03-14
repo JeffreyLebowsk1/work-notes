@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Assets — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container" style="max-width:1100px">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <span>Assets</span>
+    </div>
+
+    <div class="section-header">
+        <div class="section-header-icon">📁</div>
+        <div>
+            <h1>Assets</h1>
+            <p>Shared images, documents, and spreadsheets.</p>
+        </div>
+    </div>
+
+    {# Success / error banner from upload redirect #}
+    {% set msg      = request.args.get('msg', '') %}
+    {% set msg_type = request.args.get('msg_type', 'success') %}
+    {% if msg %}
+    <div class="notify-banner notify-{{ msg_type }}" role="alert">
+        {{ '✅' if msg_type == 'success' else '⚠️' }} {{ msg }}
+    </div>
+    {% endif %}
+
+    {# Upload panel #}
+    <details class="upload-panel" {% if msg_type == 'error' and msg %}open{% endif %}>
+        <summary class="upload-panel-toggle">
+            📤 Upload a file
+        </summary>
+        <form method="post" action="{{ url_for('asset_upload') }}" enctype="multipart/form-data" class="upload-form">
+            <div class="upload-form-row">
+                <div class="form-group" style="flex:0 0 auto;min-width:160px">
+                    <label class="form-label" for="subfolder">Folder</label>
+                    <select id="subfolder" name="subfolder" class="form-select">
+                        {% for sf in subfolders %}
+                        <option value="{{ sf }}">📂 {{ sf }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" style="flex:1">
+                    <label class="form-label" for="file">File <span class="form-label-muted">(max 16 MB)</span></label>
+                    <input id="file" name="file" type="file" class="form-input-file" required>
+                </div>
+                <div class="form-group" style="align-self:flex-end;flex:0 0 auto">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+            <p class="form-hint" style="margin-top:.25rem">
+                💡 Files are saved to disk. Commit and <code>git push</code> to sync them to GitHub.
+            </p>
+        </form>
+    </details>
+
+    {% if groups %}
+        {% for folder, files in groups.items() %}
+        <p class="assets-folder-heading">📂 {{ folder }}</p>
+        <div class="assets-grid">
+            {% for f in files %}
+            {% set is_image = f.mime.startswith('image/') %}
+            {% set is_pdf   = f.mime == 'application/pdf' %}
+            <a href="{{ url_for('repo_asset', asset_path=f.rel) }}"
+               class="asset-card"
+               {% if not is_image and not is_pdf %}download{% endif %}
+               target="_blank"
+               rel="noopener">
+                <div class="asset-card-preview">
+                    {% if is_image %}
+                    <img src="{{ url_for('repo_asset', asset_path=f.rel) }}" alt="{{ f.name }}" loading="lazy">
+                    {% elif is_pdf %}
+                    <span class="asset-icon">📄</span>
+                    {% elif 'spreadsheet' in f.mime or f.name.endswith(('.xlsx','.xls','.csv')) %}
+                    <span class="asset-icon">📊</span>
+                    {% elif 'presentation' in f.mime or f.name.endswith(('.pptx','.ppt')) %}
+                    <span class="asset-icon">📑</span>
+                    {% else %}
+                    <span class="asset-icon">📎</span>
+                    {% endif %}
+                </div>
+                <div class="asset-card-info">
+                    <p class="asset-card-name" title="{{ f.name }}">{{ f.name }}</p>
+                    <p class="asset-card-size">
+                        {% if f.size < 1024 %}{{ f.size }} B
+                        {% elif f.size < 1048576 %}{{ (f.size / 1024)|round(1) }} KB
+                        {% else %}{{ (f.size / 1048576)|round(1) }} MB
+                        {% endif %}
+                    </p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <p>📭 No assets found. Upload a file above or add files to the <code>assets/</code> folder.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

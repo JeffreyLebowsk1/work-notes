@@ -1,6 +1,6 @@
 # ⚙️ Setup & Workflow Guide
 
-How to set up and use this repository with Google Drive on your work PC.
+How to set up and use this repository with Google Drive on your work PC, host the web app free online, and access it from any device — including Android.
 
 ---
 
@@ -302,6 +302,197 @@ systemctl --user daemon-reload && systemctl --user restart auto-sync.service
 | Service stops after a reboot | Run `loginctl enable-linger $USER` so user services start without a login session |
 | rclone mount disappears after reboot | Add `rclone mount gdrive: ~/gdrive --vfs-cache-mode writes --daemon` to a `@reboot` cron entry or a systemd service |
 | Changes not detected | Make sure the rclone mount VFS cache is flushing — use `--vfs-cache-mode writes` or `full` |
+
+---
+
+## 📱 Android Setup
+
+Access your work notes on your Android phone or tablet. Three options are available depending on how much you need to do.
+
+---
+
+### Option A — GitHub Mobile App (Read-Only Browsing — Easiest)
+
+Best for quickly looking up a note when you're away from your desk. No extra setup needed beyond a GitHub account.
+
+1. Install the **[GitHub](https://play.google.com/store/apps/details?id=com.github.android)** app from the Google Play Store.
+2. Sign in with your GitHub account.
+3. Open the **JeffreyLebowsk1/work-notes** repository.
+4. Browse and read any `.md` file directly in the app.
+
+> ⚠️ The GitHub app is **read-only** for viewing files — you cannot commit or push changes from it.
+
+---
+
+### Option B — Google Drive App (View & Edit Synced Files)
+
+If you already use Google Drive to sync this repo from your work PC (see [Day-to-Day Workflow](#-day-to-day-workflow) above), the files are already on your Drive. You can read and even edit them from your phone.
+
+1. Install the **[Google Drive](https://play.google.com/store/apps/details?id=com.google.android.apps.docs)** app from the Google Play Store (usually pre-installed).
+2. Open the app and navigate to the `work-notes` folder inside **My Drive**.
+3. Tap any `.md` file to preview it.
+4. To edit, tap the three-dot menu → **Open with** → choose a plain-text or Markdown editor (e.g. **[Markor](https://play.google.com/store/apps/details?id=net.gsantner.markor)**).
+
+> 💡 Edits saved in Google Drive will sync back to your work PC automatically. From there, the Jetson auto-sync service (if enabled) will push the changes to GitHub.
+
+---
+
+### Option C — Termux (Full Git Workflow — Most Powerful)
+
+For committing and pushing changes directly from your Android device.
+
+1. Install **[Termux](https://f-droid.org/en/packages/com.termux/)** from **F-Droid** (recommended) or the Google Play Store.
+
+   > ⚠️ The Play Store version of Termux is outdated. Use the **F-Droid** version for the most up-to-date packages.
+
+2. Open Termux and install Git:
+
+   ```bash
+   pkg update && pkg upgrade -y
+   pkg install git -y
+   ```
+
+3. Set up your Git identity:
+
+   ```bash
+   git config --global user.name "Your Name"
+   git config --global user.email "your@email.com"
+   ```
+
+4. Clone the repository:
+
+   ```bash
+   mkdir -p ~/storage/shared && termux-setup-storage
+   cd ~
+   git clone https://github.com/JeffreyLebowsk1/work-notes.git
+   ```
+
+5. Configure a **Personal Access Token (PAT)** so you can push without a password prompt (see [Step 4 of the Linux setup](#step-4--configure-git-credentials) for how to create a PAT):
+
+   ```bash
+   git config --global credential.helper store
+   cd ~/work-notes
+   git pull   # enter your GitHub username and PAT when prompted
+   ```
+
+After that, the day-to-day workflow is the same as on any other machine:
+
+```bash
+cd ~/work-notes
+git add .
+git commit -m "describe what you changed"
+git push
+```
+
+---
+
+### Troubleshooting (Android)
+
+| Problem | Solution |
+|---|---|
+| Can't find the repo in the GitHub app | Make sure you are signed in with the correct GitHub account |
+| `.md` files open as a download instead of previewing in Drive | Tap **Open with** and choose a text/Markdown editor app |
+| `pkg: command not found` in Termux | Termux environment is not set up — run `pkg update` first |
+| `git push` fails with "Authentication failed" | Re-run `git pull` inside the repo and re-enter your PAT |
+| Termux can't access internal storage | Run `termux-setup-storage` and grant the permission in the system prompt |
+
+---
+
+## 🌐 Hosting the Web App (Free — Access From Any Browser)
+
+The **CCCC Notes web app** can be hosted for free on [Render.com](https://render.com) so you can open it in any browser — your work PC, a tablet, a phone, or any computer — without running Python locally. Every time you push notes to GitHub, the hosted app updates automatically.
+
+> ⚠️ **Always set a password before hosting.** The app contains internal CCCC work notes. Without authentication, anyone with the URL could read them.
+
+---
+
+### Step 1 — Make Your GitHub Repo Private (Recommended)
+
+Before hosting publicly, make sure the repository is **private**:
+
+1. Go to your repo on GitHub → **Settings** → scroll to **Danger Zone**
+2. Click **Change repository visibility** → **Make private**
+
+---
+
+### Step 2 — Set a Password on the App
+
+The app supports HTTP Basic Auth — a simple username/password prompt in the browser.
+
+Set these two environment variables wherever you host the app (see Step 3):
+
+| Variable | Example value |
+|---|---|
+| `APP_USERNAME` | `registrar` |
+| `APP_PASSWORD` | `choose-a-strong-password` |
+
+Leave both blank only for local use on your own machine.
+
+---
+
+### Step 3 — Deploy to Render.com (Free)
+
+A `render.yaml` file is already included in the repo. Render reads it automatically.
+
+1. Go to **[render.com](https://render.com)** and sign in with your GitHub account (free)
+2. Click **New** → **Blueprint**
+3. Connect your **JeffreyLebowsk1/work-notes** repository
+4. Render detects `render.yaml` and pre-fills the settings — click **Apply**
+5. Before the first deploy finishes, go to your new service → **Environment**
+6. Add the following environment variables:
+
+   | Key | Value |
+   |---|---|
+   | `APP_USERNAME` | your chosen username |
+   | `APP_PASSWORD` | your chosen password |
+   | `GEMINI_API_KEY` | *(optional)* your Gemini key to enable the AI assistant |
+
+7. Click **Save Changes** — the service restarts and is live ✅
+
+Your app will be at a URL like `https://cccc-notes.onrender.com`.
+
+> 💡 **Free tier note:** Render's free web services spin down after 15 minutes of inactivity and take ~30 seconds to wake up on the next visit. This is fine for occasional reference use. Upgrade to a paid plan ($7/month) for instant response.
+
+---
+
+### Step 4 — Auto-Deploy on Every Git Push
+
+Once hosted, every `git push` to GitHub automatically triggers a new deploy on Render. Your notes are always up to date within a minute or two of pushing.
+
+```
+Edit a note on your PC
+        ↓
+git add . && git commit -m "updated checklist" && git push
+        ↓
+Render detects the push → redeploys automatically (~60 sec)
+        ↓
+Open your app URL in any browser — notes are updated ✅
+```
+
+---
+
+### Accessing From Android
+
+Once hosted, open the app URL in **Chrome on Android** and tap:
+
+**⋮ menu → Add to Home screen**
+
+This installs it as a home screen icon that opens full-screen, just like a native app — no App Store needed.
+
+---
+
+### Alternative: Run in GitHub Codespaces (No Hosting Needed)
+
+GitHub Codespaces gives you a browser-based Linux environment — free for 60 hours/month.
+
+1. Go to your repo on GitHub → green **Code** button → **Codespaces** tab → **Create codespace**
+2. In the terminal that opens:
+   ```bash
+   pip install -r tools/requirements-web.txt
+   python tools/app.py
+   ```
+3. GitHub shows a popup: **Open in Browser** — click it
+4. The app runs at a temporary `https://` URL, accessible only while the codespace is open
 
 ---
 
