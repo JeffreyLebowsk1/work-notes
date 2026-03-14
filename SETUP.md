@@ -117,9 +117,10 @@ Make your commit messages descriptive so you can find things later:
 Use these steps to clone the repo and launch the browser UI on any Linux machine (Ubuntu, Debian, Fedora, etc.) — no cloud hosting required.
 
 > ⚡ **Shortcut — automated setup script:**
-> Once you have the repo cloned, a single script handles everything below (venv, dependencies, `.env` scaffold, and app launch):
+> Once you have the repo cloned, a single script handles everything below (venv, dependencies, `.env` scaffold, port check, and app launch):
 > ```bash
-> bash tools/linux-setup.sh
+> bash tools/linux-setup.sh              # default port 5000
+> bash tools/linux-setup.sh --port 8080  # use a different port
 > ```
 > The manual steps are documented below if you prefer to run them yourself or need to troubleshoot.
 
@@ -243,11 +244,14 @@ ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link i
 | Goal | Command |
 |---|---|
 | Activate the virtual environment | `source .venv/bin/activate` |
-| Start the app | `python3 tools/app.py` |
-| Start with password protection | `APP_USERNAME=registrar APP_PASSWORD=secret python3 tools/app.py` |
+| Start the app (default port 5000) | `python3 tools/app.py` |
+| Start on a different port | `bash tools/linux-setup.sh --port 8080` |
+| Run setup script (default port) | `bash tools/linux-setup.sh` |
+| Run setup script on a different port | `bash tools/linux-setup.sh --port 8080` |
+| Start with password protection | `APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh` |
 | Pull latest notes from GitHub | `git pull` |
 | Stop the app | Press `Ctrl+C` in the terminal |
-| Expose publicly via ngrok | `ngrok http 5000` *(app must already be running)* |
+| Expose publicly via ngrok | `ngrok http <PORT>` *(app must already be running)* |
 
 ---
 

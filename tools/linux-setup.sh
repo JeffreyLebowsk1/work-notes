@@ -3,23 +3,29 @@
 #
 # Run this script from the repository root:
 #   bash tools/linux-setup.sh
+#   bash tools/linux-setup.sh --port 8080
 #
 # What it does:
 #   1. Verifies prerequisites (Python 3.10+, pip, git)
 #   2. Creates a Python virtual environment at .venv/ (skipped if it already exists)
 #   3. Installs all Python dependencies from tools/requirements-web.txt
 #   4. Scaffolds tools/.env from tools/.env.example (skipped if it already exists)
-#   5. Starts the web app at http://localhost:5000
+#   5. Checks that the chosen port is free
+#   6. Starts the web app at http://localhost:<PORT>
 #
-# Environment variables you can set before running:
+# Options:
+#   --port PORT, -p PORT   Port to run the web app on (default: 5000)
+#   --help, -h             Show this help message
+#
+# Environment variables (alternative to flags):
 #   APP_USERNAME   — set a login username (recommended for shared/public machines)
 #   APP_PASSWORD   — set a login password (required when using ngrok or Render)
-#   PORT           — override the default port (default: 5000)
+#   PORT           — override the default port (default: 5000; --port takes precedence)
 #
 # Examples:
 #   bash tools/linux-setup.sh
-#   APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh
-#   PORT=8080 bash tools/linux-setup.sh
+#   bash tools/linux-setup.sh --port 8080
+#   APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --port 8080
 # ---------------------------------------------------------------------------
 
 set -euo pipefail
@@ -38,6 +44,37 @@ info()    { echo -e "${CYAN}[setup]${RESET} $*"; }
 success() { echo -e "${GREEN}[setup]${RESET} $*"; }
 warn()    { echo -e "${YELLOW}[setup]${RESET} $*"; }
 error()   { echo -e "${RED}[setup] ERROR:${RESET} $*" >&2; }
+
+# ---------------------------------------------------------------------------
+# Parse CLI arguments
+# ---------------------------------------------------------------------------
+PORT="${PORT:-5000}"  # default; can be overridden by env var or --port flag
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --port|-p)
+      if [[ -z "${2:-}" || ! "${2}" =~ ^[0-9]+$ ]]; then
+        error "--port requires a numeric argument (e.g. --port 8080)"
+        exit 1
+      fi
+      PORT="$2"
+      shift 2
+      ;;
+    --help|-h)
+      echo "Usage: bash tools/linux-setup.sh [--port PORT]"
+      echo ""
+      echo "Options:"
+      echo "  --port PORT, -p PORT   Port to run the web app on (default: 5000)"
+      echo "  --help, -h             Show this help message"
+      exit 0
+      ;;
+    *)
+      error "Unknown argument: $1"
+      echo "Usage: bash tools/linux-setup.sh [--port PORT]" >&2
+      exit 1
+      ;;
+  esac
+done
 
 # ---------------------------------------------------------------------------
 # Locate the repository root (the script may be invoked from anywhere)
@@ -137,9 +174,30 @@ if [ -z "${APP_USERNAME:-}" ] || [ -z "${APP_PASSWORD:-}" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 6. Start the app
+# 6. Check the chosen port is not already in use
 # ---------------------------------------------------------------------------
-PORT="${PORT:-5000}"
+port_in_use() {
+  # Try ss first (iproute2, available on all modern Linux distros),
+  # then fall back to lsof (installed on many systems but not all).
+  if command -v ss &>/dev/null; then
+    ss -tlnp 2>/dev/null | awk '{print $4}' | grep -qE ":${PORT}$"
+  elif command -v lsof &>/dev/null; then
+    lsof -ti ":${PORT}" &>/dev/null
+  else
+    return 1  # can't tell — let Flask try
+  fi
+}
+
+if port_in_use; then
+  error "Port ${PORT} is already in use by another process."
+  error "Choose a free port with the --port flag, for example:"
+  error "  bash tools/linux-setup.sh --port 8080"
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# 7. Start the app
+# ---------------------------------------------------------------------------
 
 echo ""
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"

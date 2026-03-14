@@ -10,7 +10,8 @@ A one-shot setup and launch script for the web app on any Linux machine.
 
 ```bash
 # Run from the repository root:
-bash tools/linux-setup.sh
+bash tools/linux-setup.sh              # default port 5000
+bash tools/linux-setup.sh --port 8080  # use a different port
 ```
 
 What it does:
@@ -18,7 +19,15 @@ What it does:
 2. Creates a Python virtual environment at `.venv/`
 3. Installs all dependencies from `tools/requirements-web.txt`
 4. Scaffolds `tools/.env` from `tools/.env.example` (if not already present)
-5. Starts the web app at `http://localhost:5000`
+5. Checks that the chosen port is not already in use — errors with a helpful message if it is
+6. Starts the web app at `http://localhost:<PORT>`
+
+Options:
+
+| Flag | Purpose |
+|---|---|
+| `--port PORT`, `-p PORT` | Port to run on (default: `5000`) |
+| `--help`, `-h` | Show usage |
 
 Optional environment variables:
 
@@ -26,11 +35,11 @@ Optional environment variables:
 |---|---|
 | `APP_USERNAME` | HTTP Basic Auth username (strongly recommended for shared machines) |
 | `APP_PASSWORD` | HTTP Basic Auth password |
-| `PORT` | Override the default port (`5000`) |
+| `PORT` | Alternative to `--port`; `--port` flag takes precedence |
 
 ```bash
 # Example — launch with password protection on port 8080:
-APP_USERNAME=registrar APP_PASSWORD=secret PORT=8080 bash tools/linux-setup.sh
+APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh --port 8080
 ```
 
 See the **🐧 Run the Web App Locally on Linux** section of [SETUP.md](../SETUP.md) for the full walkthrough, including how to use ngrok to create a public link.
@@ -38,6 +47,12 @@ See the **🐧 Run the Web App Locally on Linux** section of [SETUP.md](../SETUP
 ---
 
 ## auto-sync.sh
+
+A background watcher that commits and pushes every change automatically.  Designed for a Linux machine (e.g. Jetson Orin Nano) where the repo lives inside a Google Drive folder mounted via rclone.  See the **🐧 Linux / Jetson Orin Nano Setup (Automatic Sync)** section of [SETUP.md](../SETUP.md) for full instructions.
+
+---
+
+## notes_helper.py
 
 A command-line tool to **analyze**, **sort**, **organize**, **search**, and **import** your notes.
 
