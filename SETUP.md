@@ -110,6 +110,9 @@ Make your commit messages descriptive so you can find things later:
 ### Google Drive is showing a sync error on the repo folder
 - Wait for any `git` commands to finish before Drive syncs — they usually resolve on their own
 
+### Web app shows `ERR_CONNECTION_TIMED_OUT` from another device
+- The Linux firewall is blocking the port. Run `sudo ufw allow 4200/tcp && sudo ufw reload` on the machine running the app, then retry. See the **Troubleshooting (Linux web app)** section below for more detail.
+
 ---
 
 ## 🐧 Run the Web App Locally on Linux
@@ -178,9 +181,31 @@ python3 tools/app.py
 
 Then open **http://localhost:4200** in your browser.
 
+> 💡 **Find your LAN IP:** run `hostname -I` and note the `192.168.x.x` address — that is the address other devices on the same network can use (see Step 5 below).
+
 ---
 
-### Step 5 — (Optional) Set a password
+### Step 5 — (Optional) Allow access from other devices on your network
+
+By default, Linux's firewall (`ufw`) blocks incoming connections on port 4200, so other machines on the same Wi-Fi or LAN will get `ERR_CONNECTION_TIMED_OUT` even though the app is running. Open the port to fix this:
+
+```bash
+sudo ufw allow 4200/tcp
+sudo ufw reload
+```
+
+Then open **http://\<your-LAN-IP\>:4200** (e.g. `http://192.168.1.146:4200`) in a browser on any other device on the same network.
+
+> ⚠️ Only do this on a trusted private network. When you no longer need remote access, close the port again:
+> ```bash
+> sudo ufw delete allow 4200/tcp && sudo ufw reload
+> ```
+
+> 💡 If `ufw` is not installed or is inactive (`sudo ufw status` shows `Status: inactive`), no firewall rule is needed — the port is already reachable on the LAN.
+
+---
+
+### Step 6 — (Optional) Set a password
 
 If other users share your machine or network, protect the app with HTTP Basic Auth:
 
@@ -194,28 +219,41 @@ The browser will prompt for the username and password before showing any notes.
 
 ---
 
-### Step 6 — (Optional) Share publicly with ngrok
+### Step 7 — (Optional) Share publicly with ngrok
 
-By default the app is only reachable at `http://localhost:4200` on your own machine. **ngrok** creates a temporary public `https://` URL that tunnels to it — useful for accessing your notes from another device or sharing with a colleague without deploying to Render.
+Use this when you need to reach the app from **outside your local network** (e.g. from a phone on mobile data, or a colleague on a different network). **ngrok** creates a temporary public `https://` URL that tunnels straight to your running app.
 
 > ⚠️ **Always set `APP_USERNAME` and `APP_PASSWORD` before exposing the app publicly.** Without a password, anyone with the ngrok URL can read your notes.
 
 **1. Install ngrok**
 
 ```bash
-# Snap (Ubuntu/Debian):
-sudo snap install ngrok
+# Recommended — download the official binary:
+curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+  | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+  && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+  | sudo tee /etc/apt/sources.list.d/ngrok.list \
+  && sudo apt update && sudo apt install ngrok
 
-# Or download directly from https://ngrok.com/download and unzip to /usr/local/bin
+# Alternative — Snap (Ubuntu/Debian with snapd):
+sudo snap install ngrok
+# ⚠️ After a snap install, log out and back in (or run `export PATH=$PATH:/snap/bin`)
+# so the `ngrok` command is on your PATH.
 ```
 
 **2. Authenticate ngrok** *(one-time setup — free account required)*
 
-Sign up at <https://ngrok.com>, copy your authtoken from the dashboard, then run:
+Sign up at <https://ngrok.com>, copy your authtoken from the dashboard, then run **one** of these:
 
 ```bash
+# Option A — save permanently to ngrok's config file:
 ngrok config add-authtoken <YOUR_AUTHTOKEN>
+
+# Option B — set as an environment variable (for this shell session only):
+export NGROK_AUTHTOKEN=<YOUR_AUTHTOKEN>
 ```
+
+> 💡 The environment variable is named **`NGROK_AUTHTOKEN`** (no underscore between AUTH and TOKEN).
 
 **3. Start the app with a password, then tunnel it**
 
@@ -237,6 +275,8 @@ ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link i
 
 > 💡 **The URL changes every time** you restart ngrok on the free plan. Upgrade to a paid plan for a stable custom subdomain — check current pricing at <https://ngrok.com/pricing>.
 
+> 💡 **Free-tier browser warning:** ngrok may show a "You are about to visit…" interstitial page on the first visit. Click **Visit Site** to continue. This does not appear for the app owner when using the ngrok dashboard.
+
 ---
 
 ### Quick Reference (Linux local)
@@ -249,9 +289,42 @@ ngrok prints a public URL like `https://abc123.ngrok-free.app`. Open that link i
 | Run setup script (default port) | `bash tools/linux-setup.sh` |
 | Run setup script on a different port | `bash tools/linux-setup.sh --port 8080` |
 | Start with password protection | `APP_USERNAME=registrar APP_PASSWORD=secret bash tools/linux-setup.sh` |
+| Find your LAN IP | `hostname -I` |
+| Allow LAN access through firewall | `sudo ufw allow 4200/tcp && sudo ufw reload` |
+| Remove LAN firewall rule | `sudo ufw delete allow 4200/tcp && sudo ufw reload` |
 | Pull latest notes from GitHub | `git pull` |
 | Stop the app | Press `Ctrl+C` in the terminal |
 | Expose publicly via ngrok | `ngrok http <PORT>` *(app must already be running)* |
+
+---
+
+### Troubleshooting (Linux web app)
+
+**`ERR_CONNECTION_TIMED_OUT` when accessing from another machine on the same network**
+The app is running but the Linux firewall is blocking the port. Fix:
+```bash
+sudo ufw allow 4200/tcp
+sudo ufw reload
+```
+Then try `http://<your-LAN-IP>:4200` again. Find your LAN IP with `hostname -I`.
+
+**`ngrok: command not found` after `snap install ngrok`**
+The snap bin directory may not be on your PATH yet. Fix:
+```bash
+export PATH=$PATH:/snap/bin
+```
+Add that line to `~/.bashrc` to make it permanent, or log out and back in.
+
+**`ngrok` exits immediately with "authentication failed" or "Your account is not authorized"`**
+Every ngrok account (including free) requires an authtoken. Run:
+```bash
+ngrok config add-authtoken <YOUR_AUTHTOKEN>
+# or:  export NGROK_AUTHTOKEN=<YOUR_AUTHTOKEN>
+```
+Get your token at <https://dashboard.ngrok.com/get-started/your-authtoken>.
+
+**ngrok shows a browser warning page ("You are about to visit…")**
+This is ngrok's free-tier interstitial. Click **Visit Site** to continue — it only appears once per browser session. It does not affect the app itself.
 
 ---
 
