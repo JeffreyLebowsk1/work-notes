@@ -3,8 +3,7 @@ AI provider abstraction for Work Notes.
 
 Supported providers
 -------------------
-  perplexity  – Perplexity Sonar (OpenAI-compatible endpoint)
-  openai      – OpenAI GPT-4o-mini (chat.completions)
+  perplexity  – Perplexity Sonar (REST API)
   gemini      – Google Gemini 2.0 Flash (google-generativeai)  ← default
 
 The active provider is chosen by:
@@ -13,6 +12,8 @@ The active provider is chosen by:
   3. First provider whose API key is configured
 """
 
+import requests
+
 import config
 
 # ---------------------------------------------------------------------------
@@ -20,7 +21,6 @@ import config
 # ---------------------------------------------------------------------------
 
 PROVIDER_LABELS = {
-    "openai": "OpenAI (GPT-4o-mini)",
     "gemini": "Google Gemini 2.0 Flash",
     "perplexity": "Perplexity Sonar",
 }
@@ -48,8 +48,6 @@ class ProviderError(Exception):
 def get_available_providers():
     """Return a list of provider names whose API keys are configured."""
     available = []
-    if config.OPENAI_API_KEY:
-        available.append("openai")
     if config.GEMINI_API_KEY:
         available.append("gemini")
     if config.PERPLEXITY_API_KEY:
@@ -80,7 +78,7 @@ def ask(message, system_prompt=None, provider=None):
     ----------
     message : str
     system_prompt : str | None  – defaults to REGISTRAR_SYSTEM_PROMPT
-    provider : str | None       – "perplexity" | "openai" | "gemini" | None
+    provider : str | None       – "perplexity" | "gemini" | None
 
     Returns
     -------
@@ -95,22 +93,18 @@ def ask(message, system_prompt=None, provider=None):
     provider = resolve_provider(provider)
     if provider == "gemini":
         return _ask_gemini(message, system_prompt)
-    if provider == "perplexity":
-        return _ask_perplexity(message, system_prompt)
-    return _ask_openai(message, system_prompt)
+    return _ask_perplexity(message, system_prompt)
 
 
 # ---------------------------------------------------------------------------
-# Perplexity  (OpenAI-compatible REST API)
+# Perplexity  (REST API)
 # ---------------------------------------------------------------------------
 
-_PERPLEXITY_BASE_URL = "https://api.perplexity.ai"
+_PERPLEXITY_BASE_URL = "https://api.perplexity.ai/chat/completions"
 _PERPLEXITY_CHAT_MODEL = "sonar"
 
 
 def _ask_perplexity(message, system_prompt):
-    import openai
-
     if not config.PERPLEXITY_API_KEY:
         raise ProviderError(
             "Perplexity API key not configured. "
@@ -118,66 +112,35 @@ def _ask_perplexity(message, system_prompt):
             503,
         )
     try:
-        client = openai.OpenAI(
-            api_key=config.PERPLEXITY_API_KEY,
-            base_url=_PERPLEXITY_BASE_URL,
+        resp = requests.post(
+            _PERPLEXITY_BASE_URL,
+            headers={
+                "Authorization": f"Bearer {config.PERPLEXITY_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": _PERPLEXITY_CHAT_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": message},
+                ],
+                "max_tokens": 1024,
+                "temperature": 0.7,
+            },
+            timeout=30,
         )
-        response = client.chat.completions.create(
-            model=_PERPLEXITY_CHAT_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": message},
-            ],
-            max_tokens=1024,
-            temperature=0.7,
-        )
-        return response.choices[0].message.content
-    except openai.AuthenticationError:
-        raise ProviderError("Invalid Perplexity API key.", 401)
-    except openai.RateLimitError:
-        raise ProviderError(
-            "Perplexity rate limit exceeded. Try again in a moment.", 429
-        )
-    except openai.OpenAIError:
+        if resp.status_code == 401:
+            raise ProviderError("Invalid Perplexity API key.", 401)
+        if resp.status_code == 429:
+            raise ProviderError(
+                "Perplexity rate limit exceeded. Try again in a moment.", 429
+            )
+        resp.raise_for_status()
+        return resp.json()["choices"][0]["message"]["content"]
+    except ProviderError:
+        raise
+    except Exception:
         raise ProviderError("Perplexity request failed. Please try again.", 500)
-
-
-# ---------------------------------------------------------------------------
-# OpenAI
-# ---------------------------------------------------------------------------
-
-_OPENAI_CHAT_MODEL = "gpt-4o-mini"
-
-
-def _ask_openai(message, system_prompt):
-    import openai
-
-    if not config.OPENAI_API_KEY:
-        raise ProviderError(
-            "OpenAI API key not configured. "
-            "Set OPENAI_API_KEY in tools/.env to enable AI.",
-            503,
-        )
-    try:
-        client = openai.OpenAI(api_key=config.OPENAI_API_KEY)
-        response = client.chat.completions.create(
-            model=_OPENAI_CHAT_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": message},
-            ],
-            max_tokens=1024,
-            temperature=0.7,
-        )
-        return response.choices[0].message.content
-    except openai.AuthenticationError:
-        raise ProviderError("Invalid OpenAI API key.", 401)
-    except openai.RateLimitError:
-        raise ProviderError(
-            "OpenAI rate limit exceeded. Try again in a moment.", 429
-        )
-    except openai.OpenAIError:
-        raise ProviderError("OpenAI request failed. Please try again.", 500)
 
 
 # ---------------------------------------------------------------------------
