@@ -13,8 +13,8 @@ services:
     name: cccc-notes
     runtime: python
     buildCommand: pip install -r tools/requirements-web.txt
-    startCommand: gunicorn --chdir tools app:app
-    # Render free tier auto-assigns a PORT env var; the app reads it via config.py
+    startCommand: gunicorn --chdir tools app:app --bind 0.0.0.0:$PORT
+    # Render auto-assigns a PORT env var; --bind 0.0.0.0:$PORT tells gunicorn to listen on it
     envVars:
       - key: SECRET_KEY
         generateValue: true      # Render generates a random secret automatically
