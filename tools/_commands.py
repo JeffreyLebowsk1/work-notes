@@ -40,13 +40,13 @@ def cmd_analyze(args: argparse.Namespace) -> None:
         meta = _parse_note(path)
         print(f"\n{'='*60}")
         print(f"  📄 {meta['relative']}")
-        print(f"{'='*60}")
+        print("=" * 60)
         print(f"  Title    : {meta['title']}")
         print(f"  Folder   : {meta['folder']}")
         print(f"  Words    : {meta['words']}")
         print(f"  Modified : {meta['modified'].strftime('%Y-%m-%d %H:%M')}")
         if meta["headings"]:
-            print(f"  Headings :")
+            print("  Headings :")
             for level, heading in meta["headings"]:
                 print(f"    {'  ' * (level - 1)}{'#' * level} {heading}")
         if meta["open_items"]:
@@ -94,13 +94,14 @@ def cmd_sort(args: argparse.Namespace) -> None:
             col_fn = lambda m: m["kind"]
 
         col_w = max(len(col_fn(m)) for m in assets_meta) if assets_meta else 10
+        col_w = max(col_w, len(col_header))
         path_w = max(len(m["relative"]) for m in assets_meta) if assets_meta else 20
 
-        header = f"{'Path':<{path_w}}  {col_header}"
+        header = f"{'Path':<{path_w}}  {col_header:<{col_w}}"
         print(f"\n{header}")
-        print("-" * (len(header) + 4))
+        print("-" * len(header))
         for m in assets_meta:
-            print(f"{m['relative']:<{path_w}}  {col_fn(m)}")
+            print(f"{m['relative']:<{path_w}}  {col_fn(m):<{col_w}}")
         print(f"\n{len(assets_meta)} asset(s) found.\n")
         return
 
@@ -129,13 +130,14 @@ def cmd_sort(args: argparse.Namespace) -> None:
         col_fn = lambda m: m["folder"]
 
     col_w = max(len(col_fn(m)) for m in notes_meta) if notes_meta else 10
+    col_w = max(col_w, len(col_header))
     path_w = max(len(m["relative"]) for m in notes_meta) if notes_meta else 20
 
-    header = f"{'Path':<{path_w}}  {col_header}"
+    header = f"{'Path':<{path_w}}  {col_header:<{col_w}}"
     print(f"\n{header}")
-    print("-" * (len(header) + 4))
+    print("-" * len(header))
     for m in notes_meta:
-        print(f"{m['relative']:<{path_w}}  {col_fn(m)}")
+        print(f"{m['relative']:<{path_w}}  {col_fn(m):<{col_w}}")
     print(f"\n{len(notes_meta)} note(s) found.\n")
 
 
@@ -183,8 +185,8 @@ def cmd_organize(args: argparse.Namespace) -> None:
     lines += [
         "## Summary",
         "",
-        f"| Folder | Notes | Total Words |",
-        f"|--------|-------|-------------|",
+        "| Folder | Notes | Total Words |",
+        "|--------|-------|-------------|",
     ]
     for folder in sorted(folders):
         folder_notes = folders[folder]
@@ -263,8 +265,8 @@ def cmd_organize(args: argparse.Namespace) -> None:
         for subfolder in sorted(by_subfolder):
             lines.append(f"### assets/{subfolder}" if subfolder != "(root)" else "### assets")
             lines.append("")
-            lines.append(f"| File | Type | Size | Modified |")
-            lines.append(f"|------|------|------|----------|")
+            lines.append("| File | Type | Size | Modified |")
+            lines.append("|------|------|------|----------|")
             for a in sorted(by_subfolder[subfolder], key=lambda x: x["name"]):
                 rel = a["relative"]
                 link = f"../{rel}" if args.output else rel
