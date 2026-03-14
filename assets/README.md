@@ -15,6 +15,8 @@ Shared assets including images, screenshots, spreadsheets, and reference files.
   - `updates/` — Policy, technology, and workflow update screenshots
 - `spreadsheets/` — Excel/CSV files and data exports
 - `documents/` — PDFs and other documents
+  - `Colleague Mnemonic Training 2026.pptx` — Training slides for Colleague mnemonic codes
+  - `Foreign Transcript Receival Form.pdf` — Form used when receiving foreign transcripts
 
 ## Notes
 
