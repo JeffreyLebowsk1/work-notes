@@ -37,7 +37,7 @@
 
 | Action | What it does | Button |
 |---|---|---|
-| **Open App** | Open the live web app in your browser | [![Open CCCC Notes web app on Render](https://img.shields.io/badge/Open%20App-cccc--notes-blue?logo=firefox-browser)](https://cccc-notes.onrender.com) |
+| **Open App** | Open the live web app in your browser | [![Open CCCC Notes web app on Render](https://img.shields.io/badge/Open%20App-cccc--notes-blue?logo=render&logoColor=white)](https://cccc-notes.onrender.com) |
 | Notes Helper | analyze, sort, organize, search, import, or process-inbox | [![Notes Helper](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml) |
 | Inbox Processor | import every file waiting in `inbox/` | [![Inbox Processor](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml) |
 
