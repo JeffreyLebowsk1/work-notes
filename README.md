@@ -57,7 +57,7 @@ The repository is a **living knowledge base** for the Registrar's Office. Here's
 
 5. **Web App** — Run `python3 tools/app.py` to launch a browser UI (at `http://localhost:5000`) for browsing sections, reading rendered Markdown notes, running full-text searches, and chatting with the AI Assistant.
 
-6. **AI Assistant** — The web app includes a chat interface powered by Perplexity, OpenAI, or Google Gemini. It's pre-configured with Registrar's Office context (FERPA, graduation, transcripts, etc.) and can answer procedural questions on demand.
+6. **AI Assistant** — The web app includes a chat interface powered by Perplexity or Google Gemini. It's pre-configured with Registrar's Office context (FERPA, graduation, transcripts, etc.) and can answer procedural questions on demand.
 
 7. **GitHub Actions** — Two workflows let you run tools directly from the GitHub website without a terminal:
    - **[Notes Helper](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml)** — Manually triggered; runs any `notes_helper.py` command (analyze, sort, organize, search, import, process-inbox).
