@@ -33,6 +33,16 @@
 | [⚙️ Setup Guide](./SETUP.md) | Google Drive + GitHub setup and workflow guide |
 | [📜 Changelog](./CHANGELOG.md) | History of changes to this repository |
 
+## ⚡ Quick Actions
+
+| Action | What it does | Button |
+|---|---|---|
+| **Open App** | Open the live web app in your browser | [![Open CCCC Notes web app on Render](https://img.shields.io/badge/Open%20App-cccc--notes-blue?logo=firefox-browser)](https://cccc-notes.onrender.com) |
+| Notes Helper | analyze, sort, organize, search, import, or process-inbox | [![Notes Helper](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml) |
+| Inbox Processor | import every file waiting in `inbox/` | [![Inbox Processor](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml) |
+
+---
+
 ## 🔄 How It Works
 
 The repository is a **living knowledge base** for the Registrar's Office. Here's how all the pieces fit together:
