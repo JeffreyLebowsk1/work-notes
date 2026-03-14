@@ -11,10 +11,13 @@
 
     <div class="section-header">
         <div class="section-header-icon">{{ meta.icon }}</div>
-        <div>
+        <div style="flex:1">
             <h1>{{ meta.title }}</h1>
             <p>{{ meta.description }}</p>
         </div>
+        <a href="{{ url_for('note_new') }}?section={{ section_key }}" class="btn btn-gold btn-sm">
+            ✏️ New Note
+        </a>
     </div>
 
     {% if notes %}

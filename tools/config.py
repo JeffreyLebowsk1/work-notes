@@ -21,3 +21,7 @@ AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
 
 APP_USERNAME = os.environ.get("APP_USERNAME", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
+
+# Maximum file size for asset uploads (bytes). Exposed to Flask via MAX_CONTENT_LENGTH.
+MAX_UPLOAD_MB = int(os.environ.get("MAX_UPLOAD_MB", "16"))
+MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
