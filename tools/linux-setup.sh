@@ -202,8 +202,29 @@ fi
 echo ""
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 success "Setup complete.  Starting the web app on port ${PORT} …"
-echo -e "   ${BOLD}Open in your browser:${RESET}  http://localhost:${PORT}"
+echo -e "   ${BOLD}Local:${RESET}              http://localhost:${PORT}"
+
+# Show the LAN IP so the user knows the address to share on the local network.
+LAN_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+if [ -n "$LAN_IP" ]; then
+  echo -e "   ${BOLD}On your network:${RESET}    http://${LAN_IP}:${PORT}"
+fi
+
 echo -e "   Press ${BOLD}Ctrl+C${RESET} to stop."
+echo ""
+
+# If ufw is installed and active, check whether the chosen port is allowed.
+if command -v ufw &>/dev/null; then
+  UFW_STATUS=$(sudo ufw status 2>/dev/null || true)
+  if echo "$UFW_STATUS" | grep -q "Status: active"; then
+    if ! echo "$UFW_STATUS" | grep -qE "^${PORT}[^0-9]"; then
+      warn "ufw firewall is active and port ${PORT} is not open."
+      warn "Other devices on your network will see ERR_CONNECTION_TIMED_OUT."
+      warn "To allow LAN access:  sudo ufw allow ${PORT}/tcp && sudo ufw reload"
+    fi
+  fi
+fi
+
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 echo ""
 
