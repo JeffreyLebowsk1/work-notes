@@ -308,6 +308,18 @@ If you can't run commands on your PC, you can trigger the helper tool directly f
 
 Uploading files to `inbox/` via the GitHub web interface triggers the **Inbox Processor** workflow automatically — no manual steps needed.  See [`inbox/README.md`](../inbox/README.md) for full details.
 
+### Verifying the web app via GitHub Actions
+
+The **Start Web App** workflow installs the web dependencies, starts the Flask app, and confirms every key route is responding — useful as a quick sanity-check that the app still works after changes.
+
+1. Go to your repository on [github.com](https://github.com).
+2. Click the **Actions** tab.
+3. In the left sidebar, click **Start Web App**.
+4. Click **Run workflow** and optionally change the port (default: `5000`).
+5. Once the run finishes, open the **Summary** tab of the job to see the startup report.
+
+> **Note:** The server runs on the GitHub Actions runner, so the `localhost` URL shown in the summary is not directly accessible from your own machine.  To open the app in your own browser, run `python3 tools/app.py` locally — it will open automatically once ready.
+
 ---
 
 ## Interactive Agent Mode
@@ -380,7 +392,13 @@ Get a free Perplexity API key at <https://www.perplexity.ai/settings/api>.
 python3 tools/app.py
 ```
 
-Then open **http://localhost:5000** in your browser.
+The app starts Flask and then polls `http://localhost:5000` in a background thread.  As soon as the server is accepting connections, it opens the URL automatically in your default browser.  No manual copy-paste required.
+
+Set the `NO_BROWSER` environment variable to skip auto-open (useful on headless machines or in CI):
+
+```bash
+NO_BROWSER=1 python3 tools/app.py
+```
 
 ### New files added
 

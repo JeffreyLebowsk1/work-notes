@@ -1,0 +1,90 @@
+name: Start Web App
+
+on:
+  workflow_dispatch:
+    inputs:
+      port:
+        description: "Port to run the app on"
+        required: false
+        default: "5000"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  start-and-verify:
+    name: Start web app and verify it is ready
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install -r tools/requirements-web.txt
+
+      - name: Start web app in background
+        env:
+          PORT: ${{ inputs.port }}
+          NO_BROWSER: "1"
+        run: |
+          python3 tools/app.py &
+          echo "APP_PID=$!" >> "$GITHUB_ENV"
+
+      - name: Wait until app is ready
+        env:
+          PORT: ${{ inputs.port }}
+        run: |
+          echo "Waiting for the app to respond on port ${PORT}…"
+          for i in $(seq 1 30); do
+            if curl -sf "http://localhost:${PORT}/" > /dev/null 2>&1; then
+              echo "✅ App is ready (attempt ${i})"
+              exit 0
+            fi
+            echo "  attempt ${i}/30 — not yet ready, retrying in 1 s"
+            sleep 1
+          done
+          echo "❌ App did not become ready within 30 seconds"
+          exit 1
+
+      - name: Verify key routes respond
+        env:
+          PORT: ${{ inputs.port }}
+        run: |
+          for route in "/" "/search" "/assets"; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${PORT}${route}")
+            if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 400 ]; then
+              echo "❌ Route ${route} returned HTTP ${STATUS}"
+              exit 1
+            fi
+            echo "✅ ${route} → HTTP ${STATUS}"
+          done
+
+      - name: Write job summary with app URL
+        env:
+          PORT: ${{ inputs.port }}
+        run: |
+          {
+            echo "## 🌐 Work Notes Web App"
+            echo ""
+            echo "The app started successfully and is ready."
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| **Local URL** | \`http://localhost:${PORT}\` |"
+            echo "| **Port** | \`${PORT}\` |"
+            echo ""
+            echo "> **Note:** The server is running on the GitHub Actions runner."
+            echo "> To open the app in your own browser, run it locally:"
+            echo "> \`\`\`bash"
+            echo "> python3 tools/app.py"
+            echo "> \`\`\`"
+            echo "> Your browser will open automatically once the server is ready."
+          } >> "$GITHUB_STEP_SUMMARY"

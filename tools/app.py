@@ -15,6 +15,8 @@ import os
 import re
 import sys
 import threading
+import time
+import urllib.request
 import webbrowser
 from pathlib import Path
 
@@ -38,9 +40,10 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_UPLOAD_BYTES
 
-# Seconds to wait before opening the browser after the dev server starts.
-# The delay lets Flask finish binding to the port before the browser hits it.
-_BROWSER_OPEN_DELAY = 1.0
+# How often (seconds) to poll the server while waiting for it to come up.
+_BROWSER_POLL_INTERVAL = 0.5
+# Maximum seconds to wait for the server before giving up on browser-open.
+_BROWSER_POLL_TIMEOUT = 30
 
 # ---------------------------------------------------------------------------
 # Section definitions — top-level folders with display metadata
@@ -593,8 +596,30 @@ if __name__ == "__main__":
     debug = config.DEBUG or os.environ.get("FLASK_DEBUG", "0") == "1"
     url = f"http://localhost:{port}"
     print(f"\n📋 Work Notes — starting on {url}\n")
-    # Open the browser automatically unless the Werkzeug reloader's child process
-    # would do it a second time (only the parent/initial process should open it).
-    if not debug or os.environ.get("WERKZEUG_RUN_MAIN") != "true":
-        threading.Timer(_BROWSER_OPEN_DELAY, lambda: webbrowser.open(url)).start()
+
+    def _open_browser_when_ready() -> None:
+        """Poll the server until it responds, then open the browser.
+
+        This is more reliable than a fixed-delay timer because it opens the
+        browser the moment Flask is actually accepting connections rather than
+        guessing how long startup will take.
+        """
+        deadline = time.monotonic() + _BROWSER_POLL_TIMEOUT
+        while time.monotonic() < deadline:
+            time.sleep(_BROWSER_POLL_INTERVAL)
+            try:
+                urllib.request.urlopen(url, timeout=1)  # noqa: S310
+                webbrowser.open(url)
+                return
+            except Exception:
+                continue
+
+    # Open the browser automatically unless:
+    #   • the NO_BROWSER env var is set (handy for CI / headless environments), or
+    #   • the Werkzeug reloader's child process would do it a second time
+    #     (only the parent/initial process should open it).
+    if not os.environ.get("NO_BROWSER") and (
+        not debug or os.environ.get("WERKZEUG_RUN_MAIN") != "true"
+    ):
+        threading.Thread(target=_open_browser_when_ready, daemon=True).start()
     app.run(debug=debug, host="0.0.0.0", port=port)
