@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Assets — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container" style="max-width:1100px">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <span>Assets</span>
+    </div>
+
+    <div class="section-header">
+        <div class="section-header-icon">📁</div>
+        <div>
+            <h1>Assets</h1>
+            <p>Shared images, documents, and spreadsheets.</p>
+        </div>
+    </div>
+
+    {% if groups %}
+        {% for folder, files in groups.items() %}
+        <p class="assets-folder-heading">📂 {{ folder }}</p>
+        <div class="assets-grid">
+            {% for f in files %}
+            {% set is_image = f.mime.startswith('image/') %}
+            {% set is_pdf   = f.mime == 'application/pdf' %}
+            <a href="{{ url_for('repo_asset', asset_path=f.rel) }}"
+               class="asset-card"
+               {% if not is_image and not is_pdf %}download{% endif %}
+               target="_blank"
+               rel="noopener">
+                <div class="asset-card-preview">
+                    {% if is_image %}
+                    <img src="{{ url_for('repo_asset', asset_path=f.rel) }}" alt="{{ f.name }}" loading="lazy">
+                    {% elif is_pdf %}
+                    <span class="asset-icon">📄</span>
+                    {% elif 'spreadsheet' in f.mime or f.name.endswith(('.xlsx','.xls','.csv')) %}
+                    <span class="asset-icon">📊</span>
+                    {% elif 'presentation' in f.mime or f.name.endswith(('.pptx','.ppt')) %}
+                    <span class="asset-icon">📑</span>
+                    {% else %}
+                    <span class="asset-icon">📎</span>
+                    {% endif %}
+                </div>
+                <div class="asset-card-info">
+                    <p class="asset-card-name" title="{{ f.name }}">{{ f.name }}</p>
+                    <p class="asset-card-size">
+                        {% if f.size < 1024 %}{{ f.size }} B
+                        {% elif f.size < 1048576 %}{{ (f.size / 1024)|round(1) }} KB
+                        {% else %}{{ (f.size / 1048576)|round(1) }} MB
+                        {% endif %}
+                    </p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <p>📭 No assets found. Add files to the <code>assets/</code> folder.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

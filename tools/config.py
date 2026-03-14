@@ -18,3 +18,6 @@ PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
 
 # Which provider to use by default: "gemini" | "openai" | "perplexity"
 AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
+
+APP_USERNAME = os.environ.get("APP_USERNAME", "")
+APP_PASSWORD = os.environ.get("APP_PASSWORD", "")

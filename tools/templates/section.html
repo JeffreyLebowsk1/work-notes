@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ meta.title }} — Work Notes{% endblock %}
+{% block title %}{{ meta.title }} — CCCC Notes{% endblock %}
 
 {% block content %}
 <div class="page-container">
@@ -9,8 +9,8 @@
         <span>{{ meta.title }}</span>
     </div>
 
-    <div class="category-header category-{{ meta.color }}">
-        <div class="category-header-icon">{{ meta.icon }}</div>
+    <div class="section-header">
+        <div class="section-header-icon">{{ meta.icon }}</div>
         <div>
             <h1>{{ meta.title }}</h1>
             <p>{{ meta.description }}</p>
@@ -18,19 +18,19 @@
     </div>
 
     {% if notes %}
-    <div class="lessons-list">
+    <div class="notes-list">
         {% for n in notes %}
-        <a href="{{ url_for('note', note_path=n.relative) }}" class="lesson-item">
-            <div class="lesson-number">{{ loop.index }}</div>
-            <div class="lesson-info">
+        <a href="{{ url_for('note', note_path=n.relative) }}" class="note-item">
+            <div class="note-item-icon">📄</div>
+            <div class="note-item-body">
                 <h3>{{ n.title }}</h3>
-                <p>
+                <p class="note-item-meta">
                     {{ n.modified.strftime('%Y-%m-%d') }} · {{ n.words }} words
                     {%- if n.open_items %} · 🔲 {{ n.open_items|length }} open{% endif %}
                     {%- if n.done_items %} · ✅ {{ n.done_items|length }} done{% endif %}
                 </p>
             </div>
-            <div class="lesson-arrow">→</div>
+            <div class="note-item-arrow">›</div>
         </a>
         {% endfor %}
     </div>
@@ -40,9 +40,9 @@
     </div>
     {% endif %}
 
-    <div class="category-ai-prompt">
-        <p>Have a question about {{ meta.title }}?</p>
-        <a href="{{ url_for('assistant') }}?context={{ section_key }}" class="btn btn-ai-small">🤖 Ask AI Assistant</a>
+    <div class="section-ai-prompt">
+        <span>Have a question about {{ meta.title }}?</span>
+        <a href="{{ url_for('assistant') }}?context={{ section_key }}" class="btn-ai-small">🤖 Ask AI Assistant</a>
     </div>
 </div>
 {% endblock %}

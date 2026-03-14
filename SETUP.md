@@ -1,6 +1,6 @@
 # ⚙️ Setup & Workflow Guide
 
-How to set up and use this repository with Google Drive on your work PC.
+How to set up and use this repository with Google Drive on your work PC, host the web app free online, and access it from any device — including Android.
 
 ---
 
@@ -395,6 +395,104 @@ git push
 | `pkg: command not found` in Termux | Termux environment is not set up — run `pkg update` first |
 | `git push` fails with "Authentication failed" | Re-run `git pull` inside the repo and re-enter your PAT |
 | Termux can't access internal storage | Run `termux-setup-storage` and grant the permission in the system prompt |
+
+---
+
+## 🌐 Hosting the Web App (Free — Access From Any Browser)
+
+The **CCCC Notes web app** can be hosted for free on [Render.com](https://render.com) so you can open it in any browser — your work PC, a tablet, a phone, or any computer — without running Python locally. Every time you push notes to GitHub, the hosted app updates automatically.
+
+> ⚠️ **Always set a password before hosting.** The app contains internal CCCC work notes. Without authentication, anyone with the URL could read them.
+
+---
+
+### Step 1 — Make Your GitHub Repo Private (Recommended)
+
+Before hosting publicly, make sure the repository is **private**:
+
+1. Go to your repo on GitHub → **Settings** → scroll to **Danger Zone**
+2. Click **Change repository visibility** → **Make private**
+
+---
+
+### Step 2 — Set a Password on the App
+
+The app supports HTTP Basic Auth — a simple username/password prompt in the browser.
+
+Set these two environment variables wherever you host the app (see Step 3):
+
+| Variable | Example value |
+|---|---|
+| `APP_USERNAME` | `registrar` |
+| `APP_PASSWORD` | `choose-a-strong-password` |
+
+Leave both blank only for local use on your own machine.
+
+---
+
+### Step 3 — Deploy to Render.com (Free)
+
+A `render.yaml` file is already included in the repo. Render reads it automatically.
+
+1. Go to **[render.com](https://render.com)** and sign in with your GitHub account (free)
+2. Click **New** → **Blueprint**
+3. Connect your **JeffreyLebowsk1/work-notes** repository
+4. Render detects `render.yaml` and pre-fills the settings — click **Apply**
+5. Before the first deploy finishes, go to your new service → **Environment**
+6. Add the following environment variables:
+
+   | Key | Value |
+   |---|---|
+   | `APP_USERNAME` | your chosen username |
+   | `APP_PASSWORD` | your chosen password |
+   | `GEMINI_API_KEY` | *(optional)* your Gemini key to enable the AI assistant |
+
+7. Click **Save Changes** — the service restarts and is live ✅
+
+Your app will be at a URL like `https://cccc-notes.onrender.com`.
+
+> 💡 **Free tier note:** Render's free web services spin down after 15 minutes of inactivity and take ~30 seconds to wake up on the next visit. This is fine for occasional reference use. Upgrade to a paid plan ($7/month) for instant response.
+
+---
+
+### Step 4 — Auto-Deploy on Every Git Push
+
+Once hosted, every `git push` to GitHub automatically triggers a new deploy on Render. Your notes are always up to date within a minute or two of pushing.
+
+```
+Edit a note on your PC
+        ↓
+git add . && git commit -m "updated checklist" && git push
+        ↓
+Render detects the push → redeploys automatically (~60 sec)
+        ↓
+Open your app URL in any browser — notes are updated ✅
+```
+
+---
+
+### Accessing From Android
+
+Once hosted, open the app URL in **Chrome on Android** and tap:
+
+**⋮ menu → Add to Home screen**
+
+This installs it as a home screen icon that opens full-screen, just like a native app — no App Store needed.
+
+---
+
+### Alternative: Run in GitHub Codespaces (No Hosting Needed)
+
+GitHub Codespaces gives you a browser-based Linux environment — free for 60 hours/month.
+
+1. Go to your repo on GitHub → green **Code** button → **Codespaces** tab → **Create codespace**
+2. In the terminal that opens:
+   ```bash
+   pip install -r tools/requirements-web.txt
+   python tools/app.py
+   ```
+3. GitHub shows a popup: **Open in Browser** — click it
+4. The app runs at a temporary `https://` URL, accessible only while the codespace is open
 
 ---
 

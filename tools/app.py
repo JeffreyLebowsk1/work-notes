@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 import markdown as md
-from flask import Flask, jsonify, render_template, request, send_from_directory, url_for
+from flask import Flask, Response, jsonify, render_template, request, send_from_directory, url_for
 from markupsafe import Markup
 
 # Ensure tools/ is on sys.path so sibling modules resolve correctly.
@@ -105,6 +105,29 @@ _SECTION_DIRS: dict[str, Path] = {
     key: REPO_ROOT / key for key in SECTIONS
 }
 
+@app.before_request
+def _basic_auth_check():
+    """Enforce HTTP Basic Auth when APP_USERNAME is configured.
+
+    Set APP_USERNAME and APP_PASSWORD in tools/.env (or as hosting env vars)
+    to password-protect the app when deployed to a public URL.
+    Leave both blank for local/dev use with no auth prompt.
+    """
+    if not config.APP_USERNAME:
+        return  # Auth disabled — local use
+    auth = request.authorization
+    if (
+        auth is None
+        or auth.username != config.APP_USERNAME
+        or auth.password != config.APP_PASSWORD
+    ):
+        return Response(
+            "CCCC Notes — Authentication required.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="CCCC Notes"'},
+        )
+
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -171,10 +194,11 @@ def inject_static_asset_url():
 # ---------------------------------------------------------------------------
 
 _ASSETS_DIR: Path = REPO_ROOT / "assets"
+_ASSET_SKIP = {".gitkeep", "README.md"}
 _ASSET_INDEX: dict[str, Path] = {}
 if _ASSETS_DIR.is_dir():
     for _ap in _ASSETS_DIR.rglob("*"):
-        if _ap.is_file() and _ap.name != ".gitkeep":
+        if _ap.is_file() and _ap.name not in _ASSET_SKIP:
             _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
             _ASSET_INDEX[_rel] = _ap
 
