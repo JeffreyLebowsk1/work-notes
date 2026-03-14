@@ -1,0 +1,18 @@
+{
+  "name": "Work Notes GUI",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": ".."
+  },
+  "forwardPorts": [5000],
+  "portsAttributes": {
+    "5000": {
+      "label": "Work Notes GUI",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  // Copy .env.example → .env on first launch (if not already present).
+  // Edit tools/.env inside the Codespace to add your AI provider keys.
+  "postCreateCommand": "[ -f tools/.env ] || cp tools/.env.example tools/.env",
+  "remoteUser": "root"
+}

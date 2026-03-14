@@ -112,6 +112,74 @@ Make your commit messages descriptive so you can find things later:
 
 ---
 
+## 🐳 Docker & GitHub Codespaces (Web GUI)
+
+Run the Work Notes web GUI in a self-contained container — no local Python install required.
+
+---
+
+### Option A — GitHub Codespaces (recommended for quick access)
+
+1. Go to the repository on [github.com](https://github.com)
+2. Click the green **Code** button → **Codespaces** tab → **Create codespace on main**
+3. GitHub builds the container automatically using `.devcontainer/devcontainer.json`
+4. Once the Codespace is ready, port **5000** is forwarded and a browser tab opens at the app
+5. *(Optional)* Add your AI provider key: open `tools/.env` in the editor and fill in `GEMINI_API_KEY` (or another key)
+
+> The Codespace mounts the full repository, so any notes you create or edit inside it are reflected live.
+
+---
+
+### Option B — Local Docker (with live note editing)
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows/Mac) or Docker Engine (Linux)
+
+**1. Start the GUI**
+
+```bash
+docker compose up
+```
+
+Docker builds the image on the first run (takes ~30 seconds), then starts the server.  
+Open **http://localhost:5000** in your browser.
+
+**2. Add your AI key** *(optional)*
+
+```bash
+cp tools/.env.example tools/.env
+# Edit tools/.env and add your GEMINI_API_KEY (or OPENAI_API_KEY / PERPLEXITY_API_KEY)
+```
+
+Then restart the container:
+
+```bash
+docker compose restart
+```
+
+**3. Stop the container**
+
+```bash
+docker compose down
+```
+
+> **Live editing:** The repository folder is mounted as a volume inside the container, so any notes you edit on your machine are immediately visible in the browser — no rebuild needed.
+
+---
+
+### Option C — Docker (standalone, no docker-compose)
+
+```bash
+# Build the image
+docker build -t work-notes-gui .
+
+# Run it (replace /path/to/work-notes with your actual repo path)
+docker run -p 5000:5000 -v /path/to/work-notes:/workspace work-notes-gui
+```
+
+Then open **http://localhost:5000**.
+
+---
+
 ## 🐧 Linux / Jetson Orin Nano Setup (Automatic Sync)
 
 Use your home Jetson Orin Nano (or any Linux machine) to keep the repo in sync

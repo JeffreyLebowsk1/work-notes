@@ -382,6 +382,18 @@ python3 tools/app.py
 
 Then open **http://localhost:5000** in your browser.
 
+### Run in Docker / GitHub Codespaces
+
+No local Python install required — use Docker or open the repo in a GitHub Codespace.
+
+| Method | Command |
+|--------|---------|
+| **Codespace** | Click **Code → Codespaces → Create codespace** on GitHub — port 5000 opens automatically |
+| **docker compose** (live editing) | `docker compose up` then open http://localhost:5000 |
+| **docker run** | `docker build -t work-notes-gui . && docker run -p 5000:5000 work-notes-gui` |
+
+See the [Docker & Codespaces section in SETUP.md](../SETUP.md#-docker--github-codespaces-web-gui) for full instructions.
+
 ### New files added
 
 | File | Purpose |
@@ -394,6 +406,9 @@ Then open **http://localhost:5000** in your browser.
 | `tools/static/js/main.js` | Shared JS placeholder |
 | `tools/requirements-web.txt` | Python dependencies for the web app |
 | `tools/.env.example` | API key template — copy to `tools/.env` and fill in |
+| `Dockerfile` | Builds the GUI container image |
+| `docker-compose.yml` | Runs the container with the repo volume-mounted for live editing |
+| `.devcontainer/devcontainer.json` | GitHub Codespaces configuration — builds from `Dockerfile`, forwards port 5000 |
 
 > **Note:** `tools/.env` is in `.gitignore` — your API keys will never be committed.
 

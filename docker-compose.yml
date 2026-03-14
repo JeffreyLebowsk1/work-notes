@@ -1,0 +1,23 @@
+# docker-compose.yml — run the Work Notes web GUI locally
+#
+# Usage:
+#   docker compose up          # build (first time) and start
+#   docker compose up --build  # force a rebuild
+#   docker compose down        # stop and remove the container
+#
+# The repository is mounted as a volume so any edits to your notes are
+# reflected immediately without needing to rebuild the image.
+#
+# API keys: copy tools/.env.example to tools/.env and fill in your keys.
+
+services:
+  gui:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/workspace
+    env_file:
+      - path: ./tools/.env
+        required: false
+    restart: unless-stopped
