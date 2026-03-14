@@ -12,11 +12,10 @@ DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 PORT = int(os.environ.get("PORT", "5000"))
 
 # ── AI providers ─────────────────────────────────────────────────────────────
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PERPLEXITY_API_KEY = os.environ.get("PERPLEXITY_API_KEY", "")
 
-# Which provider to use by default: "gemini" | "openai" | "perplexity"
+# Which provider to use by default: "gemini" | "perplexity"
 AI_PROVIDER = os.environ.get("AI_PROVIDER", "gemini").lower()
 
 APP_USERNAME = os.environ.get("APP_USERNAME", "")
