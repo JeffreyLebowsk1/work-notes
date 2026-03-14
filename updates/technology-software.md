@@ -15,7 +15,7 @@ A log of new systems, software rollouts, IT changes, and anything tech-related t
 
 There is no Android app for this repository. The available tools are:
 
-- **Web app** — `python3 tools/app.py` launches a browser UI at `http://localhost:420` for browsing notes, searching, and using the AI assistant. This can be accessed from any mobile browser on the same network.
+- **Web app** — `python3 tools/app.py` launches a browser UI at `http://localhost:4200` for browsing notes, searching, and using the AI assistant. This can be accessed from any mobile browser on the same network.
 - **CLI tool** — `python3 tools/notes_helper.py` to analyze, sort, organize, search, and import notes.
 - **GitHub mobile app** — The repository content (Markdown files) can be read via the [GitHub mobile app](https://github.com/mobile) on Android, but there is no dedicated standalone Android app.
 

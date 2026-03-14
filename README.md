@@ -60,11 +60,11 @@ pip install -r tools/requirements-web.txt
 python3 tools/app.py
 ```
 
-Then open **http://localhost:420** in your browser.
+Then open **http://localhost:4200** in your browser.
 
 > ⚡ **One-liner shortcut** — `bash tools/linux-setup.sh` handles steps 2 and 3 automatically (creates the venv, installs deps, checks the port, and starts the app):
 > ```bash
-> bash tools/linux-setup.sh              # default port 420
+> bash tools/linux-setup.sh              # default port 4200
 > bash tools/linux-setup.sh --port 8080  # use a different port
 > ```
 
@@ -84,7 +84,7 @@ The repository is a **living knowledge base** for the Registrar's Office. Here's
 
 4. **CLI Tools** — [`tools/notes_helper.py`](./tools/README.md) is a command-line tool for analyzing notes, sorting by date or size, generating a master index (`tools/index.md`), searching by keyword, and importing external files.
 
-5. **Web App** — Run `python3 tools/app.py` to launch a browser UI (at `http://localhost:420`) for browsing sections, reading rendered Markdown notes, running full-text searches, and chatting with the AI Assistant.
+5. **Web App** — Run `python3 tools/app.py` to launch a browser UI (at `http://localhost:4200`) for browsing sections, reading rendered Markdown notes, running full-text searches, and chatting with the AI Assistant.
 
 6. **AI Assistant** — The web app includes a chat interface powered by Perplexity or Google Gemini. It's pre-configured with Registrar's Office context (FERPA, graduation, transcripts, etc.) and can answer procedural questions on demand.
 
