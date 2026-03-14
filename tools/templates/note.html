@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ note.title }} — {{ meta.title }} — Work Notes{% endblock %}
+{% block title %}{{ note.title }} — {{ meta.title }} — CCCC Notes{% endblock %}
 
 {% block content %}
 <div class="page-container note-container">
@@ -11,10 +11,10 @@
         <span>{{ note.title }}</span>
     </div>
 
-    <div class="lesson-header">
-        <span class="lesson-badge category-{{ meta.color }}">{{ meta.icon }} {{ meta.title }}</span>
+    <div class="note-header">
+        <span class="note-badge c-{{ meta.color }}">{{ meta.icon }} {{ meta.title }}</span>
         <h1>{{ note.title }}</h1>
-        <p class="lesson-summary">
+        <p class="note-summary">
             Last modified {{ note.modified.strftime('%Y-%m-%d %H:%M') }} · {{ note.words }} words
         </p>
     </div>
@@ -30,23 +30,21 @@
     </div>
     {% endif %}
 
-    <div class="lesson-section">
-        <div class="section-content note-content">{{ content_html }}</div>
-    </div>
+    <div class="section-content note-content">{{ content_html }}</div>
 
     <div class="note-ai-prompt">
         <div class="ai-prompt-content">
             <span>🤖</span>
             <div>
                 <strong>Have a question about this note?</strong>
-                <p>Ask the AI assistant for guidance, summaries, or follow-up help.</p>
+                <p style="font-size:.875rem;color:var(--text-muted);margin-top:.15rem;">Ask the AI assistant for help, summaries, or follow-up guidance.</p>
             </div>
-            <a href="{{ url_for('assistant') }}?context={{ section_key }}" class="btn btn-ai-small">Ask AI</a>
+            <a href="{{ url_for('assistant') }}?context={{ section_key }}" class="btn-ai-small">Ask AI</a>
         </div>
     </div>
 
-    <div class="lesson-nav">
-        <div class="lesson-nav-prev">
+    <div class="note-nav">
+        <div class="note-nav-prev">
             {% if prev_note %}
             <a href="{{ url_for('note', note_path=prev_note.relative) }}" class="btn btn-nav">
                 ← {{ prev_note.title }}
@@ -56,7 +54,7 @@
         <a href="{{ url_for('section', section_key=section_key) }}" class="btn btn-outline">
             📂 All {{ meta.title }} Notes
         </a>
-        <div class="lesson-nav-next">
+        <div class="note-nav-next">
             {% if next_note %}
             <a href="{{ url_for('note', note_path=next_note.relative) }}" class="btn btn-nav">
                 {{ next_note.title }} →
