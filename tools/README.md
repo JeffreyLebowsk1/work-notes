@@ -4,7 +4,40 @@ This folder contains helper scripts for managing your work notes.
 
 ---
 
-## notes_helper.py
+## linux-setup.sh
+
+A one-shot setup and launch script for the web app on any Linux machine.
+
+```bash
+# Run from the repository root:
+bash tools/linux-setup.sh
+```
+
+What it does:
+1. Checks for Python 3.10+ and git
+2. Creates a Python virtual environment at `.venv/`
+3. Installs all dependencies from `tools/requirements-web.txt`
+4. Scaffolds `tools/.env` from `tools/.env.example` (if not already present)
+5. Starts the web app at `http://localhost:5000`
+
+Optional environment variables:
+
+| Variable | Purpose |
+|---|---|
+| `APP_USERNAME` | HTTP Basic Auth username (strongly recommended for shared machines) |
+| `APP_PASSWORD` | HTTP Basic Auth password |
+| `PORT` | Override the default port (`5000`) |
+
+```bash
+# Example — launch with password protection on port 8080:
+APP_USERNAME=registrar APP_PASSWORD=secret PORT=8080 bash tools/linux-setup.sh
+```
+
+See the **🐧 Run the Web App Locally on Linux** section of [SETUP.md](../SETUP.md) for the full walkthrough, including how to use ngrok to create a public link.
+
+---
+
+## auto-sync.sh
 
 A command-line tool to **analyze**, **sort**, **organize**, **search**, and **import** your notes.
 

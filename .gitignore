@@ -7,6 +7,9 @@ desktop.ini
 __pycache__/
 tools/__pycache__
 
+# Python virtual environment created by tools/linux-setup.sh
+.venv/
+
 # Web app secrets — never commit the real .env
 tools/.env
 

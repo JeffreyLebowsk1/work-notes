@@ -116,6 +116,13 @@ Make your commit messages descriptive so you can find things later:
 
 Use these steps to clone the repo and launch the browser UI on any Linux machine (Ubuntu, Debian, Fedora, etc.) — no cloud hosting required.
 
+> ⚡ **Shortcut — automated setup script:**
+> Once you have the repo cloned, a single script handles everything below (venv, dependencies, `.env` scaffold, and app launch):
+> ```bash
+> bash tools/linux-setup.sh
+> ```
+> The manual steps are documented below if you prefer to run them yourself or need to troubleshoot.
+
 ---
 
 ### Prerequisites
