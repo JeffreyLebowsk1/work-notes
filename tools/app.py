@@ -17,8 +17,7 @@ from pathlib import Path
 
 import markdown as md
 from flask import Flask, jsonify, render_template, request, url_for
-from markupsafe import Markup, escape as html_escape
-from werkzeug.security import safe_join
+from markupsafe import Markup
 
 # Ensure tools/ is on sys.path so sibling modules resolve correctly.
 _TOOLS_DIR = Path(__file__).resolve().parent
@@ -26,7 +25,7 @@ sys.path.insert(0, str(_TOOLS_DIR))
 
 import ai_providers  # noqa: E402
 import config  # noqa: E402
-from _helpers import REPO_ROOT, _all_notes, _parse_note  # noqa: E402
+from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
@@ -98,18 +97,26 @@ SECTIONS = {
     },
 }
 
+# Pre-computed section directories — keyed by section name.
+# Values are built from SECTIONS (a module-level constant) and REPO_ROOT,
+# so no path ever depends on user-supplied input.
+_SECTION_DIRS: dict[str, Path] = {
+    key: REPO_ROOT / key for key in SECTIONS
+}
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 
 def _notes_in_section(section_key: str) -> list[dict]:
-    """Return parsed metadata for every note in a section folder, sorted by path."""
-    safe_str = safe_join(str(REPO_ROOT), section_key)
-    if safe_str is None:
-        return []
-    section_dir = Path(safe_str)
-    if not section_dir.is_dir():
+    """Return parsed metadata for every note in a section folder, sorted by path.
+
+    ``section_key`` is validated against the pre-computed ``_SECTION_DIRS``
+    dict so the resulting path never depends on user-supplied input.
+    """
+    section_dir = _SECTION_DIRS.get(section_key)
+    if section_dir is None or not section_dir.is_dir():
         return []
     paths = sorted(
         p for p in section_dir.rglob("*.md")
@@ -119,7 +126,10 @@ def _notes_in_section(section_key: str) -> list[dict]:
 
 
 def _render_markdown(text: str) -> Markup:
-    """Convert a markdown string to safe HTML."""
+    """Convert a markdown string to safe HTML.
+
+    The ``text`` argument must come from a trusted source (repo notes only).
+    """
     if not text:
         return Markup("")
     html = md.markdown(
@@ -133,18 +143,6 @@ def _render_markdown(text: str) -> Markup:
     return Markup(html)
 
 
-def _highlight_line(line: str, pattern: re.Pattern) -> Markup:
-    """Return the line HTML-escaped with matched text wrapped in <mark>."""
-    parts = []
-    last = 0
-    for m in pattern.finditer(line):
-        parts.append(str(html_escape(line[last:m.start()])))
-        parts.append(f"<mark>{html_escape(m.group())}</mark>")
-        last = m.end()
-    parts.append(str(html_escape(line[last:])))
-    return Markup("".join(parts))
-
-
 @app.context_processor
 def inject_static_asset_url():
     """Provide a cache-busted static asset URL helper for templates."""
@@ -156,6 +154,19 @@ def inject_static_asset_url():
         return url_for("static", filename=filename)
     return {"static_asset_url": static_asset_url}
 
+
+
+# ---------------------------------------------------------------------------
+# Note index — whitelist of all known .md files, built once at startup.
+# Keyed by POSIX-style repo-relative path (e.g. "graduation/2025-ceremony.md").
+# Used by the /note/ route to prevent path injection: full_path is always
+# obtained from this pre-enumerated dict, never constructed from user input.
+# ---------------------------------------------------------------------------
+
+_NOTE_INDEX: dict[str, Path] = {
+    str(p.relative_to(REPO_ROOT)).replace("\\", "/"): p
+    for p in _all_notes()
+}
 
 # ---------------------------------------------------------------------------
 # Routes — note browser
@@ -184,11 +195,11 @@ def section(section_key):
 
 @app.route("/note/<path:note_path>")
 def note(note_path):
-    safe_str = safe_join(str(REPO_ROOT), note_path)
-    if safe_str is None:
-        return render_template("404.html"), 404
-    full_path = Path(safe_str)
-    if not full_path.exists() or full_path.suffix != ".md":
+    # Use a whitelist of all known repo notes to resolve the path.
+    # This ensures full_path always comes from our own disk enumeration,
+    # never from user-supplied input, preventing path injection.
+    full_path = _NOTE_INDEX.get(note_path)
+    if full_path is None:
         return render_template("404.html"), 404
 
     parts = Path(note_path).parts
@@ -252,15 +263,10 @@ def search():
                 if pattern.search(line):
                     start = max(0, i - 1)
                     end = min(len(lines), i + 2)
-                    snippet_lines = lines[start:end]
-                    highlighted = [
-                        _highlight_line(ln, pattern)
-                        if pattern.search(ln)
-                        else html_escape(ln)
-                        for ln in snippet_lines
-                    ]
+                    # Plain text snippet — Jinja2 auto-escapes it in the template.
+                    # Keyword highlighting is applied client-side by search.html JS.
                     matches.append(
-                        {"lineno": i + 1, "snippet": Markup("\n").join(highlighted)}
+                        {"lineno": i + 1, "snippet": "\n".join(lines[start:end])}
                     )
                     if len(matches) >= 3:
                         break
@@ -344,6 +350,6 @@ def not_found(e):
 
 if __name__ == "__main__":
     port = config.PORT
-    debug = config.DEBUG
+    debug = config.DEBUG or os.environ.get("FLASK_DEBUG", "0") == "1"
     print(f"\n📋 Work Notes — starting on http://localhost:{port}\n")
     app.run(debug=debug, host="0.0.0.0", port=port)
