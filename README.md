@@ -33,6 +33,17 @@
 | [⚙️ Setup Guide](./SETUP.md) | Google Drive + GitHub setup and workflow guide |
 | [📜 Changelog](./CHANGELOG.md) | History of changes to this repository |
 
+## ⚡ Quick Actions
+
+Click a badge to go straight to that workflow — then press **Run workflow** to launch it.
+
+| Workflow | What it does | Run |
+|---|---|---|
+| Notes Helper | analyze, sort, organize, search, import, or process-inbox | [![Notes Helper](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml) |
+| Inbox Processor | import every file waiting in `inbox/` | [![Inbox Processor](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml) |
+
+---
+
 ## 🔄 How It Works
 
 The repository is a **living knowledge base** for the Registrar's Office. Here's how all the pieces fit together:
