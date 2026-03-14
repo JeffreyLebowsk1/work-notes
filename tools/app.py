@@ -333,6 +333,9 @@ def api_ask():
         return jsonify({"answer": answer})
     except ai_providers.ProviderError as exc:
         return jsonify({"error": str(exc)}), exc.status_code
+    except Exception:
+        app.logger.exception("Unexpected error in /api/ask")
+        return jsonify({"error": "An internal error occurred. Please try again."}), 500
 
 
 # ---------------------------------------------------------------------------
