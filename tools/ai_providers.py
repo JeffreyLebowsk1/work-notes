@@ -3,9 +3,9 @@ AI provider abstraction for Work Notes.
 
 Supported providers
 -------------------
-  perplexity  – Perplexity Sonar (OpenAI-compatible endpoint)  ← default
+  perplexity  – Perplexity Sonar (OpenAI-compatible endpoint)
   openai      – OpenAI GPT-4o-mini (chat.completions)
-  gemini      – Google Gemini 2.0 Flash (google-generativeai)
+  gemini      – Google Gemini 2.0 Flash (google-generativeai)  ← default
 
 The active provider is chosen by:
   1. The ``provider`` argument passed to ask()
