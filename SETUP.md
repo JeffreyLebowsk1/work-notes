@@ -440,8 +440,7 @@ You should now see `~/gdrive/work-notes/` with all the repository files.
 
 ### Step 4 — Configure Git credentials
 
-The auto-sync script pushes to GitHub on your behalf.  Set up a **Personal
-Access Token (PAT)** so it can authenticate without a password prompt:
+The auto-sync script pushes to GitHub on your behalf. Set up a **Personal Access Token (PAT)** so it can authenticate without a password prompt:
 
 1. Go to <https://github.com/settings/tokens> → **Generate new token (classic)**
 2. Give it a name (e.g. `jetson-auto-sync`) and enable the **repo** scope
