@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 from _importer import (  # noqa: E402
     FOLDER_KEYWORDS,
     _detect_folder,
+    _pdf_dest_dir,
     _suggest_dest_dir,
     _suggest_filename,
 )
@@ -162,6 +163,33 @@ class TestSuggestDestDir:
         monkeypatch.setattr(_importer, "REPO_ROOT", fake_root)
         result = _importer._suggest_dest_dir("graduation", "checklist.md")
         assert result == fake_root / "graduation"
+
+
+# ---------------------------------------------------------------------------
+# _pdf_dest_dir
+# ---------------------------------------------------------------------------
+
+class TestPdfDestDir:
+    def test_graduation_goes_to_graduation_assets(self, monkeypatch):
+        import _importer
+        fake_root = Path("/fake/repo")
+        monkeypatch.setattr(_importer, "REPO_ROOT", fake_root)
+        result = _importer._pdf_dest_dir("graduation")
+        assert result == fake_root / "graduation" / "assets"
+
+    def test_transcripts_goes_to_assets_documents(self, monkeypatch):
+        import _importer
+        fake_root = Path("/fake/repo")
+        monkeypatch.setattr(_importer, "REPO_ROOT", fake_root)
+        result = _importer._pdf_dest_dir("transcripts")
+        assert result == fake_root / "assets" / "documents"
+
+    def test_unknown_folder_goes_to_assets_documents(self, monkeypatch):
+        import _importer
+        fake_root = Path("/fake/repo")
+        monkeypatch.setattr(_importer, "REPO_ROOT", fake_root)
+        result = _importer._pdf_dest_dir("(root)")
+        assert result == fake_root / "assets" / "documents"
 
 
 # ---------------------------------------------------------------------------

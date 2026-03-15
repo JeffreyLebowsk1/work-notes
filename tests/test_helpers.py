@@ -12,6 +12,7 @@ from _helpers import (  # noqa: E402
     REPO_ROOT,
     _asset_meta,
     _parse_note,
+    _read_pdf_text,
     _relative,
     pending_inbox_files,
 )
@@ -212,3 +213,43 @@ class TestPendingInboxFiles:
         files = _helpers.pending_inbox_files()
         names = {f.name for f in files}
         assert names == {"note.md", "draft.txt"}
+
+    def test_returns_pdf_files(self, tmp_path, monkeypatch):
+        import _helpers
+        monkeypatch.setattr(_helpers, "REPO_ROOT", tmp_path)
+        inbox = tmp_path / "inbox"
+        inbox.mkdir()
+        (inbox / "form.pdf").write_bytes(b"%PDF-1.4 fake")
+        (inbox / "image.png").write_bytes(b"img")
+        files = _helpers.pending_inbox_files()
+        names = {f.name for f in files}
+        assert "form.pdf" in names
+        assert "image.png" not in names
+
+
+# ---------------------------------------------------------------------------
+# _read_pdf_text
+# ---------------------------------------------------------------------------
+
+class TestReadPdfText:
+    def test_returns_string_for_valid_pdf(self, tmp_path):
+        """A real single-page PDF should return extracted text (may be empty for minimal PDFs)."""
+        pytest = __import__("pytest")
+        pypdf = pytest.importorskip("pypdf")
+        from pypdf import PdfWriter
+
+        writer = PdfWriter()
+        writer.add_blank_page(width=200, height=200)
+        pdf_path = tmp_path / "blank.pdf"
+        with open(pdf_path, "wb") as f:
+            writer.write(f)
+
+        result = _read_pdf_text(pdf_path)
+        assert isinstance(result, str)
+
+    def test_returns_empty_string_for_garbage_file(self, tmp_path):
+        """A non-PDF binary file should return an empty string (not raise)."""
+        bad = tmp_path / "bad.pdf"
+        bad.write_bytes(b"not a pdf at all")
+        result = _read_pdf_text(bad)
+        assert result == ""

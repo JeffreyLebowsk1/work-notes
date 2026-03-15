@@ -7,11 +7,12 @@ file copying into the correct repository location.
 
 import argparse
 import re
+import shutil
 import sys
 from pathlib import Path
 
 from _commands import cmd_organize
-from _helpers import REPO_ROOT, _parse_note, _relative, pending_inbox_files
+from _helpers import REPO_ROOT, _parse_note, _read_pdf_text, _relative, pending_inbox_files
 
 
 # ---------------------------------------------------------------------------
@@ -137,11 +138,24 @@ def _suggest_dest_dir(folder: str, filename: str) -> Path:
 # ---------------------------------------------------------------------------
 
 
+def _pdf_dest_dir(folder: str) -> Path:
+    """Return the assets destination directory for a PDF given its detected folder.
+
+    PDFs are binary files and are stored in assets/, not in the text-note
+    directories.  Graduation PDFs go into graduation/assets/ (the section's
+    own assets folder); everything else lands in assets/documents/.
+    """
+    if folder == "graduation":
+        return REPO_ROOT / "graduation" / "assets"
+    return REPO_ROOT / "assets" / "documents"
+
+
 def cmd_import(args: argparse.Namespace) -> None:
     """
-    Import a Markdown file into the repository:
+    Import a file into the repository:
     analyze its content, determine the best destination folder,
     rename to match naming conventions, and copy it into place.
+    Supports .md, .txt, and .pdf files.
     """
     source = Path(args.file)
     if not source.is_absolute():
@@ -149,16 +163,26 @@ def cmd_import(args: argparse.Namespace) -> None:
     if not source.exists():
         sys.exit(f"File not found: {args.file}")
 
-    try:
-        content = source.read_text(encoding="utf-8", errors="replace")
-    except OSError as exc:
-        sys.exit(f"Cannot read file: {exc}")
+    is_pdf = source.suffix.lower() == ".pdf"
+
+    if is_pdf:
+        content = _read_pdf_text(source)
+    else:
+        try:
+            content = source.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            sys.exit(f"Cannot read file: {exc}")
 
     # Detect destination
     detected_folder, confidence = _detect_folder(source.name, content)
     suggested_filename = _suggest_filename(source, detected_folder, content)
-    dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
-    dest_path = dest_dir / suggested_filename
+
+    if is_pdf:
+        dest_dir = _pdf_dest_dir(detected_folder)
+        dest_path = dest_dir / suggested_filename
+    else:
+        dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+        dest_path = dest_dir / suggested_filename
 
     # Allow the user to override the destination
     if args.dest:
@@ -186,13 +210,17 @@ def cmd_import(args: argparse.Namespace) -> None:
         dest_display = str(dest_path)
     print(f"  Destination: {dest_display}")
 
-    meta = _parse_note(source)
-    print(f"  Title      : {meta['title']}")
-    print(f"  Words      : {meta['words']}")
-    if meta["open_items"]:
-        print(f"  Open items : {len(meta['open_items'])}")
-    if meta["dates_in_text"]:
-        print(f"  Dates found: {', '.join(meta['dates_in_text'])}")
+    if not is_pdf:
+        meta = _parse_note(source)
+        print(f"  Title      : {meta['title']}")
+        print(f"  Words      : {meta['words']}")
+        if meta["open_items"]:
+            print(f"  Open items : {len(meta['open_items'])}")
+        if meta["dates_in_text"]:
+            print(f"  Dates found: {', '.join(meta['dates_in_text'])}")
+    else:
+        word_count = len(re.findall(r"\b\w+\b", content))
+        print(f"  Words (PDF): {word_count}")
     print()
 
     if args.dry_run:
@@ -208,7 +236,10 @@ def cmd_import(args: argparse.Namespace) -> None:
         )
 
     dest_dir.mkdir(parents=True, exist_ok=True)
-    dest_path.write_text(content, encoding="utf-8")
+    if is_pdf:
+        shutil.copy2(source, dest_path)
+    else:
+        dest_path.write_text(content, encoding="utf-8")
     print(f"  ✅ Imported to: {dest_display}")
     print()
 
@@ -244,16 +275,23 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
 
     for source in candidates:
         print(f"  ── {source.name}")
-        try:
-            content = source.read_text(encoding="utf-8", errors="replace")
-        except OSError as exc:
-            print(f"     ❌ Cannot read: {exc}\n")
-            skipped.append(source.name)
-            continue
+        is_pdf = source.suffix.lower() == ".pdf"
+        if is_pdf:
+            content = _read_pdf_text(source)
+        else:
+            try:
+                content = source.read_text(encoding="utf-8", errors="replace")
+            except OSError as exc:
+                print(f"     ❌ Cannot read: {exc}\n")
+                skipped.append(source.name)
+                continue
 
         detected_folder, confidence = _detect_folder(source.name, content)
         suggested_filename = _suggest_filename(source, detected_folder, content)
-        dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+        if is_pdf:
+            dest_dir = _pdf_dest_dir(detected_folder)
+        else:
+            dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
         dest_path = dest_dir / suggested_filename
 
         try:
@@ -275,7 +313,10 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
             continue
 
         dest_dir.mkdir(parents=True, exist_ok=True)
-        dest_path.write_text(content, encoding="utf-8")
+        if is_pdf:
+            shutil.copy2(source, dest_path)
+        else:
+            dest_path.write_text(content, encoding="utf-8")
         source.unlink()
         print(f"     ✅ Imported → {dest_display}\n")
         imported.append(source.name)

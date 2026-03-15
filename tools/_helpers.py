@@ -9,6 +9,30 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+
+def _read_pdf_text(path: Path) -> str:
+    """Extract plain text from a PDF file using pypdf.
+
+    Returns an empty string if pypdf is not installed or the file cannot
+    be parsed (e.g. encrypted, image-only, or corrupt PDF).
+    """
+    try:
+        from pypdf import PdfReader  # type: ignore[import]
+    except ImportError:
+        return ""
+
+    try:
+        reader = PdfReader(str(path))
+        parts: list[str] = []
+        for page in reader.pages:
+            text = page.extract_text() or ""
+            parts.append(text)
+        return "\n".join(parts)
+    except (OSError, ValueError, UnicodeDecodeError):
+        return ""
+    except Exception:  # noqa: BLE001 — pypdf raises various undocumented errors on corrupt/encrypted PDFs
+        return ""
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 IGNORED_DIRS = {".git", ".github", "tools", "assets", "inbox"}
 
@@ -36,7 +60,7 @@ def _all_assets() -> list[Path]:
 
 
 def pending_inbox_files() -> list[Path]:
-    """Return all processable (.md / .txt) files currently sitting in inbox/."""
+    """Return all processable (.md / .txt / .pdf) files currently sitting in inbox/."""
     inbox_dir = REPO_ROOT / "inbox"
     if not inbox_dir.exists():
         return []
@@ -45,7 +69,7 @@ def pending_inbox_files() -> list[Path]:
         if p.is_file()
         and not p.name.startswith(".")
         and p.name.lower() != "readme.md"
-        and p.suffix.lower() in (".md", ".txt")
+        and p.suffix.lower() in (".md", ".txt", ".pdf")
     )
 
 
