@@ -33,11 +33,15 @@
         </summary>
         <form method="post" action="{{ url_for('asset_upload') }}" enctype="multipart/form-data" class="upload-form">
             <div class="upload-form-row">
-                <div class="form-group" style="flex:0 0 auto;min-width:160px">
+                <div class="form-group" style="flex:0 0 auto;min-width:200px">
                     <label class="form-label" for="subfolder">Folder</label>
                     <select id="subfolder" name="subfolder" class="form-select">
-                        {% for sf in subfolders %}
-                        <option value="{{ sf }}">📂 {{ sf }}</option>
+                        {% for group_name, group_subs in subfolder_groups.items() %}
+                        <optgroup label="{{ group_name }}">
+                            {% for sf in group_subs %}
+                            <option value="{{ sf }}">📂 {{ sf.split('/')[-1] }}</option>
+                            {% endfor %}
+                        </optgroup>
                         {% endfor %}
                     </select>
                 </div>
@@ -64,6 +68,52 @@
         </form>
         <span class="form-hint" style="margin-left:.75rem">Stages all new assets and pushes them to GitHub in one click.</span>
     </div>
+
+    {% if pending_screenshots %}
+    <details class="upload-panel" id="pending-screenshots-panel">
+        <summary class="upload-panel-toggle">
+            📸 Pending Screenshots &nbsp;<span style="background:var(--accent);color:#fff;border-radius:10px;padding:1px 8px;font-size:.8rem;font-weight:700">{{ pending_screenshots|length }}</span>
+        </summary>
+        <p class="form-hint" style="margin:.5rem 0 .75rem">
+            These screenshots are referenced in procedure notes but haven't been uploaded yet.
+            Save each file with the exact filename shown, then upload it to the correct folder.
+            See <a href="{{ url_for('repo_asset', asset_path='screenshots/README.md') }}" target="_blank">Screenshot Capture Checklist</a> for full details.
+        </p>
+        <table style="width:100%;border-collapse:collapse;font-size:.875rem">
+            <thead>
+                <tr style="border-bottom:2px solid var(--border)">
+                    <th style="text-align:left;padding:.4rem .6rem">Filename</th>
+                    <th style="text-align:left;padding:.4rem .6rem">Screen</th>
+                    <th style="text-align:left;padding:.4rem .6rem">Upload folder</th>
+                    <th style="padding:.4rem .6rem"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pending_screenshots %}
+                <tr style="border-bottom:1px solid var(--border)">
+                    <td style="padding:.4rem .6rem;font-family:monospace">{{ item.filename }}</td>
+                    <td style="padding:.4rem .6rem"><code>{{ item.screen }}</code></td>
+                    <td style="padding:.4rem .6rem;font-family:monospace">{{ item.subfolder }}</td>
+                    <td style="padding:.4rem .6rem">
+                        <button class="btn btn-secondary" style="font-size:.8rem;padding:.25rem .6rem"
+                            onclick="prefillUpload('{{ item.subfolder }}')">📤 Upload</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+    <script>
+    function prefillUpload(subfolder) {
+        var sel = document.getElementById('subfolder');
+        if (sel) { sel.value = subfolder; }
+        var panel = document.querySelector('.upload-panel');
+        if (panel) { panel.open = true; }
+        var fileInput = document.getElementById('file');
+        if (fileInput) { fileInput.scrollIntoView({behavior: 'smooth', block: 'center'}); }
+    }
+    </script>
+    {% endif %}
 
     {% if groups %}
         {% for folder, files in groups.items() %}

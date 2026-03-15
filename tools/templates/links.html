@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Important Links — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container" style="max-width:1100px">
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <span>Important Links</span>
+    </div>
+
+    <div class="section-header">
+        <div class="section-header-icon">🔗</div>
+        <div>
+            <h1>Important Links</h1>
+            <p>Frequently used portals and resources — each with its QR code for handouts and quick scanning.</p>
+        </div>
+    </div>
+
+    {# QR code status summary #}
+    {% set qr_ready  = items | selectattr('qr_url') | list %}
+    {% set qr_needed = items | rejectattr('qr_url') | list %}
+    {% if qr_needed %}
+    <div class="notify-banner notify-warning" role="alert" style="margin-bottom:1.25rem">
+        ⚠️ <strong>{{ qr_needed | length }} QR code{{ 's' if qr_needed | length != 1 }} not yet generated.</strong>
+        Run <code>python tools/notes_helper.py generate-qr</code> (requires the qoder service) to create them.
+    </div>
+    {% endif %}
+
+    <div class="links-grid">
+        {% for item in items %}
+        <div class="link-card">
+            <div class="link-card-body">
+                <p class="link-card-label">{{ item.label }}</p>
+                <a class="link-card-url" href="{{ item.url }}" target="_blank" rel="noopener"
+                   title="{{ item.url }}">{{ item.url }}</a>
+            </div>
+            <div class="link-card-qr">
+                {% if item.qr_url %}
+                <a href="{{ item.url }}" target="_blank" rel="noopener" title="Open {{ item.label }}">
+                    <img src="{{ item.qr_url }}" alt="QR code for {{ item.label }}"
+                         width="110" height="110" loading="lazy">
+                </a>
+                <span class="link-card-qr-hint">Scan to open</span>
+                {% else %}
+                <div class="link-card-qr-placeholder" title="QR code not yet generated">
+                    <span>QR</span>
+                    <span class="link-card-qr-hint">Not generated</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p style="margin-top:1.5rem;font-size:.85rem;color:var(--text-muted)">
+        Links are configured in <code>tools/qr_config.json</code>.
+        QR codes are stored in <code>assets/images/qr-codes/</code> and can be viewed in the
+        <a href="{{ url_for('assets_browser') }}">Assets browser</a>.
+    </p>
+</div>
+
+<style>
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1rem;
+    margin-top: .5rem;
+}
+.link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .9rem 1rem;
+}
+.link-card-body {
+    flex: 1;
+    min-width: 0;
+}
+.link-card-label {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 .3rem;
+    color: var(--text);
+}
+.link-card-url {
+    font-size: .78rem;
+    color: var(--accent);
+    word-break: break-all;
+    text-decoration: none;
+}
+.link-card-url:hover { text-decoration: underline; }
+.link-card-qr {
+    flex: 0 0 auto;
+    text-align: center;
+}
+.link-card-qr img {
+    display: block;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+.link-card-qr-placeholder {
+    width: 110px;
+    height: 110px;
+    border: 2px dashed var(--border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    font-weight: 700;
+    gap: .25rem;
+}
+.link-card-qr-hint {
+    display: block;
+    font-size: .7rem;
+    color: var(--text-muted);
+    margin-top: .3rem;
+}
+@media (max-width: 500px) {
+    .links-grid { grid-template-columns: 1fr; }
+    .link-card { flex-direction: column; align-items: flex-start; }
+    .link-card-qr { align-self: center; }
+}
+</style>
+{% endblock %}

@@ -412,9 +412,32 @@ _NOTE_INDEX: dict[str, Path] = {
 # ---------------------------------------------------------------------------
 
 # Allowed subfolders for asset uploads — validated server-side.
-_ASSET_SUBFOLDERS: frozenset[str] = frozenset(
-    {"images", "documents", "spreadsheets", "screenshots"}
-)
+_ASSET_SUBFOLDERS: frozenset[str] = frozenset({
+    "images",
+    "documents",
+    "spreadsheets",
+    "screenshots/admissions",
+    "screenshots/continuing-education",
+    "screenshots/graduation",
+    "screenshots/residency-tuition",
+    "screenshots/transcripts",
+    "screenshots/tools",
+    "screenshots/updates",
+})
+
+# Grouped structure for the upload UI — drives <optgroup> display.
+_ASSET_SUBFOLDER_GROUPS: dict[str, list[str]] = {
+    "General": ["documents", "images", "spreadsheets"],
+    "Screenshots": [
+        "screenshots/admissions",
+        "screenshots/continuing-education",
+        "screenshots/graduation",
+        "screenshots/residency-tuition",
+        "screenshots/transcripts",
+        "screenshots/tools",
+        "screenshots/updates",
+    ],
+}
 
 # Regex that a safe note filename must fully match.
 _NOTE_FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*\.md$")
@@ -445,6 +468,56 @@ def _reload_indexes() -> None:
             if _ap.is_file() and _ap.name not in _ASSET_SKIP:
                 _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
                 _ASSET_INDEX[_rel] = _ap
+
+
+def _screenshot_checklist() -> list[dict]:
+    """Return pending screenshot items parsed from assets/screenshots/README.md.
+
+    Reads the '## Capture Status' table and returns one dict per screenshot
+    that has not yet been uploaded.  Each dict contains:
+        filename   — bare filename (e.g. 'spro-ccpp-student-type.png')
+        screen     — Colleague mnemonic (e.g. 'SPRO')
+        subfolder  — upload subfolder (e.g. 'screenshots/admissions')
+        asset_key  — key to check in _ASSET_INDEX
+    """
+    readme = _ASSETS_DIR / "screenshots" / "README.md"
+    if not readme.exists():
+        return []
+
+    pending = []
+    in_table = False
+    for line in readme.read_text(encoding="utf-8").splitlines():
+        if "| File |" in line:
+            in_table = True
+            continue
+        if not in_table:
+            continue
+        if line.strip().startswith("|---"):
+            continue
+        if not line.strip().startswith("|"):
+            break
+
+        parts = [p.strip() for p in line.split("|") if p.strip()]
+        if len(parts) < 2:
+            continue
+
+        rel = parts[0].strip("`")          # e.g. "admissions/spro-ccpp-student-type.png"
+        screen = parts[1]                  # e.g. "SPRO"
+        asset_key = f"screenshots/{rel}"   # key in _ASSET_INDEX
+
+        path_parts = rel.split("/")
+        subfolder = f"screenshots/{path_parts[0]}" if len(path_parts) >= 2 else "screenshots/updates"
+        filename = path_parts[-1]
+
+        if asset_key not in _ASSET_INDEX:
+            pending.append({
+                "filename": filename,
+                "screen": screen,
+                "subfolder": subfolder,
+                "asset_key": asset_key,
+            })
+
+    return pending
 
 # ---------------------------------------------------------------------------
 # Routes — note browser
@@ -547,7 +620,9 @@ def assets_browser():
             }
         )
     return render_template("assets.html", groups=groups,
-                           subfolders=sorted(_ASSET_SUBFOLDERS))
+                           subfolders=sorted(_ASSET_SUBFOLDERS),
+                           subfolder_groups=_ASSET_SUBFOLDER_GROUPS,
+                           pending_screenshots=_screenshot_checklist())
 
 
 @app.route("/repo-assets/<path:asset_path>")
@@ -732,6 +807,60 @@ def asset_commit():
 
 # ---------------------------------------------------------------------------
 # Routes — search
+# ---------------------------------------------------------------------------
+# Routes — important links & QR codes
+# ---------------------------------------------------------------------------
+
+# Human-readable labels for each qr_config.json key.
+_LINK_LABELS: dict[str, str] = {
+    "cfnc":               "CFNC",
+    "diplomasender":      "DiplomaSender",
+    "cccc-scholarships":  "CCCC Scholarships",
+    "cccc-financial-aid": "CCCC Financial Aid",
+    "civic-center":       "Civic Center (Venue)",
+    "ce-schedule":        "CE Course Schedule",
+    "academic-calendar":  "Academic Calendar",
+    "registrar-office":   "Registrar's Office",
+    "transcript-request": "Transcript Request",
+    "fafsa":              "FAFSA",
+    "advising-hub":       "Advising Hub",
+    "nc-residency":       "NC Residency (RDS)",
+    "ce-scholarship":     "CE Scholarship Program",
+    "ccr-registration":   "CCR Registration",
+}
+
+
+def _load_important_links() -> dict[str, str]:
+    """Load important_links from tools/qr_config.json."""
+    import json as _json
+    config_path = _TOOLS_DIR / "qr_config.json"
+    if config_path.exists():
+        try:
+            return _json.loads(config_path.read_text(encoding="utf-8")).get(
+                "important_links", {}
+            )
+        except Exception:
+            pass
+    return {}
+
+
+@app.route("/links")
+def links_page():
+    """Important links page — shows each configured URL with its QR code."""
+    items = []
+    for name, url in _load_important_links().items():
+        qr_key = f"images/qr-codes/{name}.png"
+        items.append({
+            "name":    name,
+            "label":   _LINK_LABELS.get(name, name.replace("-", " ").title()),
+            "url":     url,
+            "qr_key":  qr_key,
+            "qr_url":  url_for("repo_asset", asset_path=qr_key)
+                       if qr_key in _ASSET_INDEX else None,
+        })
+    return render_template("links.html", items=items)
+
+
 # ---------------------------------------------------------------------------
 
 
