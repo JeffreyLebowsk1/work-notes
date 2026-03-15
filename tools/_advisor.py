@@ -21,6 +21,7 @@ CAMPUS_CODES = {
     "LMC": ["Lee", "Sanford", "Lee "],
     "HMC": ["Harnett", "Lillington"],
     "PMC": ["Pittsboro", "Chatham", "Chatham Health"],
+    "CMC": ["Chatham Main", "Chatham Campus"],
     "DUNN": ["Dunn"],
     "ESTC": ["ESTC"],
     "WHC": ["West Harnett Center"],
@@ -52,7 +53,7 @@ def _campus_code_from_text(text: str) -> str:
     if code:
         return code
     # Check for short campus codes in the text (e.g., "PMC", "LMC", "HMC")
-    for short in ("LMC", "HMC", "PMC", "ESTC", "WHC"):
+    for short in ("LMC", "HMC", "PMC", "CMC", "ESTC", "WHC"):
         if short.lower() in t:
             return short
     # Check for canonical campus name substrings (longest first to prefer specific)

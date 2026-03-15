@@ -908,40 +908,38 @@ def api_advisor():
 
 @app.route("/api/advisor/qr")
 def api_advisor_qr():
-    """Generate a QR code for an advisor's contact info via the qoder API."""
-    name = request.args.get("name", "")
-    advisor_id = request.args.get("id", "")
-    email = request.args.get("email", "")
-    office = request.args.get("office", "")
-    program = request.args.get("program", "")
-    # Build a mailto or text payload
-    lines = [f"Advisor: {name}"]
-    if advisor_id:
-        lines.append(f"ID#: {advisor_id}")
-    if program:
-        lines.append(f"Program: {program}")
-    if office:
-        lines.append(f"Office: {office}")
-    if email:
-        lines.append(f"Email: {email}")
-    text = "\n".join(lines)
-    # Call qoder API on localhost
+    """Generate a scannable QR linking to the advisor's cccc.edu directory page."""
+    import re
+    name = request.args.get("name", "").strip()
+    _1x1 = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+        b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
+        b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
+        b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    if not name:
+        return Response(_1x1, mimetype="image/png")
+    # Build cccc.edu staff directory URL from name
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    directory_url = f"https://www.cccc.edu/faculty-staff-directory/{slug}"
+    # Clean, minimal styling — no logo/circle modules that hurt scannability
     try:
         import requests as req
-        from _qr_generator import CCCC_BRAND
-        payload = {"data": text, **CCCC_BRAND}
+        payload = {
+            "data": directory_url,
+            "fg_color": "#1d3557",
+            "bg_color": "#FFFFFF",
+            "module_style": "square",
+            "eye_style": "square",
+            "error_correction": "M",
+            "box_size": 10,
+            "border": 2,
+        }
         resp = req.post("http://localhost:8080/api/qr/text", json=payload, timeout=10)
         resp.raise_for_status()
         return Response(resp.content, mimetype="image/png")
     except Exception:
-        # Fallback: return a 1x1 transparent PNG
-        return Response(
-            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
-            b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
-            b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
-            b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82",
-            mimetype="image/png",
-        )
+        return Response(_1x1, mimetype="image/png")
 
 
 # ---------------------------------------------------------------------------
