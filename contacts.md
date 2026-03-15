@@ -98,9 +98,10 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Graduation Coordinator | Matt Dilworth | mdilworth@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
 | Financial Assistance / Regalia | Abby Walker | awalker@cccc.edu | (919) 718-7332 | CCCC Foundation — see also: [Foundation section](#-cccc-foundation) above |
 | Advisor Hub Issues | Jim Johnson | jjohn087@cccc.edu | (919) 718-7349 | Advising Hub upload/access issues |
-| Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) | | | Black caps and gowns; no personal stoles/cords |
+| Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) — Barry Weseleski, Rep | | | Black caps and gowns; no personal stoles/cords |
 | Diploma Vendor | | | | |
 | Ceremony Venue | Dennis A. Wicker Civic & Conference Center — David Foster, Director | dfoster@cccc.edu | | Spring 2026 commencement venue |
+| Ceremony Performer | Peter McArthur | | | Bagpiper |
 | Photographer / Videographer | | | | |
 | [National Student Clearinghouse](https://www.studentclearinghouse.org) | Enrollment & degree verification service | | | Used for enrollment verification and degree reporting |
 
