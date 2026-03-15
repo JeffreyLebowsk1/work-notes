@@ -31,6 +31,7 @@ from _commands import (             # noqa: E402
 )
 from _calendar_sync import cmd_sync_calendar  # noqa: E402
 from _directory_sync import cmd_sync_directory  # noqa: E402
+from _email_receiver import cmd_check_email  # noqa: E402
 from _importer import (             # noqa: E402
     cmd_import,
     cmd_process_inbox,
@@ -241,6 +242,25 @@ Examples:
         help="Fetch detail pages for contact info (phone, email, campus)",
     )
     p_dir.set_defaults(func=cmd_sync_directory)
+
+    # check-email
+    p_email = sub.add_parser(
+        "check-email",
+        help="Check configured IMAP inbox and import unread emails as notes",
+    )
+    p_email.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be imported without saving any files",
+    )
+    p_email.add_argument(
+        "--limit",
+        type=int,
+        default=25,
+        metavar="N",
+        help="Maximum number of unread messages to fetch (default: 25)",
+    )
+    p_email.set_defaults(func=cmd_check_email)
 
     return parser
 

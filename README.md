@@ -16,6 +16,7 @@
 | [📓 Daily Logs](./daily-logs/) | Day-to-day logs and notes |
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |
 | [📣 Updates & Changes](./updates/) | Policy, technology, workflow, and graduation updates log |
+| [📖 Documentation](./documentation/) | Reference guides, glossary, FAQs, and setup documentation |
 
 ## 📋 Reference Files
 
@@ -23,12 +24,12 @@
 |---|---|
 | [📅 Academic Calendar](./academic-calendar.md) | Key semester dates and Registrar office deadlines |
 | [👥 Contacts](./contacts.md) | Internal staff, campus offices, and vendor contacts |
-| [❓ FAQ](./faq.md) | Common student & staff questions with standard answers |
-| [🔁 Recurring Tasks](./recurring-tasks.md) | Daily, weekly, semester, and annual task checklists |
-| [🗂️ Glossary](./glossary.md) | Terms, acronyms, and status codes |
+| [❓ FAQ](./documentation/faq.md) | Common student & staff questions with standard answers |
+| [🔁 Recurring Tasks](./documentation/recurring-tasks.md) | Daily, weekly, semester, and annual task checklists |
+| [🗂️ Glossary](./documentation/glossary.md) | Terms, acronyms, and status codes |
 | [📝 Email Templates](./email-templates.md) | Ready-to-use email templates for all areas |
-| [🚨 Exceptions & Edge Cases](./exceptions-and-edge-cases.md) | Log of unusual situations and how they were resolved |
-| [📊 Reports](./reports.md) | Notes on regularly run reports |
+| [🚨 Exceptions & Edge Cases](./documentation/exceptions-and-edge-cases.md) | Log of unusual situations and how they were resolved |
+| [📊 Reports](./documentation/reports.md) | Notes on regularly run reports |
 | [🔗 Links & Resources](./_links.md) | Central index of important links |
 | [⚙️ Setup Guide](./SETUP.md) | Google Drive + GitHub setup and workflow guide |
 | [📜 Changelog](./CHANGELOG.md) | History of changes to this repository |
@@ -71,7 +72,7 @@ See [SETUP.md](./SETUP.md) for initial setup instructions and [tools/README.md](
 - [Graduation Checklists](./graduation/checklists/)
 - [Upcoming Ceremonies](./graduation/ceremonies/)
 - [Latest Updates](./updates/)
-- [Recurring Tasks](./recurring-tasks.md)
+- [Recurring Tasks](./documentation/recurring-tasks.md)
 - [All Links & Resources](./_links.md)
 
 ---

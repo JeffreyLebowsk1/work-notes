@@ -121,6 +121,12 @@ SECTIONS = {
         "description": "Financial aid coordination and notes.",
         "color": "teal",
     },
+    "documentation": {
+        "title": "Documentation",
+        "icon": "📖",
+        "description": "Reference guides, glossary, FAQs, and setup documentation.",
+        "color": "green",
+    },
 }
 
 # Pre-computed section directories — keyed by section name.

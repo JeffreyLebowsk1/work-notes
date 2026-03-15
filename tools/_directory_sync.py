@@ -33,8 +33,8 @@ DEPT_URL = "https://www.cccc.edu/about/department-office-directory"
 BASE_URL = "https://www.cccc.edu"
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-FACULTY_MD = REPO_ROOT / "faculty-staff-directory.md"
-DEPT_MD = REPO_ROOT / "department-office-directory.md"
+FACULTY_MD = REPO_ROOT / "documentation" / "faculty-staff-directory.md"
+DEPT_MD = REPO_ROOT / "documentation" / "department-office-directory.md"
 
 # Regex patterns for listing page
 _ITEM_RE = re.compile(
