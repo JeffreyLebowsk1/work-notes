@@ -578,22 +578,55 @@ _PHOTO_RE = re.compile(
 )
 
 
+def _parse_directory_entries() -> list[dict]:
+    """Parse faculty-staff-directory.md → list of {name, photo_url, role, profile_url}.
+
+    Each row in the directory tables has: photo | [Name](url) | Role
+    """
+    md_path = REPO_ROOT / "documentation" / "faculty-staff-directory.md"
+    if not md_path.exists():
+        return []
+    text = md_path.read_text(encoding="utf-8", errors="replace")
+    # Match: | <img src="photo"> | [Name](profile_url) | Role |
+    row_re = re.compile(
+        r'<img\s+src="([^"]+)"[^>]*>\s*\|\s*\[([^\]]+)\]\(([^)]+)\)\s*\|\s*([^|\n]+)',
+        re.IGNORECASE,
+    )
+    entries: list[dict] = []
+    for m in row_re.finditer(text):
+        photo_url = m.group(1).strip()
+        name = m.group(2).strip()
+        profile_url = m.group(3).strip()
+        role = m.group(4).strip()
+        if _PLACEHOLDER_PHOTO in photo_url:
+            photo_url = ""
+        entries.append({
+            "name": name,
+            "photo_url": photo_url,
+            "profile_url": profile_url,
+            "role": role,
+        })
+    return entries
+
+
 def get_photo_map() -> dict[str, str]:
     """Parse faculty-staff-directory.md → {normalised_name: photo_url}.
 
     Excludes entries that use the placeholder headshot.
     """
-    md_path = REPO_ROOT / "documentation" / "faculty-staff-directory.md"
-    if not md_path.exists():
-        return {}
-    text = md_path.read_text(encoding="utf-8", errors="replace")
-    photos: dict[str, str] = {}
-    for m in _PHOTO_RE.finditer(text):
-        url, name = m.group(1), m.group(2).strip()
-        if _PLACEHOLDER_PHOTO in url:
-            continue
-        photos[name.lower()] = url
-    return photos
+    entries = _parse_directory_entries()
+    return {e["name"].lower(): e["photo_url"] for e in entries if e["photo_url"]}
+
+
+def get_navigators() -> list[dict]:
+    """Return Education Navigators from the faculty-staff directory.
+
+    Matches anyone whose role contains 'education navigator' (case-insensitive).
+    Returns list of {name, photo_url, profile_url, role}, sorted by name.
+    """
+    entries = _parse_directory_entries()
+    navs = [e for e in entries if "education navigator" in e["role"].lower()]
+    return sorted(navs, key=lambda e: e["name"].lower())
 
 
 def get_advisor_directory() -> list[dict]:

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Education Navigators — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>🧭 Education Navigators</h1>
+        <p>{{ navigators | length }} Education Navigators help students with enrollment, registration, and campus resources.</p>
+    </div>
+
+    <div class="nav-grid">
+        {% for nav in navigators %}
+        <a class="nav-card" href="{{ nav.profile_url }}" target="_blank" rel="noopener noreferrer">
+            {% if nav.photo_url %}
+            <div class="nav-photo-wrap">
+                <img class="nav-photo" src="{{ nav.photo_url }}" alt="{{ nav.name }}" loading="lazy">
+            </div>
+            {% else %}
+            <div class="nav-photo-wrap">
+                <div class="nav-avatar" data-initials="{{ nav.name.split()[0][0] }}{{ nav.name.split()[-1][0] }}"></div>
+            </div>
+            {% endif %}
+            <div class="nav-card-body">
+                <div class="nav-card-name">{{ nav.name }}</div>
+                <div class="nav-card-role">{{ nav.role }}</div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.nav-card {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 14px;
+    padding: .75rem .75rem 1.25rem;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.nav-card:hover {
+    transform: translateY(-4px);
+    border-color: #457b9d;
+    box-shadow: 0 8px 24px rgba(29,53,87,.13), 0 2px 6px rgba(0,0,0,.06);
+}
+.nav-photo-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: .75rem;
+    margin-bottom: .6rem;
+}
+.nav-photo {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border, #e9ecef);
+    transition: border-color .2s, transform .2s;
+}
+.nav-card:hover .nav-photo {
+    border-color: #457b9d;
+    transform: scale(1.04);
+}
+.nav-avatar {
+    width: 96px;
+    height: 96px;
+    min-width: 96px;
+    border-radius: 50%;
+    background: var(--navy, #1d3557);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: .04em;
+    border: 3px solid var(--border, #e9ecef);
+    transition: border-color .2s, transform .2s;
+}
+.nav-card:hover .nav-avatar {
+    border-color: #457b9d;
+    transform: scale(1.04);
+}
+.nav-avatar::after {
+    content: attr(data-initials);
+}
+.nav-card-body {
+    padding: 0 .5rem;
+}
+.nav-card-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text, #212529);
+    margin-bottom: .25rem;
+}
+.nav-card-role {
+    font-size: .85rem;
+    color: var(--text-muted, #6c757d);
+    line-height: 1.4;
+}
+@media (max-width: 480px) {
+    .nav-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}

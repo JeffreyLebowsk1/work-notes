@@ -399,7 +399,10 @@ if _ASSETS_DIR.is_dir():
 
 # Relative path to the CCCC logo within the asset index
 _CCCC_LOGO_REL = next(
-    (r for r in _ASSET_INDEX if "cccc" in r.lower() or "central-carolina" in r.lower()),
+    (r for r in _ASSET_INDEX
+     if "logos/" in r.lower()
+     and ("cccc" in r.lower() or "central-carolina" in r.lower())
+     and r.lower().endswith((".png", ".jpg", ".jpeg", ".svg", ".webp"))),
     None,
 )
 
@@ -986,6 +989,16 @@ def contacts_page():
 # ---------------------------------------------------------------------------
 # Routes — Advisor lookup
 # ---------------------------------------------------------------------------
+
+
+@app.route("/navigators")
+def navigators_page():
+    """Render the Education Navigators directory page."""
+    return render_template(
+        "navigators.html",
+        sections=SECTIONS,
+        navigators=_advisor.get_navigators(),
+    )
 
 
 @app.route("/advisor")
