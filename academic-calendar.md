@@ -10,51 +10,51 @@ Key dates and deadlines for the current and upcoming academic year.
 
 | Event | Date | Notes |
 |---|---|---|
-| Semester Start | | |
-| Last Day to Add/Drop | | |
-| Graduation Application Deadline | | |
-| Spring Break | | |
-| Last Day of Classes | | |
-| Finals Week | | |
-| Commencement Ceremony | | |
-| Grades Due | | |
-| Semester End | | |
-|
+| Semester Start | January 12, 2026 | Monday |
+| Last Day to Add/Drop | January 16, 2026 | Friday; end of first week |
+| Graduation Application Deadline | March 9, 2026 (recommended) / March 13 (final cutoff) | Midterm of final semester |
+| Spring Break | March 16–20, 2026 | Week following midterm |
+| Last Day of Classes | May 1, 2026 | Friday before finals |
+| Finals Week | May 4–7, 2026 | Monday–Thursday |
+| Commencement Ceremony | May 14, 2026 | Dennis A. Wicker Civic & Conference Center |
+| Grades Due | May 12, 2026 | Tuesday after finals end |
+| Semester End | May 7, 2026 | Official graduation date; last day of spring term |
+
 ## 🗓️ Summer 2026
 
 | Event | Date | Notes |
 |---|---|---|
-| Session I Start | | |
-| Session I End | | |
-| Session II Start | | |
-| Session II End | | |
-| Graduation Application Deadline | | |
-|
+| Session I Start | May 18, 2026 | Monday after commencement weekend |
+| Session I End | June 26, 2026 | 6-week session |
+| Session II Start | June 29, 2026 | Monday |
+| Session II End | August 7, 2026 | 6-week session |
+| Graduation Application Deadline | June 15, 2026 | Mid-Session I; confirm exact date |
+
 ## 🗓️ Fall 2026
 
 | Event | Date | Notes |
 |---|---|---|
-| Semester Start | | |
-| Last Day to Add/Drop | | |
-| Graduation Application Deadline | | |
-| Thanksgiving Break | | |
-| Last Day of Classes | | |
-| Finals Week | | |
-| Commencement Ceremony | | |
-| Grades Due | | |
-| Semester End | | |
-|
+| Semester Start | August 17, 2026 | Monday |
+| Last Day to Add/Drop | August 21, 2026 | Friday; end of first week |
+| Graduation Application Deadline | October 16, 2026 | Around midterm; confirm exact date |
+| Thanksgiving Break | November 23–27, 2026 | Monday–Friday; Thanksgiving is Nov 26 |
+| Last Day of Classes | December 10, 2026 | Thursday |
+| Finals Week | December 14–18, 2026 | Monday–Friday |
+| Commencement Ceremony | December 17, 2026 | Confirm date and venue |
+| Grades Due | December 21, 2026 | Monday after finals |
+| Semester End | December 18, 2026 | Friday; last day of finals |
+
 ---
 
-## 📌 Registrar Office Key Dates
+## 📌 Registrar Office Key Dates — Spring 2026
 
 | Task | Date | Notes |
 |---|---|---|
-| Graduation list to Provost | | |
-| Diploma order deadline | | |
-| Commencement program due to printer | | |
-| IPEDS reporting deadline | | |
-| Enrollment certification deadline | | |
+| Graduation list to Provost | April 25, 2026 | After degree audits complete |
+| Diploma order deadline | April 30, 2026 | Confirm with diploma vendor |
+| Commencement program due to printer | April 11, 2026 | |
+| IPEDS reporting deadline | October 15, 2026 | Fall enrollment IPEDS survey |
+| Enrollment certification deadline | September 15, 2026 | NSC enrollment reporting; confirm exact date |
 |
 
 ---
