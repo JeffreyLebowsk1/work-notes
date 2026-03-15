@@ -7,8 +7,15 @@
 	"settings": {
 		"chat.tools.terminal.autoApprove": {
 			"Get-Command": true,
-			"ConvertTo-Json": true
+			"ConvertTo-Json": true,
+			"Test-Path": true,
+			"/^cd H:\\\\work-notes ; python -c \"\nimport os, re\nfrom pathlib import Path\n\nroot = Path\\('H:/work-notes'\\)\nbroken = \\[\\]\n\n# Collect all \\.md files\nmd_files = list\\(root\\.rglob\\('\\*\\.md'\\)\\)\nmd_files = \\[f for f in md_files if '\\.git' not in str\\(f\\) and 'node_modules' not in str\\(f\\) and '__pycache__' not in str\\(f\\)\\]\n\n# Regex for markdown links - \\[text\\]\\(path\\) but not http/https/mailto/#\nlink_re = re\\.compile\\(r'\\\\\\[\\(\\[\\^\\\\\\]\\]\\*\\)\\\\\\]\\\\\\(\\(\\[\\^\\)\\]\\+\\)\\\\\\)'\\)\n\nfor md_file in sorted\\(md_files\\):\n    try:\n        text = md_file\\.read_text\\(encoding='utf-8', errors='replace'\\)\n    except:\n        continue\n    \n    for i, line in enumerate\\(text\\.splitlines\\(\\), 1\\):\n        for m in link_re\\.finditer\\(line\\):\n            link_text = m\\.group\\(1\\)\n            target = m\\.group\\(2\\)\n            \n            # Skip external links, anchors-only, images, mailto\n            if target\\.startswith\\(\\('http://', 'https://', 'mailto:', '#', 'tel:'\\)\\):\n                continue\n            \n            # Strip anchor\n            target_path = target\\.split\\('#'\\)\\[0\\]\n            if not target_path:\n                continue\n            \n            # Skip non-file links \\(e\\.g\\., javascript:\\)\n            if ':' in target_path:\n                continue\n            \n            # Resolve relative to the file's directory\n            base_dir = md_file\\.parent\n            resolved = \\(base_dir / target_path\\)\\.resolve\\(\\)\n            \n            if not resolved\\.exists\\(\\):\n                rel_file = md_file\\.relative_to\\(root\\)\n                broken\\.append\\(\\(str\\(rel_file\\), i, link_text, target\\)\\)\n\nprint\\(f'Found \\{len\\(broken\\)\\} broken internal links:\\\\n'\\)\nfor filepath, linenum, text, target in broken:\n    print\\(f'\\{filepath\\}:\\{linenum\\}'\\)\n    print\\(f'  \\[\\{text\\}\\]\\(\\{target\\}\\)'\\)\n    \n    # Try to suggest fix\n    target_path = target\\.split\\('#'\\)\\[0\\]\n    anchor = '#' \\+ target\\.split\\('#'\\)\\[1\\] if '#' in target else ''\n    fname = os\\.path\\.basename\\(target_path\\)\n    \n    # Search for the file\n    matches = \\[str\\(p\\.relative_to\\(root\\)\\)\\.replace\\(os\\.sep, '/'\\) for p in root\\.rglob\\(fname\\) if p\\.is_file\\(\\)\\]\n    if matches:\n        file_dir = Path\\(filepath\\)\\.parent\n        for match_path in matches\\[:3\\]:\n            try:\n                correct_rel = os\\.path\\.relpath\\(root / match_path, root / file_dir\\)\\.replace\\(os\\.sep, '/'\\)\n                print\\(f'  -> Suggested fix: \\{correct_rel\\}\\{anchor\\}'\\)\n            except:\n                print\\(f'  -> Found at: \\{match_path\\}'\\)\n    else:\n        print\\(f'  -> FILE NOT FOUND: \\{fname\\}'\\)\n    print\\(\\)\n\"\n$/": {
+				"approve": true,
+				"matchCommandLine": true
+			}
 		},
-		"git.useEditorAsCommitInput": false
+		"git.useEditorAsCommitInput": false,
+		"chat.promptFiles": true,
+		"chat.promptFilesRecommendations": true
 	}
 }

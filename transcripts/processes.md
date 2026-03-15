@@ -17,7 +17,7 @@ flowchart TD
 
 ## Official Transcript Requests
 
-1. Student submits request via the [Transcript Request Portal](_links.md) (online) or completes a paper request form in person.
+1. Student submits request via the [Transcript Request Portal](../_links.md) (online) or completes a paper request form in person.
 2. Verify student identity — confirm name, student ID, and date of birth match records.
 3. Confirm the request is complete: recipient address/institution, number of copies, delivery method (electronic vs. mail), and purpose.
 4. Check for any holds on the student's account (financial, academic, administrative) — **do not release transcripts if a hold is present; notify the student.**

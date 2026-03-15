@@ -3,5 +3,7 @@
         "Get-Command": true,
         "ConvertTo-Json": true
     },
-    "git.useEditorAsCommitInput": false
+    "git.useEditorAsCommitInput": false,
+    "chat.promptFiles": true,
+    "chat.promptFilesRecommendations": true
 }

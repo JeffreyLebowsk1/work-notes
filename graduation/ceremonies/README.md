@@ -47,7 +47,7 @@ flowchart TD
 - Graduates must wear **black caps and gowns** ordered through **[Herff Jones](https://www.herffjones.com)**.
 - No personal stoles or cords are permitted.
 - **Allowed:** Official honors stoles (3.5+ GPA) and pre-approved program cords.
-- **Cost assistance:** If a student cannot afford regalia, refer them to the **CCCC Foundation** (Abby Walker) as early as possible — emergency assistance or scholarship funds may be available. See [Foundation Scholarships](../../../financial-aid/foundation-scholarships.md).
+- **Cost assistance:** If a student cannot afford regalia, refer them to the **CCCC Foundation** (Abby Walker) as early as possible — emergency assistance or scholarship funds may be available. See [Foundation Scholarships](../../financial-aid/foundation-scholarships.md).
 
 ### Arrival & Ceremony Flow
 - Students should arrive **45 minutes early** for their assigned ceremony.
@@ -58,9 +58,9 @@ flowchart TD
 
 | Role | Name | Contact |
 |---|---|---|
-| Graduation Coordinator | [Matt Dilworth](../contacts.md#-graduation-vendors--external-contacts) | (919) 718-7063 |
-| Student Records / Policy | [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) | (919) 718-7201 |
-| Advisor Hub Issues | [Jim Johnson](../contacts.md#-graduation-vendors--external-contacts) | (919) 718-7349 |
+| Graduation Coordinator | [Matt Dilworth](../../contacts.md#-graduation-vendors--external-contacts) | (919) 718-7063 |
+| Student Records / Policy | [Student Records and Registrar's Office](../../contacts.md#-internal--registrars-office) | (919) 718-7201 |
+| Advisor Hub Issues | [Jim Johnson](../../contacts.md#-graduation-vendors--external-contacts) | (919) 718-7349 |
 | Cap & Gown Vendor Rep | [Herff Jones](https://www.herffjones.com) | *(pending — confirm ordering portal link)* |
 | Venue Coordinator | | |
 | Photography / Videography | | |
