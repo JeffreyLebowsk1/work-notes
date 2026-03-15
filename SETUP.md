@@ -336,6 +336,15 @@ ngrok config add-authtoken <YOUR_AUTHTOKEN>
 ```
 Get your token at <https://dashboard.ngrok.com/get-started/your-authtoken>.
 
+**`ERR_NGROK_3200` — "Your account has reached the maximum number of simultaneous ngrok agent sessions"**
+Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears when a previous ngrok process is still running (or was not shut down cleanly) and that cap has been reached. Fix:
+```bash
+# Kill any leftover ngrok processes, then restart:
+pkill -x ngrok
+ngrok http 4200
+```
+If that doesn't help, open the [ngrok dashboard → Agents](https://dashboard.ngrok.com/tunnels/agents) in your browser, terminate any listed sessions, and then run `ngrok http 4200` again.
+
 **ngrok shows a browser warning page ("You are about to visit…")**
 This is ngrok's free-tier interstitial. Click **Visit Site** to continue — it only appears once per browser session. It does not affect the app itself.
 
@@ -431,8 +440,7 @@ You should now see `~/gdrive/work-notes/` with all the repository files.
 
 ### Step 4 — Configure Git credentials
 
-The auto-sync script pushes to GitHub on your behalf.  Set up a **Personal
-Access Token (PAT)** so it can authenticate without a password prompt:
+The auto-sync script pushes to GitHub on your behalf. Set up a **Personal Access Token (PAT)** so it can authenticate without a password prompt:
 
 1. Go to <https://github.com/settings/tokens> → **Generate new token (classic)**
 2. Give it a name (e.g. `jetson-auto-sync`) and enable the **repo** scope
