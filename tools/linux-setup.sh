@@ -293,6 +293,15 @@ if [ "$USE_NGROK" -eq 1 ]; then
     wait "$APP_PID" 2>/dev/null || true
   }
   trap cleanup EXIT INT TERM
+  # Kill any existing ngrok sessions to avoid ERR_NGROK_3200 (free-tier cap).
+  EXISTING_NGROK_PIDS=$(pgrep -x ngrok 2>/dev/null || true)
+  if [ -n "$EXISTING_NGROK_PIDS" ]; then
+    info "Stopping existing ngrok session(s) to free up agent slots …"
+    for pid in $EXISTING_NGROK_PIDS; do
+      kill "$pid" 2>/dev/null || true
+    done
+    sleep 1
+  fi
   info "Starting ngrok tunnel on port ${PORT} …"
   ngrok http "${PORT}"
 else
