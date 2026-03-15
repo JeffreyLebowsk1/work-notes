@@ -1,0 +1,19 @@
+{% macro person_card(person) %}
+<div class="advisor-dir-card" data-search="{{ person.name | lower }} {{ person.title | lower }} {{ person.email | lower }}" data-person='{{ person | tojson | e }}'>
+    <div class="advisor-dir-card-row">
+        <div class="advisor-avatar" data-initials="{{ person.initials }}"></div>
+        <div class="advisor-dir-card-info">
+            <div class="advisor-dir-name">{{ person.name }}</div>
+            <div class="advisor-dir-meta">
+                {% if person.email %}<a href="mailto:{{ person.email }}">{{ person.email }}</a>{% endif %}
+                {% if person.office %}<span>📍 {{ person.office }}</span>{% endif %}
+                {% if person.phone %}<span>📞 {{ person.phone }}</span>{% endif %}
+            </div>
+            <div class="advisor-dir-details">
+                {% if person.title %}<span class="advisor-dir-tag">{{ person.title }}</span>{% endif %}
+                {% if person.department %}<span class="advisor-dir-programs">{{ person.department }}</span>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

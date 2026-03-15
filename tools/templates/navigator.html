@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "person_card.html" import person_card %}
+{% block title %}Education Navigators — CCCC Notes{% endblock %}
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>🧭 Education Navigators</h1>
+        <p>Education Navigators help students with enrollment, registration, and campus resources.</p>
+    </div>
+    <div class="advisor-directory">
+        <div class="advisor-directory-header">
+            <h2>Navigator Directory</h2>
+        </div>
+        <div class="advisor-dir-list">
+            {% for person in directory %}
+                {{ person_card(person) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Modal and QR logic will be added as in advisor.html -->
+{% endblock %}

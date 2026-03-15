@@ -1,154 +1,38 @@
 {% extends "base.html" %}
-
-{% block title %}Contacts — CCCC Notes{% endblock %}
-
+{% from "person_card.html" import person_card %}
+{% block title %}Contacts Directory — CCCC Notes{% endblock %}
 {% block content %}
 <div class="page-container">
     <div class="page-header">
         <h1>👥 Contacts Directory</h1>
         <p>People and offices you work with regularly.</p>
     </div>
-
-    {% for section in sections %}
-    <div class="contacts-section">
-        <h2 class="contacts-section-header">{{ section.icon }} {{ section.title }}</h2>
-        {% if section.description %}
-        <p class="contacts-section-desc">{{ section.description }}</p>
-        {% endif %}
-
-        <div class="staff-grid">
-            {% for c in section.contacts %}
-            {% set display_name = c.get('name', '') or c.get('office', '') or c.get('department', '') or c.get('service', '') or c.get('vendor / organization', '') %}
-            {% set display_role = c.get('title', '') or c.get('role', '') or c.get('contact', '') or c.get('chair', '') %}
-            {% set email = c.get('email', '') or c.get('contact / url', '') %}
-            {% set phone = c.get('phone', '') %}
-            {% set notes = c.get('notes', '') %}
-            {% set dean = c.get('dean', '') %}
-
-            <div class="staff-card" data-contact='{{ c | tojson | e }}'>
-                <div class="staff-photo-wrap">
-                    {% if c.get('photo_url') %}
-                    <img class="staff-photo" src="{{ c.photo_url }}" alt="{{ display_name }}" loading="lazy">
-                    {% elif display_name and display_name.split()|length >= 2 %}
-                    <div class="staff-avatar" data-initials="{{ display_name.split()[0][0] }}{{ display_name.split()[-1][0] }}"></div>
-                    {% elif display_name %}
-                    <div class="staff-avatar" data-initials="{{ display_name[0:2] | upper }}"></div>
-                    {% else %}
-                    <div class="staff-avatar" data-initials="?"></div>
-                    {% endif %}
-                </div>
-                <div class="staff-card-body">
-                    <div class="staff-card-name">{{ display_name }}</div>
-                    {% if display_role %}
-                    <div class="staff-card-role">{{ display_role }}</div>
-                    {% endif %}
-                    {% if dean %}
-                    <div class="staff-card-role">Dean: {{ dean }}</div>
-                    {% endif %}
-                    {% if c.get('office_location') or c.get('campus_location') %}
-                    <div class="staff-card-meta">
-                        <span class="staff-card-location">📍 <span class="pushpin-icon">📌</span> {{ c.get('office_location', '') }} {{ c.get('campus_location', '') }}</span>
-                    </div>
-                    {% endif %}
-                    <div class="staff-card-meta">
-                        {% if email and '@' in email %}
-                        <a class="contact-email-link" href="mailto:{{ email }}">{{ email }}</a>
-                        {% elif email and email.startswith('[') %}
-                        <span class="contact-note">{{ email }}</span>
-                        {% endif %}
-                        {% if phone %}
-                        <span class="contact-phone">{{ phone }}</span>
-                        {% endif %}
-                    </div>
-                    {% if notes %}
-                    <div class="contact-note">{{ notes }}</div>
-                    {% endif %}
-                </div>
-            </div>
+    <div class="advisor-directory">
+        <div class="advisor-directory-header">
+            <h2>Internal — Registrar's Office</h2>
+        </div>
+        <div class="advisor-dir-list">
+            {% for person in directory %}
+                {{ person_card(person) }}
             {% endfor %}
         </div>
     </div>
-    {% endfor %}
 </div>
-
-<!-- Contact detail modal -->
-<div id="contact-modal" class="advisor-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Contact details">
-    <div class="advisor-modal">
-        <button class="advisor-modal-close" id="modal-close" aria-label="Close">&times;</button>
-        <div id="modal-body"></div>
+<!-- Modal and QR logic will be added as in advisor.html -->
+<!-- Contact detail modal and scripts will be adapted from advisor.html for unified modal/QR logic. -->
+{% endblock %}
+=======
+    <div class="advisor-directory">
+        <div class="advisor-directory-header">
+            <h2>Internal — Registrar's Office</h2>
+        </div>
+        <div class="advisor-dir-list">
+            {% for person in directory %}
+                {{ person_card(person) }}
+            {% endfor %}
+        </div>
     </div>
 </div>
+<!-- Modal and QR logic will be added as in advisor.html -->
 {% endblock %}
-
-{% block scripts %}
-<script>
-(function() {
-    const overlay = document.getElementById('contact-modal');
-    const body = document.getElementById('modal-body');
-    const closeBtn = document.getElementById('modal-close');
-
-    function esc(s) {
-        const d = document.createElement('div');
-        d.textContent = s || '';
-        return d.innerHTML;
-    }
-
-    function closeModal() { overlay.style.display = 'none'; }
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', function(e) {
-        if (e.target === overlay) closeModal();
-    });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    function showContact(c) {
-        const name = c.name || c.office || c.department || c.service || c['vendor / organization'] || '';
-        const role = c.title || c.role || c.contact || c.chair || '';
-        const dean = c.dean || '';
-        const email = c.email || c['contact / url'] || '';
-        const phone = c.phone || '';
-        const notes = c.notes || '';
-        const photoUrl = c.photo_url || '';
-
-        const initials = name.split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).join('').slice(0, 2) || '?';
-        const avatarHtml = photoUrl
-            ? `<img class="advisor-photo-lg" src="${esc(photoUrl)}" alt="${esc(name)}">`
-            : `<div class="advisor-avatar advisor-avatar-lg" data-initials="${esc(initials)}"></div>`;
-
-        const emailHtml = email.includes('@')
-            ? `<a href="mailto:${esc(email)}">${esc(email)}</a>`
-            : esc(email || '—');
-
-        let rows = '';
-        if (role) rows += `<tr><td>Title</td><td>${esc(role)}</td></tr>`;
-        if (dean) rows += `<tr><td>Dean</td><td>${esc(dean)}</td></tr>`;
-        rows += `<tr><td>Email</td><td>${emailHtml}</td></tr>`;
-        if (phone) rows += `<tr><td>Phone</td><td>${esc(phone)}</td></tr>`;
-        if (notes) rows += `<tr><td>Notes</td><td>${esc(notes)}</td></tr>`;
-
-        body.innerHTML = `
-            <div class="advisor-detail-header">
-                ${avatarHtml}
-                <div>
-                    <div class="advisor-detail-name">${esc(name)}</div>
-                    ${role ? `<div class="advisor-detail-id">${esc(role)}</div>` : ''}
-                </div>
-            </div>
-            <table class="advisor-detail-table">
-                ${rows}
-            </table>`;
-        overlay.style.display = 'flex';
-    }
-
-    document.querySelectorAll('.staff-card[data-contact]').forEach(function(card) {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', function(e) {
-            if (e.target.closest('a')) return;
-            const data = JSON.parse(card.getAttribute('data-contact'));
-            showContact(data);
-        });
-    });
-})();
-</script>
-{% endblock %}
+>>>>>>> 1b63088 (Unified person/place card template, modal click action, QR workflow for Advisors, Contacts, Navigators)
