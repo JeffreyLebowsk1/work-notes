@@ -454,6 +454,39 @@ def _reload_indexes() -> None:
                 _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
                 _ASSET_INDEX[_rel] = _ap
 
+
+# Regex to find markdown image refs like ![alt](screenshots/foo.png)
+_IMG_REF_RE = re.compile(r"!\[[^\]]*\]\((?:assets/)?screenshots/([^)]+)\)")
+
+
+def _find_pending_screenshots() -> list[dict]:
+    """Return screenshots referenced in notes but missing from assets/screenshots/."""
+    existing = {
+        p.name.lower()
+        for rel, p in _ASSET_INDEX.items()
+        if rel.startswith("screenshots/")
+    }
+    pending: list[dict] = []
+    seen: set[str] = set()
+    for note_path in _NOTE_INDEX.values():
+        try:
+            text = note_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for m in _IMG_REF_RE.finditer(text):
+            filename = m.group(1).strip()
+            if filename.lower() not in existing and filename not in seen:
+                seen.add(filename)
+                # Guess a human-friendly screen name from the filename
+                screen = filename.rsplit(".", 1)[0].replace("-", " ").replace("_", " ").title()
+                pending.append({
+                    "filename": filename,
+                    "screen": screen,
+                    "subfolder": "screenshots",
+                })
+    return pending
+
+
 # ---------------------------------------------------------------------------
 # Routes — note browser
 # ---------------------------------------------------------------------------
@@ -554,8 +587,20 @@ def assets_browser():
                 "mime": mimetypes.guess_type(path.name)[0] or "application/octet-stream",
             }
         )
+
+    # Build subfolder_groups for the upload <select> — group by top-level folder
+    subfolder_groups: dict[str, list[str]] = {}
+    for sf in sorted(_ASSET_SUBFOLDERS):
+        top = sf.split("/")[0]
+        subfolder_groups.setdefault(top, []).append(sf)
+
+    # Pending screenshots — find images referenced in notes but not yet uploaded
+    pending_screenshots = _find_pending_screenshots()
+
     return render_template("assets.html", groups=groups,
-                           subfolders=sorted(_ASSET_SUBFOLDERS))
+                           subfolders=sorted(_ASSET_SUBFOLDERS),
+                           subfolder_groups=subfolder_groups,
+                           pending_screenshots=pending_screenshots)
 
 
 @app.route("/repo-assets/<path:asset_path>")
