@@ -18,21 +18,70 @@
         </div>
     </div>
 </div>
-<!-- Modal and QR logic will be added as in advisor.html -->
-<!-- Contact detail modal and scripts will be adapted from advisor.html for unified modal/QR logic. -->
-{% endblock %}
-=======
-    <div class="advisor-directory">
-        <div class="advisor-directory-header">
-            <h2>Internal — Registrar's Office</h2>
-        </div>
-        <div class="advisor-dir-list">
-            {% for person in directory %}
-                {{ person_card(person) }}
-            {% endfor %}
-        </div>
+<!-- Contact detail modal -->
+<div id="contact-modal" class="advisor-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Contact details">
+    <div class="advisor-modal">
+        <button class="advisor-modal-close" id="modal-close" aria-label="Close">&times;</button>
+        <div id="modal-body"></div>
     </div>
 </div>
-<!-- Modal and QR logic will be added as in advisor.html -->
 {% endblock %}
->>>>>>> 1b63088 (Unified person/place card template, modal click action, QR workflow for Advisors, Contacts, Navigators)
+{% block scripts %}
+<script>
+(function() {
+    const overlay = document.getElementById('contact-modal');
+    const body = document.getElementById('modal-body');
+    const closeBtn = document.getElementById('modal-close');
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+    }
+    function closeModal() { overlay.style.display = 'none'; }
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+    function showContact(person) {
+        const name = person.name || '';
+        const title = person.title || '';
+        const office = person.office || '';
+        const email = person.email || '';
+        const phone = person.phone || '';
+        const qrSrc = `/api/advisor/qr?name=${encodeURIComponent(name)}`;
+        const initials = name.split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).join('').slice(0, 2);
+        body.innerHTML = `
+            <div class="advisor-detail-header">
+                <div class="advisor-avatar advisor-avatar-lg" data-initials="${esc(initials)}"></div>
+                <div>
+                    <div class="advisor-detail-name">${esc(name)}</div>
+                    <div class="advisor-detail-id">${esc(title)}</div>
+                </div>
+            </div>
+            <table class="advisor-detail-table">
+                <tr><td>Office</td><td>${esc(office)}</td></tr>
+                <tr><td>Email</td><td>${email ? `<a href='mailto:${esc(email)}'>${esc(email)}</a>` : '—'}</td></tr>
+                <tr><td>Phone</td><td>${esc(phone)}</td></tr>
+            </table>
+            <div class="advisor-qr-row">
+                <div class="advisor-qr-item">
+                    <img src="${qrSrc}" alt="QR" width="200" height="200" loading="lazy">
+                    <span class="advisor-qr-label">Scan for staff page</span>
+                </div>
+            </div>`;
+        overlay.style.display = 'flex';
+    }
+    document.querySelectorAll('.advisor-dir-card[data-person]').forEach(function(card) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            const data = JSON.parse(card.getAttribute('data-person'));
+            showContact(data);
+        });
+    });
+})();
+</script>
+{% endblock %}
