@@ -44,6 +44,7 @@ The catalog covers all CCCC institutional policies, program requirements, tuitio
 - **Fees and tuition rates** may not reflect current Board-approved rates — verify in Banner/Colleague or with the Business Office.
 - **Program requirements** (credit hours, required courses) should be confirmed in the current Curriculum Evaluation in Colleague before advising students.
 - **Financial Aid SAP thresholds and policies** may have been updated — see the current FA handbook or consult the Financial Aid Office.
+- **3 image-only pages** (cover art p. 2, section divider p. 39, back matter p. 253) contain no extractable text. These are decorative; no content is missing. OCR is not needed — all 254 content pages extract cleanly with pypdf.
 
 ---
 

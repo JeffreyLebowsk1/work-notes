@@ -3,7 +3,7 @@
 *Source: `assets/documents/Transcript_Waiver_Form.pdf`*  
 *Print from `assets/documents/` or request a copy from the Registrar's Office.*
 
-> **Note:** This PDF is an image-based (scanned) form — the text cannot be extracted electronically. Print the PDF and complete it by hand.
+> **Note:** This PDF is an image-based (scanned) form — pypdf extracts zero characters from it. OCR *could* technically read the printed field labels, but since the form is blank (no filled-in data), OCR would only reproduce the labels that are already documented below. **OCR is not needed for this file.**
 
 ## Purpose
 

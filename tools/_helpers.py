@@ -15,6 +15,13 @@ def _read_pdf_text(path: Path) -> str:
 
     Returns an empty string if pypdf is not installed or the file cannot
     be parsed (e.g. encrypted, image-only, or corrupt PDF).
+
+    OCR note: An audit of all PDFs in assets/documents/ (2026-03-15) found
+    that only one file — Transcript_Waiver_Form.pdf — is fully image-based,
+    and it is a blank intake form with no data content to recover.  Three
+    decorative/cover pages in the CCCC Catalog are also image-only.  OCR
+    is therefore not needed for the current document set; pypdf text
+    extraction is sufficient.
     """
     try:
         from pypdf import PdfReader  # type: ignore[import]
