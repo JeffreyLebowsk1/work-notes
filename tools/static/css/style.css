@@ -772,7 +772,7 @@ body { overflow-x: hidden; width: 100%; }
 }
 .cal-weekdays {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   background: var(--navy);
   color: #fff;
   font-weight: 700;
@@ -782,7 +782,7 @@ body { overflow-x: hidden; width: 100%; }
 .cal-weekdays > div { padding: .55rem .25rem; }
 .cal-days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 .cal-day {
   min-height: 90px;
@@ -794,6 +794,7 @@ body { overflow-x: hidden; width: 100%; }
   transition: background .12s;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .cal-day:nth-child(7n) { border-right: none; }
 .cal-day.empty { background: var(--bg); cursor: default; }
