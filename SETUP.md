@@ -754,6 +754,65 @@ GitHub Codespaces gives you a browser-based Linux environment — free for 60 ho
 
 ---
 
+## 🔐 Secret Scanning with GitGuardian (ggshield)
+
+This repository uses [ggshield](https://github.com/GitGuardian/ggshield) as a pre-commit hook to automatically scan every commit for accidentally included secrets (API keys, passwords, credentials, etc.) before they reach GitHub.
+
+### Prerequisites
+
+- **Python 3.8+** installed
+- A free [GitGuardian account](https://dashboard.gitguardian.com/signup) and API key
+
+### One-Time Setup
+
+1. **Install `pre-commit`:**
+   ```bash
+   pip install pre-commit
+   ```
+
+2. **Install the hook** (run once from the repo root):
+   ```bash
+   pre-commit install
+   ```
+
+3. **Authenticate ggshield** with your GitGuardian API key.
+   The `pre-commit` framework manages ggshield in its own isolated environment, but you still need to authenticate once so it can reach the GitGuardian API:
+   ```bash
+   pip install ggshield
+   ggshield auth login
+   ```
+   Follow the browser prompt to log in and authorize the CLI. Your API key is stored locally — it is **never** committed to this repository.
+
+   Alternatively, set the key as an environment variable (useful for CI environments):
+   ```bash
+   export GITGUARDIAN_API_KEY=your_api_key_here
+   ```
+
+### How It Works
+
+Every time you run `git commit`, ggshield automatically scans the staged files for secrets using the GitGuardian API. If a secret is detected, the commit is **blocked** and you are shown the offending file and line so you can remove it before committing.
+
+```
+git commit -m "your message"
+        ↓
+ggshield scans staged files
+        ↓
+No secrets found → commit proceeds ✅
+Secret detected  → commit blocked, details shown ❌
+```
+
+### Skipping the Hook (Emergency Only)
+
+If you need to bypass the hook (e.g., a confirmed false positive), you can skip it for a single commit:
+
+```bash
+SKIP=ggshield git commit -m "your message"
+```
+
+> ⚠️ Use this only when you are certain there are no real secrets in the commit. Never bypass the hook to commit actual credentials.
+
+---
+
 ## 📁 Repo Structure Reference
 
 ```
