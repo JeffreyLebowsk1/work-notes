@@ -499,7 +499,7 @@ _watcher = threading.Thread(target=_index_watcher, daemon=True)
 _watcher.start()
 
 
-def _log_to_daily_log(filename: str, subfolder: str) -> None:
+def _log_to_daily_log(filename: str, subfolder: str, *, is_note: bool = False) -> None:
     """Append an upload entry to today's daily log, creating it if needed."""
     from datetime import date
 
@@ -508,7 +508,10 @@ def _log_to_daily_log(filename: str, subfolder: str) -> None:
     month_dir.mkdir(parents=True, exist_ok=True)
     log_path = month_dir / f"{today.isoformat()}.md"
 
-    link = f"../../assets/{subfolder}/{filename}"
+    if is_note:
+        link = f"../../{subfolder}/{filename}"
+    else:
+        link = f"../../assets/{subfolder}/{filename}"
     entry = f"- [{filename}]({link}) — uploaded via web app\n"
 
     if log_path.exists():
@@ -597,6 +600,11 @@ def note(note_path):
     # This ensures full_path always comes from our own disk enumeration,
     # never from user-supplied input, preventing path injection.
     full_path = _NOTE_INDEX.get(note_path)
+    if full_path is None:
+        # Multi-worker race: file may exist on disk but another worker
+        # hasn't rebuilt its index yet.  Try a reload before giving up.
+        _reload_indexes()
+        full_path = _NOTE_INDEX.get(note_path)
     if full_path is None:
         return render_template("404.html"), 404
 
@@ -796,9 +804,13 @@ def asset_upload():
                 + f"?msg={safe_name}+already+exists+in+{folder}&msg_type=error"
             )
         dest.write_text(content, encoding="utf-8")
-        _log_to_daily_log(safe_name, folder)
+        _reload_indexes()
+        _log_to_daily_log(safe_name, folder, is_note=True)
+        note_rel = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
+        section_title = SECTIONS.get(folder, {}).get("title", folder)
         return redirect(
-            url_for("note", note_path=str(dest.relative_to(REPO_ROOT)).replace("\\", "/"))
+            url_for("assets_browser")
+            + f"?msg={safe_name}+sorted+into+{section_title.replace(' ', '+')}&msg_type=success"
         )
 
     dest_dir = _ASSETS_DIR / subfolder
