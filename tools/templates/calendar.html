@@ -112,22 +112,23 @@
 
             if (dayEvts.length > 0) {
                 cell.classList.add('has-events');
-                var dots = document.createElement('div');
-                dots.className = 'cal-dots';
-                var shown = dayEvts.slice(0, 3);
+                var labels = document.createElement('div');
+                labels.className = 'cal-labels';
+                var shown = dayEvts.slice(0, 2);
                 shown.forEach(function(e) {
-                    var dot = document.createElement('span');
-                    dot.className = 'cal-dot ' + sectionClass(e.section);
-                    dot.title = e.name;
-                    dots.appendChild(dot);
+                    var label = document.createElement('div');
+                    label.className = 'cal-label ' + sectionClass(e.section);
+                    label.textContent = e.name;
+                    label.title = e.name;
+                    labels.appendChild(label);
                 });
-                if (dayEvts.length > 3) {
+                if (dayEvts.length > 2) {
                     var more = document.createElement('span');
                     more.className = 'cal-more';
-                    more.textContent = '+' + (dayEvts.length - 3);
-                    dots.appendChild(more);
+                    more.textContent = '+' + (dayEvts.length - 2) + ' more';
+                    labels.appendChild(more);
                 }
-                cell.appendChild(dots);
+                cell.appendChild(labels);
                 (function(ds, devts) {
                     cell.addEventListener('click', function() { showDayEvents(ds, devts); });
                 })(dateStr, dayEvts);

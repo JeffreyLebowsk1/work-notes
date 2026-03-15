@@ -785,13 +785,15 @@ body { overflow-x: hidden; width: 100%; }
   grid-template-columns: repeat(7, 1fr);
 }
 .cal-day {
-  min-height: 70px;
-  padding: .35rem .4rem;
+  min-height: 90px;
+  padding: .3rem .35rem;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   position: relative;
   cursor: default;
   transition: background .12s;
+  display: flex;
+  flex-direction: column;
 }
 .cal-day:nth-child(7n) { border-right: none; }
 .cal-day.empty { background: var(--bg); cursor: default; }
@@ -818,12 +820,31 @@ body { overflow-x: hidden; width: 100%; }
   display: inline-block;
   margin-bottom: .15rem;
 }
-.cal-dots {
+.cal-labels {
   display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
+  flex-direction: column;
+  gap: 2px;
   margin-top: 2px;
+  overflow: hidden;
+  flex: 1;
 }
+.cal-label {
+  font-size: .68rem;
+  line-height: 1.2;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+  font-weight: 600;
+}
+.cal-label.dot-spring   { background: var(--green); }
+.cal-label.dot-summer   { background: var(--orange); }
+.cal-label.dot-fall     { background: var(--blue); }
+.cal-label.dot-holiday  { background: #dc2626; }
+.cal-label.dot-registrar { background: var(--purple); }
+.cal-label.dot-default  { background: var(--teal); }
 .cal-dot {
   width: 8px;
   height: 8px;
@@ -839,8 +860,8 @@ body { overflow-x: hidden; width: 100%; }
 .cal-more {
   font-size: .65rem;
   color: var(--text-muted);
-  font-weight: 700;
-  line-height: 8px;
+  font-weight: 600;
+  padding-left: 4px;
 }
 .day-events {
   display: none;
@@ -890,9 +911,10 @@ body { overflow-x: hidden; width: 100%; }
 }
 
 @media (max-width: 640px) {
-  .cal-day { min-height: 52px; padding: .25rem .2rem; }
+  .cal-day { min-height: 60px; padding: .2rem .15rem; }
   .cal-day-num { font-size: .72rem; }
-  .cal-dot { width: 6px; height: 6px; }
+  .cal-label { font-size: .58rem; padding: 1px 2px; }
+  .cal-more { font-size: .55rem; }
   .calendar-nav h2 { font-size: 1rem; min-width: 140px; }
   .calendar-header { flex-direction: column; }
 }
