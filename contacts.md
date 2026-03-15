@@ -26,6 +26,29 @@ People and offices you work with regularly.
 |
 ---
 
+## 🎓 CCP Advisors
+
+Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissions/ccp-procedures.md#ccp-advisor-contacts) for the full school-by-school table.
+
+| Name | Phone | Email | Schools / Coverage |
+|---|---|---|---|
+| Ben Thomas | (919) 639-6161 | bthomas@cccc.edu | Harnett Central; Cape Fear Christian; Woods Charter; Calvary Education Center; Brookside Christian Academy; other private schools (Chatham, Lee, Harnett) |
+| Tracy Autry | (910) 897-8123, Ext. 2804 | tautry@cccc.edu | Harnett Virtual Academy; Triton ⭐ *Harnett Lead Advisor* |
+| Carissa Cain | (919) 436-1436, Ext. 4216 | ccain@cccc.edu | Overhills |
+| Deanna Goins | (919) 499-5113 | dgoin675@cccc.edu | Western Harnett; Grace Christian; Lee Christian |
+| Nick Testa | (919) 718-7528 | ntesta@cccc.edu | Harnett Early College; Lee Early College |
+| Jennifer Babb | (919) 718-2400, Ext. 2116 | jbabb312@cccc.edu | Central Carolina Academy; Southern Lee; Bragg Street |
+| Heather McKenzie | (919) 776-7541, Ext. 2533 | hmcke851@cccc.edu | Lee County High School ⭐ *Lee Lead Advisor*; Ascend Leadership Academy |
+| Kristin Turner | (919) 837-2251 | klturner@cccc.edu | Chatham Central; Jordan Matthews |
+| Timarie Franco | (919) 816-2942 | tfran108@cccc.edu | Chatham Charter; Northwood ⭐ *Chatham Lead Advisor* |
+| Samantha Lane | (910) 436-1436 | slane774@cccc.edu | Seaforth |
+| Fae Goodman | (919) 545-8047 | fgoodman@cccc.edu | Chatham Early College; One Academy |
+| Megan Burgess | (919) 718-7232 | mferg264@cccc.edu | Home school 9th/10th grade; out-of-area & NCVPS students |
+| Mary Schmid Carter | (919) 718-7542 | mschmid@cccc.edu | Home school 11th/12th grade |
+|
+
+---
+
 ## 🏢 Other Campus Offices
 
 | Office | Contact Name | Email | Phone | Notes |
@@ -95,4 +118,4 @@ People and offices you work with regularly.
 | Lee/Chatham CCR Coordinator | Anita Green | (919) 545-8669 | agreen@cccc.edu |
 
 ---
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-15*
