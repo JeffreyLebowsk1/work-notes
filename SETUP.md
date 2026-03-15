@@ -625,7 +625,7 @@ For committing and pushing changes directly from your Android device.
    git clone https://github.com/JeffreyLebowsk1/work-notes.git
    ```
 
-5. Configure a **Personal Access Token (PAT)** so you can push without a password prompt (see [Step 4 of the Linux setup](#step-4--configure-git-credentials) for how to create a PAT):
+5. Configure a **Personal Access Token (PAT)** so you can push without a password prompt (see [Step 4 of the Linux setup](#step-4---configure-git-credentials) for how to create a PAT):
 
    ```bash
    git config --global credential.helper store
