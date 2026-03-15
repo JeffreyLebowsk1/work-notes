@@ -337,10 +337,17 @@ ngrok config add-authtoken <YOUR_AUTHTOKEN>
 Get your token at <https://dashboard.ngrok.com/get-started/your-authtoken>.
 
 **`ERR_NGROK_3200` — "Your account has reached the maximum number of simultaneous ngrok agent sessions"**
-Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears when a previous ngrok process is still running (or was not shut down cleanly) and that cap has been reached. Fix:
+Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears when a previous ngrok process is still running (or was not shut down cleanly) and that cap has been reached.
+
+`linux-setup.sh --ngrok` now detects and stops any existing ngrok session automatically before starting a new one, so simply **re-running the script** is the easiest fix:
 ```bash
-# Kill any leftover ngrok processes, then restart:
-pkill -x ngrok
+bash tools/linux-setup.sh --ngrok
+```
+
+If you are running `ngrok` manually instead of via the script, kill the old session(s) first:
+```bash
+# Kill all running ngrok processes, then restart:
+pgrep -x ngrok | xargs -r kill
 ngrok http 4200
 ```
 If that doesn't help, open the [ngrok dashboard → Agents](https://dashboard.ngrok.com/tunnels/agents) in your browser, terminate any listed sessions, and then run `ngrok http 4200` again.
