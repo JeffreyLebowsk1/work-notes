@@ -66,6 +66,13 @@
 
 ---
 
+## Attachments
+
+<!-- Link any files shared or referenced during this meeting -->
+<!-- - [filename](../assets/documents/filename.pdf) — brief description -->
+
+---
+
 ## Follow-Up / Next Meeting
 
 **Next meeting:** <!-- date, time, location -->  

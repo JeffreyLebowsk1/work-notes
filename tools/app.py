@@ -10,7 +10,6 @@ Or from the tools/ directory:
 Then open http://localhost:4200 in your browser.
 """
 
-import logging
 import mimetypes
 import os
 import re
@@ -20,7 +19,6 @@ import threading
 import time
 import urllib.parse
 import webbrowser
-from datetime import datetime, timezone
 from pathlib import Path
 
 import markdown as md
@@ -144,6 +142,29 @@ def _add_cache_headers(response):
         # HTML pages: allow browser back/forward cache, revalidate on navigate
         response.headers["Cache-Control"] = "private, no-cache"
     return response
+
+
+@app.before_request
+def _basic_auth_check():
+    """Enforce HTTP Basic Auth when APP_USERNAME is configured.
+
+    Set APP_USERNAME and APP_PASSWORD in tools/.env (or as hosting env vars)
+    to password-protect the app when deployed to a public URL.
+    Leave both blank for local/dev use with no auth prompt.
+    """
+    if not config.APP_USERNAME:
+        return  # Auth disabled — local use
+    auth = request.authorization
+    if (
+        auth is None
+        or auth.username != config.APP_USERNAME
+        or auth.password != config.APP_PASSWORD
+    ):
+        return Response(
+            "CCCC Notes — Authentication required.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="CCCC Notes"'},
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -392,32 +413,9 @@ _NOTE_INDEX: dict[str, Path] = {
 # ---------------------------------------------------------------------------
 
 # Allowed subfolders for asset uploads — validated server-side.
-_ASSET_SUBFOLDERS: frozenset[str] = frozenset({
-    "images",
-    "documents",
-    "spreadsheets",
-    "screenshots/admissions",
-    "screenshots/continuing-education",
-    "screenshots/graduation",
-    "screenshots/residency-tuition",
-    "screenshots/transcripts",
-    "screenshots/tools",
-    "screenshots/updates",
-})
-
-# Grouped structure for the upload UI — drives <optgroup> display.
-_ASSET_SUBFOLDER_GROUPS: dict[str, list[str]] = {
-    "General": ["documents", "images", "spreadsheets"],
-    "Screenshots": [
-        "screenshots/admissions",
-        "screenshots/continuing-education",
-        "screenshots/graduation",
-        "screenshots/residency-tuition",
-        "screenshots/transcripts",
-        "screenshots/tools",
-        "screenshots/updates",
-    ],
-}
+_ASSET_SUBFOLDERS: frozenset[str] = frozenset(
+    {"images", "documents", "spreadsheets", "screenshots"}
+)
 
 # Regex that a safe note filename must fully match.
 _NOTE_FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*\.md$")
@@ -448,56 +446,6 @@ def _reload_indexes() -> None:
             if _ap.is_file() and _ap.name not in _ASSET_SKIP:
                 _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
                 _ASSET_INDEX[_rel] = _ap
-
-
-def _screenshot_checklist() -> list[dict]:
-    """Return pending screenshot items parsed from assets/screenshots/README.md.
-
-    Reads the '## Capture Status' table and returns one dict per screenshot
-    that has not yet been uploaded.  Each dict contains:
-        filename   — bare filename (e.g. 'spro-ccpp-student-type.png')
-        screen     — Colleague mnemonic (e.g. 'SPRO')
-        subfolder  — upload subfolder (e.g. 'screenshots/admissions')
-        asset_key  — key to check in _ASSET_INDEX
-    """
-    readme = _ASSETS_DIR / "screenshots" / "README.md"
-    if not readme.exists():
-        return []
-
-    pending = []
-    in_table = False
-    for line in readme.read_text(encoding="utf-8").splitlines():
-        if "| File |" in line:
-            in_table = True
-            continue
-        if not in_table:
-            continue
-        if line.strip().startswith("|---"):
-            continue
-        if not line.strip().startswith("|"):
-            break
-
-        parts = [p.strip() for p in line.split("|") if p.strip()]
-        if len(parts) < 2:
-            continue
-
-        rel = parts[0].strip("`")          # e.g. "admissions/spro-ccpp-student-type.png"
-        screen = parts[1]                  # e.g. "SPRO"
-        asset_key = f"screenshots/{rel}"   # key in _ASSET_INDEX
-
-        path_parts = rel.split("/")
-        subfolder = f"screenshots/{path_parts[0]}" if len(path_parts) >= 2 else "screenshots/updates"
-        filename = path_parts[-1]
-
-        if asset_key not in _ASSET_INDEX:
-            pending.append({
-                "filename": filename,
-                "screen": screen,
-                "subfolder": subfolder,
-                "asset_key": asset_key,
-            })
-
-    return pending
 
 # ---------------------------------------------------------------------------
 # Routes — note browser
@@ -600,9 +548,7 @@ def assets_browser():
             }
         )
     return render_template("assets.html", groups=groups,
-                           subfolders=sorted(_ASSET_SUBFOLDERS),
-                           subfolder_groups=_ASSET_SUBFOLDER_GROUPS,
-                           pending_screenshots=_screenshot_checklist())
+                           subfolders=sorted(_ASSET_SUBFOLDERS))
 
 
 @app.route("/repo-assets/<path:asset_path>")
@@ -644,7 +590,7 @@ def note_new():
                 section_dir = _SECTION_DIRS[section_key]
                 # Daily-log notes live in a YYYY-MM/ sub-folder — auto-create it.
                 if section_key == "daily-logs":
-                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}", safe_name)
+                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}\.md$", safe_name)
                     dest = (
                         section_dir / date_match.group(1) / safe_name
                         if date_match
@@ -662,47 +608,6 @@ def note_new():
                     dest.parent.mkdir(parents=True, exist_ok=True)
                     dest.write_text(content, encoding="utf-8")
                     _reload_indexes()
-                    if section_key == "daily-logs":
-                        repo = str(REPO_ROOT)
-                        rel_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
-                        date_str = safe_name.removesuffix(".md")
-                        ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-                        commit_msg = f"docs: add daily log {date_str} (via web app) [{ts}]"
-                        try:
-                            result = subprocess.run(
-                                ["git", "-C", repo, "add", rel_path],
-                                capture_output=True, text=True, timeout=30,
-                            )
-                            if result.returncode != 0:
-                                logging.warning(
-                                    "git add failed for daily log %s: %s",
-                                    safe_name, result.stderr.strip(),
-                                )
-                            else:
-                                result = subprocess.run(
-                                    ["git", "-C", repo, "commit", "-m", commit_msg],
-                                    capture_output=True, text=True, timeout=30,
-                                )
-                                if result.returncode != 0:
-                                    logging.warning(
-                                        "git commit failed for daily log %s: %s",
-                                        safe_name, result.stderr.strip(),
-                                    )
-                                else:
-                                    result = subprocess.run(
-                                        ["git", "-C", repo, "push"],
-                                        capture_output=True, text=True, timeout=60,
-                                    )
-                                    if result.returncode != 0:
-                                        logging.warning(
-                                            "git push failed for daily log %s: %s",
-                                            safe_name, result.stderr.strip(),
-                                        )
-                        except subprocess.TimeoutExpired:
-                            logging.warning(
-                                "Git operation timed out while committing daily log %s",
-                                safe_name,
-                            )
                     note_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
                     return redirect(url_for("note", note_path=note_path))
 
@@ -763,6 +668,9 @@ def asset_commit():
     This is the one-click alternative to running ``git add assets/ && git commit
     && git push`` from the terminal after uploading files through the web UI.
     """
+    import logging
+    from datetime import datetime, timezone
+
     repo = str(REPO_ROOT)
     try:
         # Stage everything inside assets/
@@ -825,79 +733,6 @@ def asset_commit():
 
 # ---------------------------------------------------------------------------
 # Routes — search
-# ---------------------------------------------------------------------------
-# Routes — Advisor lookup
-# ---------------------------------------------------------------------------
-
-
-@app.route("/advisor")
-def advisor_page():
-    """Render the advisor lookup page."""
-    return render_template(
-        "advisor.html",
-        sections=SECTIONS,
-        campus_codes=_advisor.CAMPUS_CODES,
-    )
-
-
-@app.route("/api/programs")
-def api_programs():
-    """Return the program code list as JSON for autocomplete."""
-    programs = _advisor.get_programs()
-    return jsonify(programs)
-
-
-@app.route("/api/advisor", methods=["POST"])
-def api_advisor():
-    """Look up advisors by student last name, optional campus and program."""
-    data = request.get_json(silent=True)
-    if not data or not data.get("last_name"):
-        return jsonify({"error": "last_name is required"}), 400
-    last_name = data["last_name"].strip()
-    campus = data.get("campus", "").strip()
-    program = data.get("program", "").strip()
-    records = _advisor.get_records()
-    matches = _advisor.lookup_advisor(records, last_name, campus, program)
-    return jsonify({"results": matches})
-
-
-@app.route("/api/advisor/qr")
-def api_advisor_qr():
-    """Generate a QR code for an advisor contact via the qoder API."""
-    name = request.args.get("name", "")
-    advisor_id = request.args.get("id", "")
-    email = request.args.get("email", "")
-    office = request.args.get("office", "")
-    program = request.args.get("program", "")
-    lines = [f"Advisor: {name}"]
-    if advisor_id:
-        lines.append(f"ID#: {advisor_id}")
-    if program:
-        lines.append(f"Program: {program}")
-    if office:
-        lines.append(f"Office: {office}")
-    if email:
-        lines.append(f"Email: {email}")
-    qr_text = "\n".join(lines)
-    try:
-        import requests as req
-        from _qr_generator import CCCC_BRAND, _logo_data_uri, CCCC_LOGO
-        payload = {"data": qr_text, **CCCC_BRAND}
-        if CCCC_LOGO.exists():
-            payload["logo_path"] = _logo_data_uri()
-        resp = req.post("http://localhost:8080/api/qr/text", json=payload, timeout=10)
-        resp.raise_for_status()
-        return Response(resp.content, mimetype="image/png")
-    except Exception:
-        return Response(
-            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
-            b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
-            b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
-            b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82",
-            mimetype="image/png",
-        )
-
-
 # ---------------------------------------------------------------------------
 
 
@@ -988,6 +823,125 @@ def api_ask():
     except Exception:
         app.logger.exception("Unexpected error in /api/ask")
         return jsonify({"error": "An internal error occurred. Please try again."}), 500
+
+
+# ---------------------------------------------------------------------------
+# Routes — Calendar & Contacts
+# ---------------------------------------------------------------------------
+
+
+@app.route("/calendar")
+def calendar_page():
+    """Render the academic calendar as a standalone page."""
+    cal_path = REPO_ROOT / "academic-calendar.md"
+    if not cal_path.exists():
+        return render_template("404.html"), 404
+    content_html = _render_markdown(
+        cal_path.read_text(encoding="utf-8", errors="replace")
+    )
+    return render_template(
+        "note.html",
+        note=_parse_note(cal_path),
+        content_html=content_html,
+        section_key="",
+        meta={"title": "Reference", "icon": "📅", "color": "teal", "description": ""},
+        prev_note=None,
+        next_note=None,
+    )
+
+
+@app.route("/contacts")
+def contacts_page():
+    """Render the contacts directory as a standalone page."""
+    contacts_path = REPO_ROOT / "contacts.md"
+    if not contacts_path.exists():
+        return render_template("404.html"), 404
+    content_html = _render_markdown(
+        contacts_path.read_text(encoding="utf-8", errors="replace")
+    )
+    return render_template(
+        "note.html",
+        note=_parse_note(contacts_path),
+        content_html=content_html,
+        section_key="",
+        meta={"title": "Reference", "icon": "👥", "color": "blue", "description": ""},
+        prev_note=None,
+        next_note=None,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Routes — Advisor lookup
+# ---------------------------------------------------------------------------
+
+
+@app.route("/advisor")
+def advisor_page():
+    """Render the advisor lookup page."""
+    return render_template(
+        "advisor.html",
+        sections=SECTIONS,
+        campus_codes=_advisor.CAMPUS_CODES,
+    )
+
+
+@app.route("/api/programs")
+def api_programs():
+    """Return the program code list as JSON for autocomplete."""
+    programs = _advisor.get_programs()
+    return jsonify(programs)
+
+
+@app.route("/api/advisor", methods=["POST"])
+def api_advisor():
+    """Look up advisors by student last name, optional campus and program."""
+    data = request.get_json(silent=True)
+    if not data or not data.get("last_name"):
+        return jsonify({"error": "last_name is required"}), 400
+    last_name = data["last_name"].strip()
+    campus = data.get("campus", "").strip()
+    program = data.get("program", "").strip()
+    records = _advisor.get_records()
+    matches = _advisor.lookup_advisor(records, last_name, campus, program)
+    return jsonify({"results": matches})
+
+
+@app.route("/api/advisor/qr")
+def api_advisor_qr():
+    """Generate a QR code for an advisor's contact info via the qoder API."""
+    name = request.args.get("name", "")
+    advisor_id = request.args.get("id", "")
+    email = request.args.get("email", "")
+    office = request.args.get("office", "")
+    program = request.args.get("program", "")
+    # Build a mailto or text payload
+    lines = [f"Advisor: {name}"]
+    if advisor_id:
+        lines.append(f"ID#: {advisor_id}")
+    if program:
+        lines.append(f"Program: {program}")
+    if office:
+        lines.append(f"Office: {office}")
+    if email:
+        lines.append(f"Email: {email}")
+    text = "\n".join(lines)
+    # Call qoder API on localhost
+    try:
+        import requests as req
+        from _qr_generator import CCCC_BRAND
+        payload = {"data": text, **CCCC_BRAND}
+        resp = req.post("http://localhost:8080/api/qr/text", json=payload, timeout=10)
+        resp.raise_for_status()
+        return Response(resp.content, mimetype="image/png")
+    except Exception:
+        # Fallback: return a 1x1 transparent PNG
+        return Response(
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+            b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
+            b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
+            b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82",
+            mimetype="image/png",
+        )
 
 
 # ---------------------------------------------------------------------------

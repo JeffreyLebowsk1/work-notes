@@ -654,7 +654,41 @@ code, pre { font-family: "Fira Code", "Cascadia Code", ui-monospace, monospace; 
 .bottom-nav-icon  { font-size: 1.3rem; line-height: 1; }
 .bottom-nav-label { font-size: .62rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
 
-/* ---- Responsive ---- */\n/* Stacked layout: chat, notes, etc. — still shows top nav */\n@media (max-width: 900px) {\n  .assistant-layout { grid-template-columns: 1fr; }\n  .chat-messages { max-height: calc(100vh - 200px); }\n  .note-nav { flex-direction: column; align-items: stretch; text-align: center; }\n  .search-row { flex-direction: column; }\n}\n/* Phone only: mobile nav, hide top nav links, single column */\n@media (max-width: 640px) {\n  body { padding-bottom: var(--bottom-nav-h); }\n  .bottom-nav { display: block; }\n  .nav-hide-mobile { display: none !important; }\n  .sections-grid { grid-template-columns: 1fr; }\n  .page-header h1 { font-size: 1.15rem; }\n  .note-header h1 { font-size: 1.4rem; }\n  .assets-grid { grid-template-columns: repeat(2, 1fr); }\n  .page-container { margin: 1.1rem auto; }\n  .note-nav { font-size: .875rem; }\n}
+/* ---- Responsive ---- */
+/* Prevent horizontal overflow on all devices */
+html { overflow-x: hidden; }
+body { overflow-x: hidden; width: 100%; }
+.main-content { overflow-x: hidden; }
+.page-container,
+.section-container { max-width: 100%; }
+.section-content pre { max-width: 100%; }
+.table-wrapper { max-width: 100%; -webkit-overflow-scrolling: touch; }
+
+/* Stacked layout: chat, notes, etc. — still shows top nav */
+@media (max-width: 900px) {
+  .assistant-layout { grid-template-columns: 1fr; }
+  .chat-messages { max-height: calc(100vh - 200px); }
+  .note-nav { flex-direction: column; align-items: stretch; text-align: center; }
+  .search-row { flex-direction: column; }
+}
+/* Phone only: mobile nav, hide top nav links, single column */
+@media (max-width: 640px) {
+  body { padding-bottom: var(--bottom-nav-h); }
+  .bottom-nav { display: block; }
+  .nav-hide-mobile { display: none !important; }
+  .sections-grid { grid-template-columns: 1fr; }
+  .page-header h1 { font-size: 1.15rem; }
+  .note-header h1 { font-size: 1.4rem; }
+  .assets-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-container { margin: 1.1rem auto; padding: 0 .75rem; }
+  .section-container { padding: 0 .75rem; }
+  .note-nav { font-size: .875rem; }
+  .nav-container { padding: 0 .75rem; }
+  .page-header { padding: 1.1rem .75rem 1rem; }
+  .section-content table { font-size: .8rem; }
+  .section-content th,
+  .section-content td { padding: .35rem .5rem; }
+}
 
 /* ---- Dark mode ---- */
 [data-theme="dark"] {

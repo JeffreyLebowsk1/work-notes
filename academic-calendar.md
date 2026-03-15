@@ -10,40 +10,66 @@ Key dates and deadlines for the current and upcoming academic year.
 
 | Event | Date | Notes |
 |---|---|---|
-| Semester Start | | |
-| Last Day to Add/Drop | | |
-| Graduation Application Deadline | | |
-| Spring Break | | |
-| Last Day of Classes | | |
-| Finals Week | | |
-| Commencement Ceremony | | |
-| Grades Due | | |
-| Semester End | | |
-|
+| Holiday - College Closed | Jan 1 | |
+| Spring 2026 General Registration ends; payment due | Jan 7 | |
+| Last day to drop (16 or 1st 8) w/100% refund | Jan 8 | |
+| Spring Term (SP26) classes begin | Jan 12 | |
+| Last day to add 1st 8-wk classes | Jan 13 | |
+| Last day to add 16-wk course; Tuition due as keyed | Jan 15 | |
+| 1st 8-week census | Jan 15 | |
+| Holiday College Closed | Jan 19 | |
+| 16-week census | Jan 22 | |
+| 1st 8-wk midterm | Feb 9 | |
+| Last day to withdraw wo/“WF” (1st 8-wk) | Feb 23 | |
+| 1st 8-wk session ends | Mar 6 | |
+| 1st 8-wk grades due to Registrar's Office | Mar 9 | |
+| Student wellness day - no classes | Mar 10 | |
+| 2nd 8-wk Session Begins | Mar 11 | |
+| Last day to Add for 2nd 8-wk | Mar 12 | |
+| Graduation Application Deadline (Spring 2026) | Mar 13 | |
+| Registration for SU26 & FA26 begins | Mar 23 | |
+| Student Break (no classes) | Mar 31 | |
+| Student Break (no classes) | Apr 1 | |
+| Holiday - College Closed | Apr 2 | |
+| Student Break (no classes) | Apr 2 | |
+| Holiday - College Closed | Apr 3 | |
+| Last day to withdraw w/o WF (16, 12, & 2nd 8-wk sessions) | Apr 9 | |
+| 2nd 8-wk Midterm | Apr 9 | |
+| Spring Term Ends | May 7 | |
+| Grades due to Registrar's Office | May 8 | |
+| Last day to drop classes to receive 100% refund | May 13 | |
+| Spring Graduation | May 14 | |
+
+
 ## 🗓️ Summer 2026
 
 | Event | Date | Notes |
 |---|---|---|
-| Session I Start | | |
-| Session I End | | |
-| Session II Start | | |
-| Session II End | | |
-| Graduation Application Deadline | | |
-|
+| Summer Term Begins | May 18 | |
+| Last day to add 8-wk or 10-wk classes -Tuition due as keyed | May 19 | |
+| Holiday - College Closed | May 25 | |
+| Student Break | May 26 | |
+| 8-wk Midterm | Jun 16 | |
+| 10-wk Midterm | Jun 23 | |
+| Last day to withdraw w/o WF (8-wk) | Jun 30 | |
+| Student Break | Jun 30 | |
+| College Closed (Holiday Observance) | Jul 1 | |
+| Student Break | Jul 1 | |
+| College Closed (Holiday Observance) | Jul 2 | |
+| Last day to withdraw w/o WF (10-wk) | Jul 14 | |
+| 8-wk Session Ends | Jul 16 | |
+| 10-wk & Late Session Ends | Jul 30 | |
+| Grades due to Registrar's Office (10-wk & Late Sessions) | Aug 3 | |
+| Summer Graduation | Aug 6 | |
+
+
 ## 🗓️ Fall 2026
 
 | Event | Date | Notes |
 |---|---|---|
-| Semester Start | | |
-| Last Day to Add/Drop | | |
-| Graduation Application Deadline | | |
-| Thanksgiving Break | | |
-| Last Day of Classes | | |
-| Finals Week | | |
-| Commencement Ceremony | | |
-| Grades Due | | |
-| Semester End | | |
-|
+| *No events found yet* | | Check [calendar.cccc.edu](https://calendar.cccc.edu/) |
+
+
 ---
 
 ## 📌 Registrar Office Key Dates
@@ -98,3 +124,6 @@ Key dates and deadlines for the current and upcoming academic year.
 
 ---
 *Last updated: 2026-03-15*
+
+---
+*Last synced from calendar.cccc.edu: 2026-03-15*

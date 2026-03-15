@@ -256,11 +256,11 @@ def main() -> int:
     findings = scan_files(files)
 
     if not findings:
-        print(f"PII scan ({mode}): ✓ clean — {len(files)} file(s) checked.")
+        print(f"PII scan ({mode}): CLEAN - {len(files)} file(s) checked.")
         return 0
 
     # Report findings
-    print(f"\n⚠️  PII scan ({mode}): {len(findings)} potential issue(s) found!\n")
+    print(f"\nPII scan ({mode}): {len(findings)} potential issue(s) found!\n")
     for f in findings:
         print(f)
     print()
