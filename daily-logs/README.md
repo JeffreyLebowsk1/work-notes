@@ -27,6 +27,11 @@ Example: `2026-03/2026-03-13.md`
 ### Blockers / Questions
 
 
+### Attachments
+
+<!-- Link any files uploaded today (PDFs, spreadsheets, screenshots, etc.) -->
+<!-- - [filename](../assets/documents/filename.pdf) — brief description -->
+
 ### Notes
 
 

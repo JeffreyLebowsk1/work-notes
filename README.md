@@ -16,6 +16,7 @@
 | [📓 Daily Logs](./daily-logs/) | Day-to-day logs and notes |
 | [📁 Assets](./assets/) | Shared images, spreadsheets, and files |
 | [📣 Updates & Changes](./updates/) | Policy, technology, workflow, and graduation updates log |
+| [📖 Documentation](./documentation/) | Reference guides, glossary, FAQs, and setup documentation |
 
 ## 📋 Reference Files
 
@@ -23,12 +24,12 @@
 |---|---|
 | [📅 Academic Calendar](./academic-calendar.md) | Key semester dates and Registrar office deadlines |
 | [👥 Contacts](./contacts.md) | Internal staff, campus offices, and vendor contacts |
-| [❓ FAQ](./faq.md) | Common student & staff questions with standard answers |
-| [🔁 Recurring Tasks](./recurring-tasks.md) | Daily, weekly, semester, and annual task checklists |
-| [🗂️ Glossary](./glossary.md) | Terms, acronyms, and status codes |
+| [❓ FAQ](./documentation/faq.md) | Common student & staff questions with standard answers |
+| [🔁 Recurring Tasks](./documentation/recurring-tasks.md) | Daily, weekly, semester, and annual task checklists |
+| [🗂️ Glossary](./documentation/glossary.md) | Terms, acronyms, and status codes |
 | [📝 Email Templates](./email-templates.md) | Ready-to-use email templates for all areas |
-| [🚨 Exceptions & Edge Cases](./exceptions-and-edge-cases.md) | Log of unusual situations and how they were resolved |
-| [📊 Reports](./reports.md) | Notes on regularly run reports |
+| [🚨 Exceptions & Edge Cases](./documentation/exceptions-and-edge-cases.md) | Log of unusual situations and how they were resolved |
+| [📊 Reports](./documentation/reports.md) | Notes on regularly run reports |
 | [🔗 Links & Resources](./_links.md) | Central index of important links |
 | [⚙️ Setup Guide](./SETUP.md) | Google Drive + GitHub setup and workflow guide |
 | [📜 Changelog](./CHANGELOG.md) | History of changes to this repository |
@@ -37,38 +38,8 @@
 
 | Action | What it does | Button |
 |---|---|---|
-| **Open App** | Open the live web app in your browser | [![Open CCCC Notes web app on Render](https://img.shields.io/badge/Open%20App-cccc--notes-blue?logo=render&logoColor=white)](https://cccc-notes.onrender.com) |
 | Notes Helper | analyze, sort, organize, search, import, or process-inbox | [![Notes Helper](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/notes-helper.yml) |
 | Inbox Processor | import every file waiting in `inbox/` | [![Inbox Processor](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml/badge.svg)](https://github.com/JeffreyLebowsk1/work-notes/actions/workflows/inbox-processor.yml) |
-
----
-
-## 🐧 Linux Quick Start
-
-Run the web app on your local Linux machine in three steps:
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/JeffreyLebowsk1/work-notes.git
-cd work-notes
-
-# 2. Install Python dependencies
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r tools/requirements-web.txt
-
-# 3. Launch the app
-python3 tools/app.py
-```
-
-Then open **http://localhost:4200** in your browser.
-
-> ⚡ **One-liner shortcut** — `bash tools/linux-setup.sh` handles steps 2 and 3 automatically (creates the venv, installs deps, checks the port, and starts the app):
-> ```bash
-> bash tools/linux-setup.sh              # default port 4200
-> bash tools/linux-setup.sh --port 8080  # use a different port
-> ```
-
-For password protection, ngrok public sharing, and the automatic-sync service (Jetson / rclone), see the **[🐧 Linux sections of SETUP.md](./SETUP.md#-run-the-web-app-locally-on-linux)**.
 
 ---
 
@@ -78,7 +49,7 @@ The repository is a **living knowledge base** for the Registrar's Office. Here's
 
 1. **Notes** — All content is stored as Markdown (`.md`) files organized into topic folders (`graduation/`, `meetings/`, `transcripts/`, etc.). Edit them directly in any text editor, VS Code, or the GitHub web interface.
 
-2. **Day-to-day editing** — After editing, commit and push with `git push`. If you're on the Linux/Jetson setup described in [SETUP.md](./SETUP.md), an auto-sync service watches for changes and pushes to GitHub automatically — no manual commands needed.
+2. **Day-to-day editing** — After editing, commit and push with `git push`.
 
 3. **Inbox** — Drop a `.md` or `.txt` file into [`inbox/`](./inbox/) on GitHub and the **Inbox Processor** workflow automatically detects the correct destination folder, renames the file to match repository conventions, and moves it into place.
 
@@ -101,7 +72,7 @@ See [SETUP.md](./SETUP.md) for initial setup instructions and [tools/README.md](
 - [Graduation Checklists](./graduation/checklists/)
 - [Upcoming Ceremonies](./graduation/ceremonies/)
 - [Latest Updates](./updates/)
-- [Recurring Tasks](./recurring-tasks.md)
+- [Recurring Tasks](./documentation/recurring-tasks.md)
 - [All Links & Resources](./_links.md)
 
 ---

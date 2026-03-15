@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Academic Calendar — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container calendar-container">
+    <div class="calendar-header">
+        <div>
+            <h1>📅 Academic Calendar</h1>
+            <p class="calendar-subtitle">Key dates and deadlines for the current and upcoming academic year</p>
+        </div>
+        <div class="calendar-view-toggle">
+            <button class="btn-toggle active" data-view="grid" title="Grid view">📅 Grid</button>
+            <button class="btn-toggle" data-view="list" title="List view">📋 List</button>
+        </div>
+    </div>
+
+    <!-- Grid View -->
+    <div id="calendar-grid-view" class="calendar-view">
+        <div class="calendar-nav">
+            <button id="prev-month" class="btn btn-nav" aria-label="Previous month">‹</button>
+            <h2 id="month-title"></h2>
+            <button id="next-month" class="btn btn-nav" aria-label="Next month">›</button>
+            <button id="today-btn" class="btn btn-secondary btn-sm" style="margin-left:.75rem;">Today</button>
+        </div>
+
+        <div class="calendar-legend">
+            <span class="legend-item"><span class="cal-dot dot-spring"></span> Spring</span>
+            <span class="legend-item"><span class="cal-dot dot-summer"></span> Summer</span>
+            <span class="legend-item"><span class="cal-dot dot-fall"></span> Fall</span>
+            <span class="legend-item"><span class="cal-dot dot-holiday"></span> Holiday</span>
+            <span class="legend-item"><span class="cal-dot dot-registrar"></span> Registrar</span>
+        </div>
+
+        <div class="cal-grid">
+            <div class="cal-weekdays">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div id="cal-days" class="cal-days"></div>
+        </div>
+
+        <div id="day-events" class="day-events"></div>
+    </div>
+
+    <!-- List View -->
+    <div id="calendar-list-view" class="calendar-view" style="display:none;">
+        <div class="section-content note-content">{{ content_html }}</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    var EVENTS = {{ events_json|safe }};
+    var MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+    var curYear, curMonth;
+
+    function init() {
+        var today = new Date();
+        curYear = today.getFullYear();
+        curMonth = today.getMonth();
+        renderGrid();
+    }
+
+    function sectionClass(section) {
+        if (!section) return 'dot-default';
+        var s = section.toLowerCase();
+        if (s.indexOf('spring') !== -1) return 'dot-spring';
+        if (s.indexOf('summer') !== -1) return 'dot-summer';
+        if (s.indexOf('fall') !== -1) return 'dot-fall';
+        if (s.indexOf('holiday') !== -1) return 'dot-holiday';
+        if (s.indexOf('registrar') !== -1) return 'dot-registrar';
+        return 'dot-default';
+    }
+
+    function renderGrid() {
+        document.getElementById('month-title').textContent = MONTHS[curMonth] + ' ' + curYear;
+        var container = document.getElementById('cal-days');
+        container.innerHTML = '';
+        var firstDay = new Date(curYear, curMonth, 1).getDay();
+        var daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
+        var today = new Date();
+        var isCurrentMonth = today.getFullYear() === curYear && today.getMonth() === curMonth;
+
+        var monthEvents = EVENTS.filter(function(e) {
+            var d = new Date(e.date + 'T00:00:00');
+            return d.getFullYear() === curYear && d.getMonth() === curMonth;
+        });
+
+        // Empty cells for padding
+        for (var i = 0; i < firstDay; i++) {
+            var empty = document.createElement('div');
+            empty.className = 'cal-day empty';
+            container.appendChild(empty);
+        }
+
+        for (var day = 1; day <= daysInMonth; day++) {
+            var cell = document.createElement('div');
+            cell.className = 'cal-day';
+            var dateStr = curYear + '-' + String(curMonth + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            var dayEvts = monthEvents.filter(function(e) { return e.date === dateStr; });
+
+            if (isCurrentMonth && day === today.getDate()) {
+                cell.classList.add('today');
+            }
+
+            var num = document.createElement('span');
+            num.className = 'cal-day-num';
+            num.textContent = day;
+            cell.appendChild(num);
+
+            if (dayEvts.length > 0) {
+                cell.classList.add('has-events');
+                var labels = document.createElement('div');
+                labels.className = 'cal-labels';
+                var shown = dayEvts.slice(0, 2);
+                shown.forEach(function(e) {
+                    var label = document.createElement('div');
+                    label.className = 'cal-label ' + sectionClass(e.section);
+                    label.textContent = e.name;
+                    label.title = e.name;
+                    labels.appendChild(label);
+                });
+                if (dayEvts.length > 2) {
+                    var more = document.createElement('span');
+                    more.className = 'cal-more';
+                    more.textContent = '+' + (dayEvts.length - 2) + ' more';
+                    labels.appendChild(more);
+                }
+                cell.appendChild(labels);
+                (function(ds, devts) {
+                    cell.addEventListener('click', function() { showDayEvents(ds, devts); });
+                })(dateStr, dayEvts);
+            }
+            container.appendChild(cell);
+        }
+
+        // Auto-show today's events on initial load
+        if (isCurrentMonth) {
+            var todayStr = curYear + '-' + String(curMonth + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+            var todayEvts = monthEvents.filter(function(e) { return e.date === todayStr; });
+            if (todayEvts.length > 0) showDayEvents(todayStr, todayEvts);
+        }
+    }
+
+    function showDayEvents(dateStr, events) {
+        var container = document.getElementById('day-events');
+        var d = new Date(dateStr + 'T00:00:00');
+        var dayName = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        var html = '<h3>' + dayName + '</h3><ul class="day-events-list">';
+        events.forEach(function(e) {
+            html += '<li class="day-event-item">';
+            html += '<span class="cal-dot ' + sectionClass(e.section) + '"></span>';
+            html += '<div><strong>' + escapeHtml(e.name) + '</strong>';
+            if (e.notes) html += '<span class="day-event-notes"> — ' + escapeHtml(e.notes) + '</span>';
+            html += '<span class="day-event-section">' + escapeHtml(e.section) + '</span>';
+            html += '</div></li>';
+        });
+        html += '</ul>';
+        container.innerHTML = html;
+        container.style.display = 'block';
+    }
+
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(text));
+        return div.innerHTML;
+    }
+
+    // View toggle
+    document.querySelectorAll('.btn-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.btn-toggle').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            var view = btn.getAttribute('data-view');
+            document.getElementById('calendar-grid-view').style.display = view === 'grid' ? '' : 'none';
+            document.getElementById('calendar-list-view').style.display = view === 'list' ? '' : 'none';
+        });
+    });
+
+    // Month navigation
+    document.getElementById('prev-month').addEventListener('click', function() {
+        curMonth--;
+        if (curMonth < 0) { curMonth = 11; curYear--; }
+        renderGrid();
+        document.getElementById('day-events').style.display = 'none';
+    });
+    document.getElementById('next-month').addEventListener('click', function() {
+        curMonth++;
+        if (curMonth > 11) { curMonth = 0; curYear++; }
+        renderGrid();
+        document.getElementById('day-events').style.display = 'none';
+    });
+    document.getElementById('today-btn').addEventListener('click', function() {
+        var today = new Date();
+        curYear = today.getFullYear();
+        curMonth = today.getMonth();
+        renderGrid();
+    });
+
+    init();
+})();
+</script>
+{% endblock %}

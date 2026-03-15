@@ -10,7 +10,6 @@ Or from the tools/ directory:
 Then open http://localhost:4200 in your browser.
 """
 
-import logging
 import mimetypes
 import os
 import re
@@ -19,8 +18,8 @@ import sys
 import threading
 import time
 import urllib.parse
+import urllib.request
 import webbrowser
-from datetime import datetime, timezone
 from pathlib import Path
 
 import markdown as md
@@ -36,6 +35,7 @@ from werkzeug.utils import secure_filename
 _TOOLS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_TOOLS_DIR))
 
+import _advisor  # noqa: E402
 import ai_providers  # noqa: E402
 import config  # noqa: E402
 from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
@@ -121,6 +121,12 @@ SECTIONS = {
         "description": "Financial aid coordination and notes.",
         "color": "teal",
     },
+    "documentation": {
+        "title": "Documentation",
+        "icon": "📖",
+        "description": "Reference guides, glossary, FAQs, and setup documentation.",
+        "color": "green",
+    },
 }
 
 # Pre-computed section directories — keyed by section name.
@@ -143,6 +149,29 @@ def _add_cache_headers(response):
         # HTML pages: allow browser back/forward cache, revalidate on navigate
         response.headers["Cache-Control"] = "private, no-cache"
     return response
+
+
+@app.before_request
+def _basic_auth_check():
+    """Enforce HTTP Basic Auth when APP_USERNAME is configured.
+
+    Set APP_USERNAME and APP_PASSWORD in tools/.env (or as hosting env vars)
+    to password-protect the app when deployed to a public URL.
+    Leave both blank for local/dev use with no auth prompt.
+    """
+    if not config.APP_USERNAME:
+        return  # Auth disabled — local use
+    auth = request.authorization
+    if (
+        auth is None
+        or auth.username != config.APP_USERNAME
+        or auth.password != config.APP_PASSWORD
+    ):
+        return Response(
+            "CCCC Notes — Authentication required.",
+            401,
+            {"WWW-Authenticate": 'Basic realm="CCCC Notes"'},
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -391,32 +420,9 @@ _NOTE_INDEX: dict[str, Path] = {
 # ---------------------------------------------------------------------------
 
 # Allowed subfolders for asset uploads — validated server-side.
-_ASSET_SUBFOLDERS: frozenset[str] = frozenset({
-    "images",
-    "documents",
-    "spreadsheets",
-    "screenshots/admissions",
-    "screenshots/continuing-education",
-    "screenshots/graduation",
-    "screenshots/residency-tuition",
-    "screenshots/transcripts",
-    "screenshots/tools",
-    "screenshots/updates",
-})
-
-# Grouped structure for the upload UI — drives <optgroup> display.
-_ASSET_SUBFOLDER_GROUPS: dict[str, list[str]] = {
-    "General": ["documents", "images", "spreadsheets"],
-    "Screenshots": [
-        "screenshots/admissions",
-        "screenshots/continuing-education",
-        "screenshots/graduation",
-        "screenshots/residency-tuition",
-        "screenshots/transcripts",
-        "screenshots/tools",
-        "screenshots/updates",
-    ],
-}
+_ASSET_SUBFOLDERS: frozenset[str] = frozenset(
+    {"images", "documents", "spreadsheets", "screenshots"}
+)
 
 # Regex that a safe note filename must fully match.
 _NOTE_FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*\.md$")
@@ -447,56 +453,6 @@ def _reload_indexes() -> None:
             if _ap.is_file() and _ap.name not in _ASSET_SKIP:
                 _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
                 _ASSET_INDEX[_rel] = _ap
-
-
-def _screenshot_checklist() -> list[dict]:
-    """Return pending screenshot items parsed from assets/screenshots/README.md.
-
-    Reads the '## Capture Status' table and returns one dict per screenshot
-    that has not yet been uploaded.  Each dict contains:
-        filename   — bare filename (e.g. 'spro-ccpp-student-type.png')
-        screen     — Colleague mnemonic (e.g. 'SPRO')
-        subfolder  — upload subfolder (e.g. 'screenshots/admissions')
-        asset_key  — key to check in _ASSET_INDEX
-    """
-    readme = _ASSETS_DIR / "screenshots" / "README.md"
-    if not readme.exists():
-        return []
-
-    pending = []
-    in_table = False
-    for line in readme.read_text(encoding="utf-8").splitlines():
-        if "| File |" in line:
-            in_table = True
-            continue
-        if not in_table:
-            continue
-        if line.strip().startswith("|---"):
-            continue
-        if not line.strip().startswith("|"):
-            break
-
-        parts = [p.strip() for p in line.split("|") if p.strip()]
-        if len(parts) < 2:
-            continue
-
-        rel = parts[0].strip("`")          # e.g. "admissions/spro-ccpp-student-type.png"
-        screen = parts[1]                  # e.g. "SPRO"
-        asset_key = f"screenshots/{rel}"   # key in _ASSET_INDEX
-
-        path_parts = rel.split("/")
-        subfolder = f"screenshots/{path_parts[0]}" if len(path_parts) >= 2 else "screenshots/updates"
-        filename = path_parts[-1]
-
-        if asset_key not in _ASSET_INDEX:
-            pending.append({
-                "filename": filename,
-                "screen": screen,
-                "subfolder": subfolder,
-                "asset_key": asset_key,
-            })
-
-    return pending
 
 # ---------------------------------------------------------------------------
 # Routes — note browser
@@ -599,9 +555,7 @@ def assets_browser():
             }
         )
     return render_template("assets.html", groups=groups,
-                           subfolders=sorted(_ASSET_SUBFOLDERS),
-                           subfolder_groups=_ASSET_SUBFOLDER_GROUPS,
-                           pending_screenshots=_screenshot_checklist())
+                           subfolders=sorted(_ASSET_SUBFOLDERS))
 
 
 @app.route("/repo-assets/<path:asset_path>")
@@ -643,7 +597,7 @@ def note_new():
                 section_dir = _SECTION_DIRS[section_key]
                 # Daily-log notes live in a YYYY-MM/ sub-folder — auto-create it.
                 if section_key == "daily-logs":
-                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}", safe_name)
+                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}\.md$", safe_name)
                     dest = (
                         section_dir / date_match.group(1) / safe_name
                         if date_match
@@ -661,47 +615,6 @@ def note_new():
                     dest.parent.mkdir(parents=True, exist_ok=True)
                     dest.write_text(content, encoding="utf-8")
                     _reload_indexes()
-                    if section_key == "daily-logs":
-                        repo = str(REPO_ROOT)
-                        rel_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
-                        date_str = safe_name.removesuffix(".md")
-                        ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-                        commit_msg = f"docs: add daily log {date_str} (via web app) [{ts}]"
-                        try:
-                            result = subprocess.run(
-                                ["git", "-C", repo, "add", rel_path],
-                                capture_output=True, text=True, timeout=30,
-                            )
-                            if result.returncode != 0:
-                                logging.warning(
-                                    "git add failed for daily log %s: %s",
-                                    safe_name, result.stderr.strip(),
-                                )
-                            else:
-                                result = subprocess.run(
-                                    ["git", "-C", repo, "commit", "-m", commit_msg],
-                                    capture_output=True, text=True, timeout=30,
-                                )
-                                if result.returncode != 0:
-                                    logging.warning(
-                                        "git commit failed for daily log %s: %s",
-                                        safe_name, result.stderr.strip(),
-                                    )
-                                else:
-                                    result = subprocess.run(
-                                        ["git", "-C", repo, "push"],
-                                        capture_output=True, text=True, timeout=60,
-                                    )
-                                    if result.returncode != 0:
-                                        logging.warning(
-                                            "git push failed for daily log %s: %s",
-                                            safe_name, result.stderr.strip(),
-                                        )
-                        except subprocess.TimeoutExpired:
-                            logging.warning(
-                                "Git operation timed out while committing daily log %s",
-                                safe_name,
-                            )
                     note_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
                     return redirect(url_for("note", note_path=note_path))
 
@@ -762,6 +675,9 @@ def asset_commit():
     This is the one-click alternative to running ``git add assets/ && git commit
     && git push`` from the terminal after uploading files through the web UI.
     """
+    import logging
+    from datetime import datetime, timezone
+
     repo = str(REPO_ROOT)
     try:
         # Stage everything inside assets/
@@ -824,60 +740,6 @@ def asset_commit():
 
 # ---------------------------------------------------------------------------
 # Routes — search
-# ---------------------------------------------------------------------------
-# Routes — important links & QR codes
-# ---------------------------------------------------------------------------
-
-# Human-readable labels for each qr_config.json key.
-_LINK_LABELS: dict[str, str] = {
-    "cfnc":               "CFNC",
-    "diplomasender":      "DiplomaSender",
-    "cccc-scholarships":  "CCCC Scholarships",
-    "cccc-financial-aid": "CCCC Financial Aid",
-    "civic-center":       "Civic Center (Venue)",
-    "ce-schedule":        "CE Course Schedule",
-    "academic-calendar":  "Academic Calendar",
-    "registrar-office":   "Registrar's Office",
-    "transcript-request": "Transcript Request",
-    "fafsa":              "FAFSA",
-    "advising-hub":       "Advising Hub",
-    "nc-residency":       "NC Residency (RDS)",
-    "ce-scholarship":     "CE Scholarship Program",
-    "ccr-registration":   "CCR Registration",
-}
-
-
-def _load_important_links() -> dict[str, str]:
-    """Load important_links from tools/qr_config.json."""
-    import json as _json
-    config_path = _TOOLS_DIR / "qr_config.json"
-    if config_path.exists():
-        try:
-            return _json.loads(config_path.read_text(encoding="utf-8")).get(
-                "important_links", {}
-            )
-        except Exception:
-            pass
-    return {}
-
-
-@app.route("/links")
-def links_page():
-    """Important links page — shows each configured URL with its QR code."""
-    items = []
-    for name, url in _load_important_links().items():
-        qr_key = f"images/qr-codes/{name}.png"
-        items.append({
-            "name":    name,
-            "label":   _LINK_LABELS.get(name, name.replace("-", " ").title()),
-            "url":     url,
-            "qr_key":  qr_key,
-            "qr_url":  url_for("repo_asset", asset_path=qr_key)
-                       if qr_key in _ASSET_INDEX else None,
-        })
-    return render_template("links.html", items=items)
-
-
 # ---------------------------------------------------------------------------
 
 
@@ -968,6 +830,191 @@ def api_ask():
     except Exception:
         app.logger.exception("Unexpected error in /api/ask")
         return jsonify({"error": "An internal error occurred. Please try again."}), 500
+
+
+# ---------------------------------------------------------------------------
+# Routes — Calendar & Contacts
+# ---------------------------------------------------------------------------
+
+
+def _parse_calendar_events() -> list[dict]:
+    """Parse academic-calendar.md and return structured event dicts."""
+    cal_path = REPO_ROOT / "academic-calendar.md"
+    if not cal_path.exists():
+        return []
+    text = cal_path.read_text(encoding="utf-8", errors="replace")
+    MONTHS = {
+        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+        "january": 1, "february": 2, "march": 3, "april": 4, "june": 6,
+        "july": 7, "august": 8, "september": 9, "october": 10,
+        "november": 11, "december": 12,
+    }
+    events: list[dict] = []
+    current_year = None
+    current_section = ""
+    for line in text.splitlines():
+        stripped = line.strip()
+        # Detect section headings: ## 🗓️ Spring 2026, ## 🏖️ Holiday ...
+        if stripped.startswith("##") and not stripped.startswith("###"):
+            ym = re.search(r"(\d{4})", stripped)
+            if ym:
+                current_year = int(ym.group(1))
+            sm = re.search(r"[🗓📌🏖️]\s*(.+)", stripped)
+            if sm:
+                current_section = sm.group(1).strip()
+            elif stripped.lstrip("#").strip():
+                current_section = stripped.lstrip("#").strip()
+            continue
+        if not stripped.startswith("|") or "---" in stripped or not current_year:
+            continue
+        parts = [p.strip() for p in stripped.split("|") if p.strip()]
+        if len(parts) < 2 or parts[0] in ("Event", "Task", "Holiday"):
+            continue
+        event_name = parts[0]
+        date_str = parts[1]
+        notes = parts[2] if len(parts) > 2 else ""
+        # "Jan 1" or "January 1, 2026"
+        dm = re.match(r"(\w+)\s+(\d{1,2})", date_str)
+        if not dm:
+            continue
+        month_str = dm.group(1).lower()
+        day = int(dm.group(2))
+        month = MONTHS.get(month_str)
+        if not month:
+            continue
+        # If date string contains a year, use it instead
+        ym2 = re.search(r"(\d{4})", date_str)
+        year = int(ym2.group(1)) if ym2 else current_year
+        try:
+            from datetime import date as _date
+            d = _date(year, month, day)
+            events.append({
+                "date": d.isoformat(),
+                "name": event_name,
+                "notes": notes,
+                "section": current_section,
+            })
+        except ValueError:
+            pass
+    return events
+
+
+@app.route("/calendar")
+def calendar_page():
+    """Render the academic calendar with grid and list views."""
+    cal_path = REPO_ROOT / "academic-calendar.md"
+    if not cal_path.exists():
+        return render_template("404.html"), 404
+    content_html = _render_markdown(
+        cal_path.read_text(encoding="utf-8", errors="replace")
+    )
+    import json
+    events = _parse_calendar_events()
+    return render_template(
+        "calendar.html",
+        content_html=content_html,
+        events_json=json.dumps(events),
+    )
+
+
+@app.route("/contacts")
+def contacts_page():
+    """Render the contacts directory as a standalone page."""
+    contacts_path = REPO_ROOT / "contacts.md"
+    if not contacts_path.exists():
+        return render_template("404.html"), 404
+    content_html = _render_markdown(
+        contacts_path.read_text(encoding="utf-8", errors="replace")
+    )
+    return render_template(
+        "note.html",
+        note=_parse_note(contacts_path),
+        content_html=content_html,
+        section_key="",
+        meta={"title": "Reference", "icon": "👥", "color": "blue", "description": ""},
+        prev_note=None,
+        next_note=None,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Routes — Advisor lookup
+# ---------------------------------------------------------------------------
+
+
+@app.route("/advisor")
+def advisor_page():
+    """Render the advisor lookup page with full directory listing."""
+    return render_template(
+        "advisor.html",
+        sections=SECTIONS,
+        campus_codes=_advisor.CAMPUS_CODES,
+        directory=_advisor.get_advisor_directory(),
+        grouped_directory=_advisor.get_advisor_directory_grouped(),
+    )
+
+
+@app.route("/api/programs")
+def api_programs():
+    """Return the program code list as JSON for autocomplete."""
+    programs = _advisor.get_programs()
+    return jsonify(programs)
+
+
+@app.route("/api/advisor", methods=["POST"])
+def api_advisor():
+    """Look up advisors by student last name, optional campus and program."""
+    data = request.get_json(silent=True)
+    if not data or not data.get("last_name"):
+        return jsonify({"error": "last_name is required"}), 400
+    last_name = data["last_name"].strip()
+    campus = data.get("campus", "").strip()
+    program = data.get("program", "").strip()
+    records = _advisor.get_records()
+    matches = _advisor.lookup_advisor(records, last_name, campus, program)
+    return jsonify({"results": matches})
+
+
+@app.route("/api/advisor/qr")
+def api_advisor_qr():
+    """Generate a scannable QR linking to the advisor's cccc.edu directory page."""
+    import re
+    name = request.args.get("name", "").strip()
+    _1x1 = (
+        b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+        b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
+        b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
+        b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82"
+    )
+    if not name:
+        return Response(_1x1, mimetype="image/png")
+    # Build cccc.edu staff directory URL from name
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    directory_url = f"https://www.cccc.edu/faculty-staff-directory/{slug}"
+    # Clean, minimal styling — no logo/circle modules that hurt scannability
+    try:
+        import json as _json
+        payload = _json.dumps({
+            "data": directory_url,
+            "fg_color": "#1d3557",
+            "bg_color": "#FFFFFF",
+            "module_style": "square",
+            "eye_style": "square",
+            "error_correction": "M",
+            "box_size": 10,
+            "border": 2,
+        }).encode()
+        req = urllib.request.Request(
+            "http://localhost:8080/api/qr/text",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return Response(resp.read(), mimetype="image/png")
+    except Exception:
+        return Response(_1x1, mimetype="image/png")
 
 
 # ---------------------------------------------------------------------------

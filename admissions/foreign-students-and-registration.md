@@ -84,9 +84,9 @@ Out-of-state nurse aides may be able to be listed on the **NC Nurse Aide I Regis
 ## Foreign Language Placement
 
 - We do **not** accept another institution's placement for a foreign language.
-- However, students can advance to higher levels: a student can take the credit-by-exam tests for **SPA-111 & SPA-112**. If they earn **85% or higher**, Alyson Cochrane (lead instructor for Humanities) can progress the student to the next level.
+- However, students can advance to higher levels: a student can take the credit-by-exam tests for **SPA-111 & SPA-112**. If they earn **85% or higher**, Alyson Cochrane (Department Chair, English & Humanities) can progress the student to the next level.
 - The student must complete the **Challenge Exam Request Form to Award Credit by Exam**, which includes a section for the student to explain their Spanish background and why they should test into an advanced course.
-- A student can take the proficiency exam in any academic assistance center. It is best to have them contact **Begoña Buxens**, **Clyde Shafer**, or **Alyson Cochrane** for Spanish, or Dept. Chair **Ty Stumpf**.
+- A student can take the proficiency exam in any academic assistance center. It is best to have them contact **Begoña Buxens**, **Clyde Shafer**, or English & Humanities Chair **Alyson Cochrane** for Spanish.
 - High school Spanish is **not** sufficient to place in higher-level Spanish classes.
 
 ---

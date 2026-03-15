@@ -7,7 +7,9 @@ contact details.  Also loads program codes from Programs.xlsx for code/name
 matching and autocomplete.
 """
 
+import logging
 import re
+import urllib.request
 from pathlib import Path
 
 import openpyxl
@@ -21,6 +23,7 @@ CAMPUS_CODES = {
     "LMC": ["Lee", "Sanford", "Lee "],
     "HMC": ["Harnett", "Lillington"],
     "PMC": ["Pittsboro", "Chatham", "Chatham Health"],
+    "CMC": ["Chatham Main", "Chatham Campus"],
     "DUNN": ["Dunn"],
     "ESTC": ["ESTC"],
     "WHC": ["West Harnett Center"],
@@ -52,7 +55,7 @@ def _campus_code_from_text(text: str) -> str:
     if code:
         return code
     # Check for short campus codes in the text (e.g., "PMC", "LMC", "HMC")
-    for short in ("LMC", "HMC", "PMC", "ESTC", "WHC"):
+    for short in ("LMC", "HMC", "PMC", "CMC", "ESTC", "WHC"):
         if short.lower() in t:
             return short
     # Check for canonical campus name substrings (longest first to prefer specific)
@@ -87,7 +90,9 @@ def _parse_name_ranges(text: str) -> list[tuple[str, str]]:
         return [("A", "Z")]
 
     # Find all letter-range patterns: "A-B", "Gr-Gu", "A - Z"
-    ranges = re.findall(r"\b([A-Z][a-z]*)\s*[-–—]\s*([A-Z][a-z]*)\b", t)
+    # Only accept short prefixes (1-2 chars) to avoid false matches on
+    # hyphenated words like "Arts-Teacher", "Pre-Medical", "Arts-Pittsboro".
+    ranges = re.findall(r"\b([A-Z][a-z]?)\s*[-–—]\s*([A-Z][a-z]?)\b", t)
     if ranges:
         return [(s.upper(), e.upper()) for s, e in ranges]
 
@@ -424,7 +429,50 @@ def lookup_advisor(
             matches.sort(key=lambda r: r["program"].lower())
             return matches
 
+    # Ultimate fallback — ignore name ranges entirely.
+    # Priority: program match first, then LMC campus.
+    if program:
+        matches = [
+            r for r in records
+            if r["advisor_name"] and _program_matches(program, r)
+        ]
+        if matches:
+            matches.sort(key=lambda r: r["program"].lower())
+            return matches
+    # Default to LMC advisors
+    matches = [
+        r for r in records
+        if r["advisor_name"] and r.get("campus_code") == "LMC"
+    ]
+    if matches:
+        matches.sort(key=lambda r: r["program"].lower())
+        return matches
+
     return []
+
+
+# ---------------------------------------------------------------------------
+# Contact enrichment — fill gaps from cccc.edu directory
+# ---------------------------------------------------------------------------
+
+# Known emails scraped from cccc.edu for advisors missing contact info
+_DIRECTORY_EMAILS: dict[str, str] = {
+    "Billy Freeman": "bfreeman@cccc.edu",
+    "Steve Heesacker": "dhees901@cccc.edu",
+    "John Wilson": "jwils563@cccc.edu",
+    "Tiffany Needham": "tneed920@cccc.edu",
+    "Roy Allen": "rallen@cccc.edu",
+}
+
+log = logging.getLogger(__name__)
+
+
+def _enrich_records(records: list[dict]) -> None:
+    """Fill in missing email addresses from the directory fallback table."""
+    for rec in records:
+        if not rec.get("email") and rec["advisor_name"] in _DIRECTORY_EMAILS:
+            rec["email"] = _DIRECTORY_EMAILS[rec["advisor_name"]]
+            log.debug("Enriched %s → %s", rec["advisor_name"], rec["email"])
 
 
 # Cached records — loaded once per process
@@ -436,6 +484,7 @@ def get_records() -> list[dict]:
     global _CACHED_RECORDS
     if _CACHED_RECORDS is None:
         _CACHED_RECORDS = parse_advisor_spreadsheet()
+        _enrich_records(_CACHED_RECORDS)
     return _CACHED_RECORDS
 
 
@@ -516,6 +565,97 @@ def _clean_program_name(name: str) -> str:
             result.append(w)
     name = " ".join(result)
     return name
+
+
+def get_advisor_directory() -> list[dict]:
+    """Return a deduplicated, alphabetical list of unique advisors.
+
+    Each entry: {name, email, office, campuses, programs}.
+    """
+    records = get_records()
+    advisors: dict[str, dict] = {}
+    for rec in records:
+        name = rec["advisor_name"]
+        if not name:
+            continue
+        if name not in advisors:
+            advisors[name] = {
+                "name": name,
+                "advisor_id": rec.get("advisor_id", ""),
+                "email": rec.get("email", ""),
+                "office": rec.get("office", ""),
+                "campuses": set(),
+                "programs": set(),
+            }
+        entry = advisors[name]
+        # Keep the best data (prefer non-empty)
+        if not entry["email"] and rec.get("email"):
+            entry["email"] = rec["email"]
+        if not entry["office"] and rec.get("office"):
+            entry["office"] = rec["office"]
+        if rec.get("campus"):
+            entry["campuses"].add(rec["campus"])
+        if rec.get("program"):
+            entry["programs"].add(rec["program"])
+    # Convert sets to sorted lists for JSON serialization
+    result = []
+    for adv in sorted(advisors.values(), key=lambda a: a["name"].lower()):
+        adv["campuses"] = sorted(adv["campuses"])
+        adv["programs"] = sorted(adv["programs"])
+        result.append(adv)
+    return result
+
+
+# Preferred campus group ordering and display names
+_CAMPUS_ORDER = ["LMC", "HMC", "PMC", "CMC", "DUNN", "ESTC", "WHC", "REMOTE", "VIRTUAL"]
+_CAMPUS_LABELS = {
+    "LMC": "Lee Main Campus (LMC)",
+    "HMC": "Harnett Main Campus (HMC)",
+    "PMC": "Pittsboro Main Campus (PMC)",
+    "CMC": "Chatham Main Campus (CMC)",
+    "DUNN": "Dunn Center",
+    "ESTC": "ESTC",
+    "WHC": "West Harnett Center (WHC)",
+    "REMOTE": "Remote",
+    "VIRTUAL": "Virtual",
+}
+
+
+def get_advisor_directory_grouped() -> list[dict]:
+    """Return advisor directory grouped by primary campus.
+
+    Returns a list of dicts: {code, label, advisors}.
+    Groups are ordered by _CAMPUS_ORDER; advisors alphabetically within each.
+    """
+    directory = get_advisor_directory()
+    groups: dict[str, list[dict]] = {}
+    for adv in directory:
+        if adv["campuses"]:
+            code = campus_code_for(adv["campuses"][0])
+            # Handle messy values that don't resolve to a known code
+            if code not in _CAMPUS_LABELS:
+                code = "OTHER"
+        else:
+            code = "OTHER"
+        groups.setdefault(code, []).append(adv)
+
+    # Build ordered result
+    result = []
+    for code in _CAMPUS_ORDER:
+        if code in groups:
+            result.append({
+                "code": code,
+                "label": _CAMPUS_LABELS[code],
+                "advisors": groups.pop(code),
+            })
+    # Remaining (OTHER or unknown)
+    for code, advisors in sorted(groups.items()):
+        result.append({
+            "code": code,
+            "label": _CAMPUS_LABELS.get(code, "Other"),
+            "advisors": advisors,
+        })
+    return result
 
 
 _CACHED_PROGRAMS: list[dict] | None = None

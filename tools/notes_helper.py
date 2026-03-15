@@ -9,6 +9,8 @@ Usage:
     python3 tools/notes_helper.py search KEYWORD [--folder FOLDER]
     python3 tools/notes_helper.py import FILE [--dest DIR] [--dry-run] [--force] [--organize]
     python3 tools/notes_helper.py agent
+    python3 tools/notes_helper.py sync-calendar [--year YEAR] [--dry-run]
+    python3 tools/notes_helper.py sync-directory [--dry-run] [--with-detail]
 """
 
 import argparse
@@ -27,6 +29,9 @@ from _commands import (             # noqa: E402
     cmd_search,
     cmd_sort,
 )
+from _calendar_sync import cmd_sync_calendar  # noqa: E402
+from _directory_sync import cmd_sync_directory  # noqa: E402
+from _email_receiver import cmd_check_email  # noqa: E402
 from _importer import (             # noqa: E402
     cmd_import,
     cmd_process_inbox,
@@ -192,6 +197,70 @@ Examples:
         help="Interactive agent mode — type requests in plain language",
     )
     p_agent.set_defaults(func=cmd_agent)
+
+    # sync-calendar
+    p_sync = sub.add_parser(
+        "sync-calendar",
+        help="Sync academic-calendar.md from calendar.cccc.edu",
+    )
+    p_sync.add_argument(
+        "--year",
+        type=int,
+        default=2026,
+        help="Academic year to sync (default: 2026)",
+    )
+    p_sync.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print the generated markdown without writing to disk",
+    )
+    p_sync.add_argument(
+        "--detail",
+        action="store_true",
+        help="Include tier-3 detail events (orientations, sub-sessions, payment deadlines)",
+    )
+    p_sync.add_argument(
+        "--all",
+        action="store_true",
+        help="Include every academic event (tiers 1-4, no filtering)",
+    )
+    p_sync.set_defaults(func=cmd_sync_calendar)
+
+    # sync-directory
+    p_dir = sub.add_parser(
+        "sync-directory",
+        help="Sync faculty/staff and department directories from cccc.edu",
+    )
+    p_dir.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print the generated markdown without writing to disk",
+    )
+    p_dir.add_argument(
+        "--with-detail",
+        action="store_true",
+        help="Fetch detail pages for contact info (phone, email, campus)",
+    )
+    p_dir.set_defaults(func=cmd_sync_directory)
+
+    # check-email
+    p_email = sub.add_parser(
+        "check-email",
+        help="Check configured IMAP inbox and import unread emails as notes",
+    )
+    p_email.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be imported without saving any files",
+    )
+    p_email.add_argument(
+        "--limit",
+        type=int,
+        default=25,
+        metavar="N",
+        help="Maximum number of unread messages to fetch (default: 25)",
+    )
+    p_email.set_defaults(func=cmd_check_email)
 
     return parser
 

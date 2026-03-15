@@ -25,10 +25,35 @@ People and offices you work with regularly.
 
 ## 🎓 Academic Departments
 
-| Department | Contact Name | Email | Notes |
+Department chairs and their deans — see [department-chairs.md](admissions/department-chairs.md) for the full table with course prefixes.
+
+| Department | Chair | Dean | Notes |
 |---|---|---|---|
-| | Department Chair | | |
-| | Academic Advisor | | |
+| Audio & Video Production Technology | Bill Freeman | Ty Stumpf | |
+| Bioprocess Technology | Brenda Grubb | Sara Newcomb | |
+| Building Construction Technology | Walter Bestwick | Sara Newcomb | |
+| Business Technologies | Maryann Aucompaugh | Sara Newcomb | |
+| Cosmetic Arts | Susan Johnson | Denise Martin | |
+| Culinary Arts & Hospitality | Regina Minter | Denise Martin | |
+| Dental Hygiene & Assisting | Vicky Wesner | Denise Martin | |
+| Education | Ginger Harris Bartholomew | *(verify)* | |
+| English & Humanities | Alyson Cochrane | Ty Stumpf | |
+| Health & Fitness Science | Thadd McElreath | Denise Martin | |
+| Health Information Technology | Erika Parker | Denise Martin | |
+| Industrial Technologies | Wesley Womack | Sara Newcomb | Incl. machining, A/C, electrical |
+| Information & Engineering Technologies | Sandra Castonguay | Ty Stumpf | |
+| Justice Studies | Dustin Miller | *(verify)* | |
+| Library & Info Tech | Lisa O'Quinn | Ty Stumpf | |
+| Math & Science | Lora Long | Ty Stumpf | |
+| Medical Assisting | Melissa Fogarty | Denise Martin | CHSC Site Director |
+| Medical Sonography | Soni Sundquist | Denise Martin | |
+| Nursing | Barbara Campbell | Denise Martin | |
+| Physical Therapist Assistant | Tiffany Needham | Denise Martin | |
+| Social & Human Services | Thea Boyer | Denise Martin | |
+| Social Sciences | Leigh Beam | Ty Stumpf | |
+| Transportation Technology | Craig Ciliberto | Sara Newcomb | |
+| Veterinary Medical Technology | Megan Kelly | Denise Martin | |
+| Welding Technology | Charles W. Bell, II | Sara Newcomb | |
 
 ---
 

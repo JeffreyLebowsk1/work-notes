@@ -31,10 +31,10 @@ The catalog covers all CCCC institutional policies, program requirements, tuitio
 | Applied Technologies | ACHR, Automotive, Biotechnology, Building Construction, Collision Repair, CIM, Electrical, Industrial Systems, Motorcycle, Sustainability, Welding |
 | Arts | AA, AA Teacher Prep, Audio/Video Production |
 | Business Technologies | Accounting & Finance, Business Admin, Healthcare Management, Medical Office, Office Admin, Paralegal |
-| Health Sciences | Dental Assisting, Dental Hygiene, Health & Fitness, HIT, Medical Assisting, Sonography, ADN, PN, PTA, Vet Med Technology, Gen Occ Tech |
+| Health Sciences | Dental Assisting, Dental Hygiene, Health & Fitness, HIT, Medical Assisting, Medical Lab Technology, Respiratory Therapy, Sonography, ADN, PN, PTA, Vet Med Technology, Gen Occ Tech |
 | Professional Services | Barbering, Cosmetology, Culinary Arts, Education, Esthetics, Manicuring, Social & Human Services |
 | Public Safety | Criminal Justice, BLET, EMS, Public Safety Administration |
-| STEM | Associate in Engineering, AS, AS Teacher Prep, Computer Science, Engineering Technology, Math/Science |
+| STEM | Associate in Engineering, AS, AS Teacher Prep, Computer Science, Engineering Technology, Laser & Photonics, Math/Science |
 
 ---
 
