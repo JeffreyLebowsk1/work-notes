@@ -131,7 +131,7 @@ Examples:
     # import
     p_import = sub.add_parser(
         "import",
-        help="Import a note file: auto-detect its destination, rename, and copy it into the repo",
+        help="Import a file: auto-detect its destination, rename, and copy it into the repo",
     )
     p_import.add_argument(
         "file",
@@ -167,7 +167,7 @@ Examples:
     # process-inbox
     p_inbox = sub.add_parser(
         "process-inbox",
-        help="Import all files from the inbox/ folder, then remove them from inbox",
+        help="Import all files from the inbox/ folder, then remove them from inbox; metadata logged to tools/import-log.csv",
     )
     p_inbox.add_argument(
         "--dry-run",

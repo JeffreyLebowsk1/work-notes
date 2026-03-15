@@ -6,12 +6,26 @@ file copying into the correct repository location.
 """
 
 import argparse
+import csv
 import re
+import shutil
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from _commands import cmd_organize
-from _helpers import REPO_ROOT, _parse_note, _relative, pending_inbox_files
+from _helpers import (
+    REPO_ROOT,
+    _IMAGE_EXTS,
+    _PDF_EXTS,
+    _SHEET_EXTS,
+    _TEXT_EXTS,
+    _binary_inbox_dest,
+    _parse_note,
+    _read_pdf_text,
+    _relative,
+    pending_inbox_files,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -137,11 +151,76 @@ def _suggest_dest_dir(folder: str, filename: str) -> Path:
 # ---------------------------------------------------------------------------
 
 
+def _pdf_dest_dir(folder: str) -> Path:
+    """Return the assets destination directory for a PDF given its detected folder.
+
+    PDFs are binary files and are stored in assets/, not in the text-note
+    directories.  Graduation PDFs go into graduation/assets/ (the section's
+    own assets folder); everything else lands in assets/documents/.
+    """
+    if folder == "graduation":
+        return REPO_ROOT / "graduation" / "assets"
+    return REPO_ROOT / "assets" / "documents"
+
+
+# ---------------------------------------------------------------------------
+# Import log
+# ---------------------------------------------------------------------------
+
+#: Append-only CSV log of every file processed by `import` or `process-inbox`.
+IMPORT_LOG_PATH: Path = REPO_ROOT / "tools" / "import-log.csv"
+
+_LOG_HEADER = (
+    "timestamp", "source_name", "extension", "size_bytes",
+    "content_chars", "detected_folder", "confidence", "destination", "status",
+)
+
+
+def _write_import_log(
+    source: Path,
+    content: str,
+    detected_folder: str,
+    confidence: float,
+    dest_path: Path | None,
+    status: str,
+) -> None:
+    """Append one row to ``tools/import-log.csv``.
+
+    Creates the file with a header row on first use.  ``dest_path`` may be
+    ``None`` for error cases where no destination was determined; the
+    ``destination`` column is left empty in that case.
+    """
+    write_header = (
+        not IMPORT_LOG_PATH.exists() or IMPORT_LOG_PATH.stat().st_size == 0
+    )
+    try:
+        dest_display = _relative(dest_path) if dest_path is not None else ""
+    except ValueError:
+        dest_display = str(dest_path) if dest_path is not None else ""
+
+    with IMPORT_LOG_PATH.open("a", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        if write_header:
+            writer.writerow(_LOG_HEADER)
+        writer.writerow([
+            datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+            source.name,
+            source.suffix.lower(),
+            source.stat().st_size,
+            len(content),
+            detected_folder,
+            f"{confidence:.2f}",
+            dest_display,
+            status,
+        ])
+
+
 def cmd_import(args: argparse.Namespace) -> None:
     """
-    Import a Markdown file into the repository:
+    Import a file into the repository:
     analyze its content, determine the best destination folder,
     rename to match naming conventions, and copy it into place.
+    Supports .md, .txt, .pdf, images, and spreadsheets.
     """
     source = Path(args.file)
     if not source.is_absolute():
@@ -149,15 +228,32 @@ def cmd_import(args: argparse.Namespace) -> None:
     if not source.exists():
         sys.exit(f"File not found: {args.file}")
 
-    try:
-        content = source.read_text(encoding="utf-8", errors="replace")
-    except OSError as exc:
-        sys.exit(f"Cannot read file: {exc}")
+    ext = source.suffix.lower()
+    is_text = ext in _TEXT_EXTS
+    is_pdf = ext in _PDF_EXTS
+    # Any non-text, non-PDF file is treated as a binary asset
+    is_binary = not is_text and not is_pdf
+
+    if is_pdf:
+        content = _read_pdf_text(source)
+    elif is_text:
+        try:
+            content = source.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            sys.exit(f"Cannot read file: {exc}")
+    else:
+        content = ""  # binary files — folder detection uses filename only
 
     # Detect destination
     detected_folder, confidence = _detect_folder(source.name, content)
     suggested_filename = _suggest_filename(source, detected_folder, content)
-    dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+
+    if is_pdf:
+        dest_dir = _pdf_dest_dir(detected_folder)
+    elif is_binary:
+        dest_dir = _binary_inbox_dest(source)
+    else:
+        dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
     dest_path = dest_dir / suggested_filename
 
     # Allow the user to override the destination
@@ -179,6 +275,7 @@ def cmd_import(args: argparse.Namespace) -> None:
     print("  📥 Import Analysis")
     print("=" * 60)
     print(f"  Source     : {source}")
+    print(f"  Type       : {ext or '(none)'}")
     print(f"  Detected   : {detected_folder}  (confidence: {confidence:.0%})")
     try:
         dest_display = _relative(dest_path)
@@ -186,29 +283,48 @@ def cmd_import(args: argparse.Namespace) -> None:
         dest_display = str(dest_path)
     print(f"  Destination: {dest_display}")
 
-    meta = _parse_note(source)
-    print(f"  Title      : {meta['title']}")
-    print(f"  Words      : {meta['words']}")
-    if meta["open_items"]:
-        print(f"  Open items : {len(meta['open_items'])}")
-    if meta["dates_in_text"]:
-        print(f"  Dates found: {', '.join(meta['dates_in_text'])}")
+    if is_text:
+        meta = _parse_note(source)
+        print(f"  Title      : {meta['title']}")
+        print(f"  Words      : {meta['words']}")
+        if meta["open_items"]:
+            print(f"  Open items : {len(meta['open_items'])}")
+        if meta["dates_in_text"]:
+            print(f"  Dates found: {', '.join(meta['dates_in_text'])}")
+    elif is_pdf:
+        word_count = len(re.findall(r"\b\w+\b", content))
+        print(f"  Words (PDF): {word_count}")
+    else:
+        size = source.stat().st_size
+        if size >= 1_048_576:
+            size_display = f"{size / 1_048_576:.1f} MB"
+        elif size >= 1024:
+            size_display = f"{size / 1024:.1f} KB"
+        else:
+            size_display = f"{size} B"
+        print(f"  Size       : {size_display}")
     print()
 
     if args.dry_run:
         print("  DRY RUN — no changes made.")
         print(f"  Would copy to: {dest_display}")
         print()
+        _write_import_log(source, content, detected_folder, confidence, dest_path, "dry-run")
         return
 
     if dest_path.exists() and not args.force:
+        _write_import_log(source, content, detected_folder, confidence, dest_path, "skipped")
         sys.exit(
             f"Destination already exists: {dest_display}\n"
             "Use --force to overwrite."
         )
 
     dest_dir.mkdir(parents=True, exist_ok=True)
-    dest_path.write_text(content, encoding="utf-8")
+    if is_text:
+        dest_path.write_text(content, encoding="utf-8")
+    else:
+        shutil.copy2(source, dest_path)
+    _write_import_log(source, content, detected_folder, confidence, dest_path, "imported")
     print(f"  ✅ Imported to: {dest_display}")
     print()
 
@@ -244,16 +360,32 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
 
     for source in candidates:
         print(f"  ── {source.name}")
-        try:
-            content = source.read_text(encoding="utf-8", errors="replace")
-        except OSError as exc:
-            print(f"     ❌ Cannot read: {exc}\n")
-            skipped.append(source.name)
-            continue
+        ext = source.suffix.lower()
+        is_text = ext in _TEXT_EXTS
+        is_pdf = ext in _PDF_EXTS
+        is_binary = not is_text and not is_pdf
+
+        if is_pdf:
+            content = _read_pdf_text(source)
+        elif is_text:
+            try:
+                content = source.read_text(encoding="utf-8", errors="replace")
+            except OSError as exc:
+                print(f"     ❌ Cannot read: {exc}\n")
+                _write_import_log(source, "", "(unknown)", 0.0, None, "error")
+                skipped.append(source.name)
+                continue
+        else:
+            content = ""  # binary asset — folder detection from filename only
 
         detected_folder, confidence = _detect_folder(source.name, content)
         suggested_filename = _suggest_filename(source, detected_folder, content)
-        dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
+        if is_pdf:
+            dest_dir = _pdf_dest_dir(detected_folder)
+        elif is_binary:
+            dest_dir = _binary_inbox_dest(source)
+        else:
+            dest_dir = _suggest_dest_dir(detected_folder, suggested_filename)
         dest_path = dest_dir / suggested_filename
 
         try:
@@ -266,17 +398,23 @@ def cmd_process_inbox(args: argparse.Namespace) -> None:
 
         if args.dry_run:
             print(f"     DRY RUN — would copy to: {dest_display}\n")
+            _write_import_log(source, content, detected_folder, confidence, dest_path, "dry-run")
             imported.append(source.name)
             continue
 
         if dest_path.exists() and not args.force:
             print("     ⚠️  Destination already exists — skipped (use --force to overwrite)\n")
+            _write_import_log(source, content, detected_folder, confidence, dest_path, "skipped")
             skipped.append(source.name)
             continue
 
         dest_dir.mkdir(parents=True, exist_ok=True)
-        dest_path.write_text(content, encoding="utf-8")
+        if is_text:
+            dest_path.write_text(content, encoding="utf-8")
+        else:
+            shutil.copy2(source, dest_path)
         source.unlink()
+        _write_import_log(source, content, detected_folder, confidence, dest_path, "imported")
         print(f"     ✅ Imported → {dest_display}\n")
         imported.append(source.name)
 
