@@ -14,6 +14,7 @@ A running log of changes that affect how we work — policy updates, new softwar
 | [📁 General Updates](./general-updates.md) | Everything else |
 | [⚠️ Conflicts Pending Resolution](./conflicts-pending.md) | Known conflicts between administrative decisions and the published catalog |
 | [📘 Academic Advising Policy Manual (2025-2026)](./academic-advising-policy-2025-2026.md) | Comprehensive advising & registrar policy reference for O&A and Registrar staff |
+| [📚 CCCC Catalog 2025-2026 Reference](./cccc-catalog-2025-2026.md) | Table of contents, known outdated sections, and guidance on what to use instead |
 
 ## How to Use This Section
 
