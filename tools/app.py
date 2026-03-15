@@ -56,6 +56,11 @@ app.config["COMPRESS_MIN_SIZE"] = 500
 # The delay lets Flask finish binding to the port before the browser hits it.
 _BROWSER_OPEN_DELAY = 1.0
 
+# How often (seconds) the background watcher checks for new git commits.
+# When auto-sync or a manual pull brings in new files, this ensures the
+# in-memory indexes refresh without a service restart.
+_INDEX_POLL_INTERVAL = 30
+
 # ---------------------------------------------------------------------------
 # Section definitions — top-level folders with display metadata
 # ---------------------------------------------------------------------------
@@ -459,6 +464,39 @@ def _reload_indexes() -> None:
             if _ap.is_file() and _ap.name not in _ASSET_SKIP:
                 _rel = str(_ap.relative_to(_ASSETS_DIR)).replace("\\", "/")
                 _ASSET_INDEX[_rel] = _ap
+
+
+# ---------------------------------------------------------------------------
+# Background index watcher — detects new commits from auto-sync / git pull
+# and rebuilds in-memory indexes so new files appear without a restart.
+# ---------------------------------------------------------------------------
+
+def _get_git_head() -> str | None:
+    """Return the current HEAD commit hash, or None on failure."""
+    head_file = REPO_ROOT / ".git" / "HEAD"
+    try:
+        ref = head_file.read_text(encoding="utf-8").strip()
+        if ref.startswith("ref: "):
+            ref_path = REPO_ROOT / ".git" / ref[5:]
+            return ref_path.read_text(encoding="utf-8").strip()
+        return ref
+    except OSError:
+        return None
+
+
+def _index_watcher() -> None:
+    """Poll git HEAD every _INDEX_POLL_INTERVAL seconds; reload on change."""
+    last_head = _get_git_head()
+    while True:
+        time.sleep(_INDEX_POLL_INTERVAL)
+        current = _get_git_head()
+        if current and current != last_head:
+            _reload_indexes()
+            last_head = current
+
+
+_watcher = threading.Thread(target=_index_watcher, daemon=True)
+_watcher.start()
 
 
 def _log_to_daily_log(filename: str, subfolder: str) -> None:
