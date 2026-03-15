@@ -10,6 +10,7 @@ Or from the tools/ directory:
 Then open http://localhost:4200 in your browser.
 """
 
+import logging
 import mimetypes
 import os
 import re
@@ -19,6 +20,7 @@ import threading
 import time
 import urllib.parse
 import webbrowser
+from datetime import datetime, timezone
 from pathlib import Path
 
 import markdown as md
@@ -682,6 +684,47 @@ def note_new():
                     dest.parent.mkdir(parents=True, exist_ok=True)
                     dest.write_text(content, encoding="utf-8")
                     _reload_indexes()
+                    if section_key == "daily-logs":
+                        repo = str(REPO_ROOT)
+                        rel_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
+                        date_str = safe_name.removesuffix(".md")
+                        ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+                        commit_msg = f"docs: add daily log {date_str} (via web app) [{ts}]"
+                        try:
+                            result = subprocess.run(
+                                ["git", "-C", repo, "add", rel_path],
+                                capture_output=True, text=True, timeout=30,
+                            )
+                            if result.returncode != 0:
+                                logging.warning(
+                                    "git add failed for daily log %s: %s",
+                                    safe_name, result.stderr.strip(),
+                                )
+                            else:
+                                result = subprocess.run(
+                                    ["git", "-C", repo, "commit", "-m", commit_msg],
+                                    capture_output=True, text=True, timeout=30,
+                                )
+                                if result.returncode != 0:
+                                    logging.warning(
+                                        "git commit failed for daily log %s: %s",
+                                        safe_name, result.stderr.strip(),
+                                    )
+                                else:
+                                    result = subprocess.run(
+                                        ["git", "-C", repo, "push"],
+                                        capture_output=True, text=True, timeout=60,
+                                    )
+                                    if result.returncode != 0:
+                                        logging.warning(
+                                            "git push failed for daily log %s: %s",
+                                            safe_name, result.stderr.strip(),
+                                        )
+                        except subprocess.TimeoutExpired:
+                            logging.warning(
+                                "Git operation timed out while committing daily log %s",
+                                safe_name,
+                            )
                     note_path = str(dest.relative_to(REPO_ROOT)).replace("\\", "/")
                     return redirect(url_for("note", note_path=note_path))
 
@@ -742,9 +785,6 @@ def asset_commit():
     This is the one-click alternative to running ``git add assets/ && git commit
     && git push`` from the terminal after uploading files through the web UI.
     """
-    import logging
-    from datetime import datetime, timezone
-
     repo = str(REPO_ROOT)
     try:
         # Stage everything inside assets/
