@@ -18,6 +18,7 @@ import sys
 import threading
 import time
 import urllib.parse
+import urllib.request
 import webbrowser
 from pathlib import Path
 
@@ -830,23 +831,84 @@ def api_ask():
 # ---------------------------------------------------------------------------
 
 
+def _parse_calendar_events() -> list[dict]:
+    """Parse academic-calendar.md and return structured event dicts."""
+    cal_path = REPO_ROOT / "academic-calendar.md"
+    if not cal_path.exists():
+        return []
+    text = cal_path.read_text(encoding="utf-8", errors="replace")
+    MONTHS = {
+        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+        "january": 1, "february": 2, "march": 3, "april": 4, "june": 6,
+        "july": 7, "august": 8, "september": 9, "october": 10,
+        "november": 11, "december": 12,
+    }
+    events: list[dict] = []
+    current_year = None
+    current_section = ""
+    for line in text.splitlines():
+        stripped = line.strip()
+        # Detect section headings: ## 🗓️ Spring 2026, ## 🏖️ Holiday ...
+        if stripped.startswith("##") and not stripped.startswith("###"):
+            ym = re.search(r"(\d{4})", stripped)
+            if ym:
+                current_year = int(ym.group(1))
+            sm = re.search(r"[🗓📌🏖️]\s*(.+)", stripped)
+            if sm:
+                current_section = sm.group(1).strip()
+            elif stripped.lstrip("#").strip():
+                current_section = stripped.lstrip("#").strip()
+            continue
+        if not stripped.startswith("|") or "---" in stripped or not current_year:
+            continue
+        parts = [p.strip() for p in stripped.split("|") if p.strip()]
+        if len(parts) < 2 or parts[0] in ("Event", "Task", "Holiday"):
+            continue
+        event_name = parts[0]
+        date_str = parts[1]
+        notes = parts[2] if len(parts) > 2 else ""
+        # "Jan 1" or "January 1, 2026"
+        dm = re.match(r"(\w+)\s+(\d{1,2})", date_str)
+        if not dm:
+            continue
+        month_str = dm.group(1).lower()
+        day = int(dm.group(2))
+        month = MONTHS.get(month_str)
+        if not month:
+            continue
+        # If date string contains a year, use it instead
+        ym2 = re.search(r"(\d{4})", date_str)
+        year = int(ym2.group(1)) if ym2 else current_year
+        try:
+            from datetime import date as _date
+            d = _date(year, month, day)
+            events.append({
+                "date": d.isoformat(),
+                "name": event_name,
+                "notes": notes,
+                "section": current_section,
+            })
+        except ValueError:
+            pass
+    return events
+
+
 @app.route("/calendar")
 def calendar_page():
-    """Render the academic calendar as a standalone page."""
+    """Render the academic calendar with grid and list views."""
     cal_path = REPO_ROOT / "academic-calendar.md"
     if not cal_path.exists():
         return render_template("404.html"), 404
     content_html = _render_markdown(
         cal_path.read_text(encoding="utf-8", errors="replace")
     )
+    import json
+    events = _parse_calendar_events()
     return render_template(
-        "note.html",
-        note=_parse_note(cal_path),
+        "calendar.html",
         content_html=content_html,
-        section_key="",
-        meta={"title": "Reference", "icon": "📅", "color": "teal", "description": ""},
-        prev_note=None,
-        next_note=None,
+        events_json=json.dumps(events),
     )
 
 
@@ -924,8 +986,8 @@ def api_advisor_qr():
     directory_url = f"https://www.cccc.edu/faculty-staff-directory/{slug}"
     # Clean, minimal styling — no logo/circle modules that hurt scannability
     try:
-        import requests as req
-        payload = {
+        import json as _json
+        payload = _json.dumps({
             "data": directory_url,
             "fg_color": "#1d3557",
             "bg_color": "#FFFFFF",
@@ -934,10 +996,15 @@ def api_advisor_qr():
             "error_correction": "M",
             "box_size": 10,
             "border": 2,
-        }
-        resp = req.post("http://localhost:8080/api/qr/text", json=payload, timeout=10)
-        resp.raise_for_status()
-        return Response(resp.content, mimetype="image/png")
+        }).encode()
+        req = urllib.request.Request(
+            "http://localhost:8080/api/qr/text",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return Response(resp.read(), mimetype="image/png")
     except Exception:
         return Response(_1x1, mimetype="image/png")
 
