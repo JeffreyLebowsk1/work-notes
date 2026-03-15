@@ -147,14 +147,14 @@ When advising CCP students — especially those new to college coursework — em
 
 | Grade Level | Advisor | Phone | Email |
 |---|---|---|---|
-| All 9th/10th Grade | Megan Burgess | (919) 718-7232 | mferg264@cccc.edu |
+| All 9th/10th Grade | Megan Burgess | (919) 718-7232 | mburgess@cccc.edu |
 | All 11th/12th Grade | Mary Schmid Carter | (919) 718-7542 | mschmid@cccc.edu |
 
 ### Out-of-Area & NCVPS
 
 | Student Type | Advisor | Phone | Email |
 |---|---|---|---|
-| All out-of-area students & NCVPS students | Megan Burgess | (919) 718-7232 | mferg264@cccc.edu |
+| All out-of-area students & NCVPS students | Megan Burgess | (919) 718-7232 | mburgess@cccc.edu |
 
 ---
 

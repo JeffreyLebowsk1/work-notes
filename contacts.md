@@ -4,6 +4,8 @@ People and offices you work with regularly.
 
 > ⚠️ Do not store passwords or sensitive personal data here.
 
+> 📧 **CCCC email pattern:** Most staff have `firstinitial+lastname@cccc.edu`. Some older accounts use `firstinitial+first4oflastname+3digits@cccc.edu`. After a married name change, the old address may still forward — always use the current-name address.
+
 ---
 
 ## 🏛️ Internal — Registrar's Office
@@ -86,7 +88,7 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 
 | Vendor / Organization | Contact | Email | Phone | Notes |
 |---|---|---|---|---|
-| Graduation Coordinator | Matt Dilworth | mdilw269@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
+| Graduation Coordinator | Matt Dilworth | mdilworth@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
 | Financial Assistance / Regalia | Abby Walker | awalker@cccc.edu | (919) 718-7332 | CCCC Foundation — see also: [Foundation section](#-cccc-foundation) above |
 | Advisor Hub Issues | Jim Johnson | jjohn087@cccc.edu | (919) 718-7349 | Advising Hub upload/access issues |
 | Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) | | | Black caps and gowns; no personal stoles/cords |

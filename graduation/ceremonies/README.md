@@ -58,7 +58,7 @@ flowchart TD
 
 | Role | Name | Contact |
 |---|---|---|
-| Graduation Coordinator | Matt Dilworth | (919) 718-7063; mdilw269@cccc.edu |
+| Graduation Coordinator | Matt Dilworth | (919) 718-7063; mdilworth@cccc.edu |
 | Student Records / Policy | Student Records and Registrar's Office | (919) 718-7201; admissions@cccc.edu |
 | Advisor Hub Issues | Jim Johnson | (919) 718-7349; jjohn087@cccc.edu |
 | Cap & Gown Vendor Rep | [Herff Jones](https://www.herffjones.com) | *(pending — confirm ordering portal link)* |
