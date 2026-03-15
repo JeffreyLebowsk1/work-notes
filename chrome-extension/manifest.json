@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "CCCC Advisor Lookup",
+  "version": "0.1.0",
+  "description": "Quick advisor search and QR code for CCCC staff.",
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon48.png"
+  },
+  "permissions": ["clipboardWrite", "storage"],
+  "host_permissions": [
+    "http://127.0.0.1:4200/api/advisor*",
+    "https://cccc.ngrok.app/api/advisor*"
+  ]
+}
