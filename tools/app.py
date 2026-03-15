@@ -399,7 +399,7 @@ if _ASSETS_DIR.is_dir():
 
 # Relative path to the CCCC logo within the asset index
 _CCCC_LOGO_REL = next(
-    (r for r in _ASSET_INDEX if r.lower().startswith("images/cccc")),
+    (r for r in _ASSET_INDEX if "cccc" in r.lower() or "central-carolina" in r.lower()),
     None,
 )
 

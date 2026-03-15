@@ -18,13 +18,16 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="https://www.cccc.edu/" class="nav-brand" target="_blank" rel="noopener" title="Central Carolina Community College">
-                {% if cccc_logo_url %}
-                <img src="{{ cccc_logo_url }}" alt="CCCC" class="nav-logo">
-                {% else %}
-                <span class="nav-logo-text">CCCC Notes</span>
-                {% endif %}
-            </a>
+            <div class="nav-left">
+                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+                <a href="https://www.cccc.edu/" class="nav-brand" target="_blank" rel="noopener" title="Central Carolina Community College">
+                    {% if cccc_logo_url %}
+                    <img src="{{ cccc_logo_url }}" alt="CCCC" class="nav-logo">
+                    {% else %}
+                    <span class="nav-logo-text">CCCC Notes</span>
+                    {% endif %}
+                </a>
+            </div>
             <div class="nav-links">
                 <a href="{{ url_for('section', section_key='graduation') }}" class="nav-hide-mobile">🎓 Graduation</a>
                 <a href="{{ url_for('advisor_page') }}" class="nav-hide-mobile">👤 Advisors</a>
@@ -34,7 +37,6 @@
                 <a href="{{ url_for('email_templates') }}" class="nav-hide-mobile">📧 Email</a>
                 <a href="{{ url_for('search') }}" class="btn-search">🔍 Search</a>
                 <a href="{{ url_for('assistant') }}" class="btn-ai">🤖 AI</a>
-                <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
             </div>
         </div>
     </nav>
