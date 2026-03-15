@@ -1,4 +1,22 @@
 # 📁 General Updates
+> Reminder: Log all staff job title changes here, including office moves, new responsibilities, and department assignments. This ensures accurate tracking and documentation for future reference.
+## 2026-03-15 — Amy Gustavson Office Move
+
+**Category:** Workflow / General
+**Affects:** Student Records & Registrar, BOOST, Title III, Office Directory
+
+### What Changed
+Amy Gustavson moved from Marchant Hall to Hockaday Hall, SRR office. Exact office number is not yet confirmed. She now handles Title III and BOOST.
+
+### Why It Changed
+Staff reassignment and office relocation for program support.
+
+### What You Need to Do Differently
+- Update office location for Amy Gustavson in all directories and contact lists
+- Route BOOST and Title III inquiries to Amy Gustavson at Hockaday Hall
+- Confirm and document office number when available
+
+---
 
 A log of miscellaneous updates that don't fit neatly into another category.
 

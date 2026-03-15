@@ -1438,7 +1438,13 @@ body { overflow-x: hidden; width: 100%; }
   border-color: var(--navy);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--navy) 15%, transparent);
 }
-.advisor-dir-programs { line-height: 1.4; }
+.advisor-dir-programs {
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 /* ---- Contacts page ---- */
 .contacts-section { margin-bottom: 2rem; }

@@ -44,6 +44,14 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = config.SECRET_KEY
 app.config["MAX_CONTENT_LENGTH"] = config.MAX_UPLOAD_BYTES
 
+
+@app.template_filter('short_program')
+def _short_program_filter(name: str) -> str:
+    """Strip parenthetical program codes for card display."""
+    import re as _re
+    return _re.sub(r'\s*\([^)]*\)\s*$', '', name).strip()
+
+
 # Gzip compression for all responses > 500 bytes
 Compress(app)
 app.config["COMPRESS_MIMETYPES"] = [
@@ -1189,9 +1197,14 @@ def contacts_page():
     photos = _advisor.get_photo_map()
     for section in sections:
         for contact in section["contacts"]:
-            name = contact.get("name", "").strip()
-            if name:
-                contact["photo_url"] = photos.get(name.lower(), "")
+            # Try every field that might hold a person's name
+            for key in ("name", "chair", "contact", "dean"):
+                candidate = contact.get(key, "").strip()
+                if candidate:
+                    url = photos.get(candidate.lower(), "")
+                    if url:
+                        contact["photo_url"] = url
+                        break
     return render_template("contacts.html", sections=sections)
 
 

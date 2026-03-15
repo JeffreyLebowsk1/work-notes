@@ -68,7 +68,7 @@
                             </div>
                             <div class="staff-card-details">
                                 {% if adv.campuses %}<span class="staff-card-tag">{{ adv.campuses | join(', ') }}</span>{% endif %}
-                                {% if adv.programs %}<span class="advisor-dir-programs">{{ adv.programs | join(' · ') }}</span>{% endif %}
+                                {% if adv.programs %}<span class="advisor-dir-programs" title="{{ adv.programs | join(' · ') }}">{{ adv.programs | map('short_program') | join(' · ') }}</span>{% endif %}
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
 
     /* ---- Build result card HTML ---- */
     function resultCard(r) {
-        const meta = [r.program, r.campus, r.name_range_text].filter(Boolean).join(' · ');
+        const meta = [shortProgram(r.program), r.campus, r.name_range_text].filter(Boolean).join(' · ');
         return `<div class="advisor-result-card" data-advisor='${JSON.stringify(r).replace(/'/g, "&#39;")}'>
             <div class="advisor-result-name">${esc(r.advisor_name)}</div>
             <div class="advisor-result-meta">${esc(meta)}</div>
@@ -136,6 +136,7 @@
         d.textContent = s || '';
         return d.innerHTML;
     }
+    function shortProgram(s) { return (s || '').replace(/\s*\([^)]*\)\s*$/, ''); }
 
     /* ---- Open detail modal ---- */
     function showAdvisor(r) {
@@ -144,7 +145,7 @@
         const name = r.advisor_name || r.name || '';
         const id = r.advisor_id || '';
         const campus = r.campus || (r.campuses ? r.campuses.join(', ') : '—');
-        const program = r.program || (r.programs ? r.programs.join(', ') : '—');
+        const program = r.program ? shortProgram(r.program) : (r.programs ? r.programs.map(shortProgram).join(', ') : '—');
         const emailLink = r.email
             ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`
             : '—';

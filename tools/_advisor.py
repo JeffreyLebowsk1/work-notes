@@ -27,8 +27,7 @@ CAMPUS_CODES = {
     "DUNN": ["Dunn"],
     "ESTC": ["ESTC"],
     "WHC": ["West Harnett Center"],
-    "REMOTE": ["Remote"],
-    "VIRTUAL": ["Virtual"],
+    "REMOTE": ["Remote", "Virtual"],
 }
 
 # Reverse map: canonical campus name (lowered) -> short code
@@ -143,6 +142,14 @@ def _clean_advisor_name(name: str) -> str:
     """Strip informal notes from advisor name text."""
     if not name:
         return ""
+    # Known corrections for first-name-only entries
+    _NAME_CORRECTIONS = {
+        "brenda": "Brenda Grubb",
+        "lisa": "Lisa Smelser",
+    }
+    corrected = _NAME_CORRECTIONS.get(name.strip().lower())
+    if corrected:
+        return corrected
     # Not really a person's name
     if re.search(r"(?i)once officially admitted|will be assigned", name):
         return ""
@@ -295,20 +302,46 @@ def parse_advisor_spreadsheet(filepath: Path | None = None) -> list[dict]:
         # Extract embedded program codes from the data row
         embedded_codes = _extract_codes(a)
 
-        records.append({
-            "program": current_program,
-            "campus": campus,
-            "campus_code": campus_code,
-            "name_range_text": a,
-            "name_ranges": name_ranges,
-            "range_start": range_start,
-            "range_end": range_end,
-            "advisor_name": advisor_name,
-            "advisor_id": advisor_id,
-            "office": office,
-            "email": email,
-            "embedded_codes": embedded_codes,
-        })
+        # Split "X or Y" advisor entries into separate records
+        _SPLIT_ADVISORS = {
+            "brenda or lisa": [
+                {"name": "Brenda Grubb"},
+                {"name": "Lisa Smelser"},
+            ],
+        }
+        split_key = raw_name.strip().lower()
+        advisor_list = _SPLIT_ADVISORS.get(split_key)
+        if advisor_list:
+            for entry in advisor_list:
+                records.append({
+                    "program": current_program,
+                    "campus": campus,
+                    "campus_code": campus_code,
+                    "name_range_text": a,
+                    "name_ranges": name_ranges,
+                    "range_start": range_start,
+                    "range_end": range_end,
+                    "advisor_name": entry["name"],
+                    "advisor_id": advisor_id,
+                    "office": office,
+                    "email": email,
+                    "embedded_codes": embedded_codes,
+                })
+        else:
+            records.append({
+                "program": current_program,
+                "campus": campus,
+                "campus_code": campus_code,
+                "name_range_text": a,
+                "name_ranges": name_ranges,
+                "range_start": range_start,
+                "range_end": range_end,
+                "advisor_name": advisor_name,
+                "advisor_id": advisor_id,
+                "office": office,
+                "email": email,
+                "embedded_codes": embedded_codes,
+            })
 
     wb.close()
     return records
@@ -462,17 +495,30 @@ _DIRECTORY_EMAILS: dict[str, str] = {
     "John Wilson": "jwils563@cccc.edu",
     "Tiffany Needham": "tneed920@cccc.edu",
     "Roy Allen": "rallen@cccc.edu",
+    "Lisa Smelser": "lsmel384@cccc.edu",
+    "Brenda Grubb": "bgrub218@cccc.edu",
 }
 
 log = logging.getLogger(__name__)
 
+# Override campus for advisors whose spreadsheet data is wrong/missing
+_CAMPUS_OVERRIDES: dict[str, str] = {
+    "Roy Allen": "ESTC",
+    "Kris Rixon": "CMC",
+}
+
 
 def _enrich_records(records: list[dict]) -> None:
-    """Fill in missing email addresses from the directory fallback table."""
+    """Fill in missing emails and fix campus assignments from fallback tables."""
     for rec in records:
-        if not rec.get("email") and rec["advisor_name"] in _DIRECTORY_EMAILS:
-            rec["email"] = _DIRECTORY_EMAILS[rec["advisor_name"]]
-            log.debug("Enriched %s → %s", rec["advisor_name"], rec["email"])
+        name = rec["advisor_name"]
+        if not rec.get("email") and name in _DIRECTORY_EMAILS:
+            rec["email"] = _DIRECTORY_EMAILS[name]
+            log.debug("Enriched email %s → %s", name, rec["email"])
+        if name in _CAMPUS_OVERRIDES:
+            code = _CAMPUS_OVERRIDES[name]
+            rec["campus"] = CAMPUS_CODES[code][0]
+            rec["campus_code"] = code
 
 
 # Cached records — loaded once per process
@@ -671,7 +717,7 @@ def get_advisor_directory() -> list[dict]:
 
 
 # Preferred campus group ordering and display names
-_CAMPUS_ORDER = ["LMC", "HMC", "PMC", "CMC", "DUNN", "ESTC", "WHC", "REMOTE", "VIRTUAL"]
+_CAMPUS_ORDER = ["LMC", "HMC", "PMC", "CMC", "DUNN", "ESTC", "WHC", "REMOTE"]
 _CAMPUS_LABELS = {
     "LMC": "Lee Main Campus (LMC)",
     "HMC": "Harnett Main Campus (HMC)",
@@ -680,8 +726,7 @@ _CAMPUS_LABELS = {
     "DUNN": "Dunn Center",
     "ESTC": "ESTC",
     "WHC": "West Harnett Center (WHC)",
-    "REMOTE": "Remote",
-    "VIRTUAL": "Virtual",
+    "REMOTE": "Remote / Virtual",
 }
 
 

@@ -11,22 +11,114 @@
 
     <div class="staff-grid">
         {% for nav in navigators %}
-        <a class="staff-card" href="{{ nav.profile_url }}" target="_blank" rel="noopener noreferrer">
-            {% if nav.photo_url %}
+        <div class="staff-card" data-navigator='{{ nav | tojson | e }}'>
             <div class="staff-photo-wrap">
+                {% if nav.photo_url %}
                 <img class="staff-photo" src="{{ nav.photo_url }}" alt="{{ nav.name }}" loading="lazy">
-            </div>
-            {% else %}
-            <div class="staff-photo-wrap">
+                {% else %}
                 <div class="staff-avatar" data-initials="{{ nav.name.split()[0][0] }}{{ nav.name.split()[-1][0] }}"></div>
+                {% endif %}
             </div>
-            {% endif %}
             <div class="staff-card-body">
                 <div class="staff-card-name">{{ nav.name }}</div>
                 <div class="staff-card-role">{{ nav.role }}</div>
+                {% if nav.email %}
+                <div class="staff-card-meta"><a href="mailto:{{ nav.email }}">{{ nav.email }}</a></div>
+                {% endif %}
+                {% if nav.office %}
+                <div class="staff-card-meta">📍 {{ nav.office }}</div>
+                {% endif %}
             </div>
-        </a>
+        </div>
         {% endfor %}
     </div>
+    <div style="margin-top:2rem;text-align:center;">
+        <a href="/contacts" class="btn btn-secondary">View Full Directory Listing</a>
+    </div>
 </div>
+{% endblock %}
+<!-- Navigator detail modal -->
+<div id="navigator-modal" class="advisor-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Navigator details">
+    <div class="advisor-modal">
+        <button class="advisor-modal-close" id="modal-close" aria-label="Close">&times;</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+(function() {
+    const overlay = document.getElementById('navigator-modal');
+    const body = document.getElementById('modal-body');
+    const closeBtn = document.getElementById('modal-close');
+
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+    }
+
+    function closeModal() { overlay.style.display = 'none'; }
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    function showNavigator(nav) {
+        const name = nav.name || '';
+        const role = nav.role || '';
+        const email = nav.email || '';
+        const office = nav.office || '';
+        const photoUrl = nav.photo_url || '';
+        const initials = name.split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).join('').slice(0, 2) || '?';
+        const avatarHtml = photoUrl
+            ? `<img class="advisor-photo-lg" src="${esc(photoUrl)}" alt="${esc(name)}">`
+            : `<div class="advisor-avatar advisor-avatar-lg" data-initials="${esc(initials)}"></div>`;
+        const emailHtml = email.includes('@')
+            ? `<a href="mailto:${esc(email)}">${esc(email)}</a>`
+            : esc(email || '—');
+        const qrParams = new URLSearchParams({
+            name: name,
+            email: email,
+            office: office,
+            photo: photoUrl,
+        });
+        const qrSrc = `/api/advisor/qr?${qrParams.toString()}`;
+        let rows = '';
+        if (role) rows += `<tr><td>Title</td><td>${esc(role)}</td></tr>`;
+        if (office) rows += `<tr><td>Office</td><td>${esc(office)}</td></tr>`;
+        rows += `<tr><td>Email</td><td>${emailHtml}</td></tr>`;
+        body.innerHTML = `
+            <div class="advisor-detail-header">
+                ${avatarHtml}
+                <div>
+                    <div class="advisor-detail-name">${esc(name)}</div>
+                    ${role ? `<div class="advisor-detail-id">${esc(role)}</div>` : ''}
+                </div>
+            </div>
+            <table class="advisor-detail-table">
+                ${rows}
+            </table>
+            <div class="advisor-qr-row">
+                <div class="advisor-qr-item">
+                    <img src="${qrSrc}" alt="QR" width="200" height="200" loading="lazy">
+                    <span class="advisor-qr-label">Scan for staff page</span>
+                </div>
+            </div>`;
+        overlay.style.display = 'flex';
+    }
+
+    document.querySelectorAll('.staff-card[data-navigator]').forEach(function(card) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            const data = JSON.parse(card.getAttribute('data-navigator'));
+            showNavigator(data);
+        });
+    });
+})();
+</script>
 {% endblock %}
