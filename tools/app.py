@@ -762,7 +762,11 @@ def note_new():
 
 @app.route("/assets/upload", methods=["POST"])
 def asset_upload():
-    """Accept a multipart file upload and store it in the assets folder."""
+    """Accept a multipart file upload and store it in the assets folder.
+
+    Markdown files (.md) are automatically sorted into the appropriate
+    section directory using keyword-based detection from the importer.
+    """
     subfolder = request.form.get("subfolder", "").strip()
     if subfolder not in _ASSET_SUBFOLDERS:
         return redirect(url_for("assets_browser") + "?msg=Invalid+subfolder&msg_type=error")
@@ -774,6 +778,28 @@ def asset_upload():
     safe_name = secure_filename(uploaded.filename)
     if not safe_name:
         return redirect(url_for("assets_browser") + "?msg=Invalid+filename&msg_type=error")
+
+    # Markdown files are notes — sort them into the right section directory.
+    if safe_name.lower().endswith(".md"):
+        import _importer
+
+        content = uploaded.read().decode("utf-8", errors="replace")
+        folder, _conf = _importer._detect_folder(safe_name, content)
+        if folder not in _SECTION_DIRS:
+            folder = "admissions"  # safe default for unknown content
+        dest_dir = _SECTION_DIRS[folder]
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        dest = dest_dir / safe_name.lower()
+        if dest.exists():
+            return redirect(
+                url_for("assets_browser")
+                + f"?msg={safe_name}+already+exists+in+{folder}&msg_type=error"
+            )
+        dest.write_text(content, encoding="utf-8")
+        _log_to_daily_log(safe_name, folder)
+        return redirect(
+            url_for("note", note_path=str(dest.relative_to(REPO_ROOT)).replace("\\", "/"))
+        )
 
     dest_dir = _ASSETS_DIR / subfolder
     dest_dir.mkdir(parents=True, exist_ok=True)
