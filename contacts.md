@@ -12,9 +12,13 @@ People and offices you work with regularly.
 
 | Name | Title | Email | Phone | Notes |
 |---|---|---|---|---|
-| | Registrar | | | |
-| | Assistant Registrar | | | |
-| | Records Specialist | | | |
+| Jamie Tyson Childress | Dean of Enrollment / Registrar | jchildress@cccc.edu | | |
+| Haley Thomas | Associate Registrar | hthomas@cccc.edu | | |
+| Abbey Marsh | Records Assessment Specialist | amarsh@cccc.edu | | |
+| Gavin Nelson | Records Assessment Specialist | gnelson@cccc.edu | | |
+| Madison Williams | Records Assessment Specialist | mwilliams@cccc.edu | | |
+| Jennifer Phillips | Enrollment Services Coordinator | jphillips@cccc.edu | | |
+| Matt Dilworth | Graduation Coordinator & Records Assessment Specialist | mdilworth@cccc.edu | (919) 718-7063 | Graduation eligibility questions |
 | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | Records, policy, graduation status |
 
 ---
@@ -57,13 +61,16 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Financial Aid | Amber Werkheiser | Director | awerkheiser@cccc.edu | (919) 718-7311 | R2T4 processing |
 | Financial Aid | Angie Estes | VA Benefits Coordinator | aestes@cccc.edu | (919) 718-7233 | VA Educational Benefits / GI Bill® |
 | Financial Aid | Financial Aid Office | General | finaid@cccc.edu | (919) 718-7229 | General inquiries |
-| Bursar / Student Accounts | | | | | |
-| Admissions | | | | | |
-| IT Help Desk | | | | | |
-| Provost's Office | | | | | |
-| Student Affairs | | | | | |
-| Disability Services | | | | | |
-| International Student Office | | | | | |
+| Bursar / Student Accounts | Business Office | | | | Tuition billing and payment inquiries |
+| Admissions | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | Applications, enrollment, re-admission |
+| IT Help Desk | Michelle Coore | Help Desk Support | mcoore@cccc.edu | | Technical support |
+| IT Help Desk | MontE Christman | Executive Director of Information Technology | mchristman@cccc.edu | | IT escalations |
+| Provost's Office | Jon Matthews | Provost, Harnett County | jmatthews@cccc.edu | | |
+| Provost's Office | Mark Hall | Provost, Chatham County | mhall@cccc.edu | | |
+| Provost's Office | Kristi Short | Vice President / Chief Academic Officer | kshort@cccc.edu | | Academic affairs, college-wide |
+| Student Affairs | Ken Hoyle | Vice President of Student Services | khoyle@cccc.edu | | |
+| Disability Services | Aaron Love | Coordinator of Student Accessibility Services | alove@cccc.edu | | |
+| International Student Office | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | F-1/SEVIS — coordinate with SRR/Admissions |
 | Student Onboarding & Success | Sarah Shannon-Mohamed | Director | sshannon@cccc.edu | (919) 718-7300 | LMC lead |
 | Student Onboarding & Success | Megan Burgess | Dean | mburgess@cccc.edu | (919) 718-7232 | Escalation for Academic Warning/Suspension policy |
 | Student Onboarding & Success (LMC) | Office | General | onboarding@cccc.edu | (919) 718-7300 | Lee Main Campus navigator referrals |
