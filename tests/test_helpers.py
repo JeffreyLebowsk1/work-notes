@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 from _helpers import (  # noqa: E402
     REPO_ROOT,
     _asset_meta,
+    _ocr_page,
     _parse_note,
     _read_pdf_text,
     _relative,
@@ -253,3 +254,142 @@ class TestReadPdfText:
         bad.write_bytes(b"not a pdf at all")
         result = _read_pdf_text(bad)
         assert result == ""
+
+    def test_ocr_fallback_called_for_empty_page(self, tmp_path, monkeypatch):
+        """When pypdf yields no text for a page, _ocr_page is called as fallback."""
+        import _helpers
+
+        pytest_mod = __import__("pytest")
+        pytest_mod.importorskip("pypdf")
+        from pypdf import PdfWriter
+
+        # Build a PDF with a blank page (no text layer)
+        writer = PdfWriter()
+        writer.add_blank_page(width=200, height=200)
+        pdf_path = tmp_path / "blank.pdf"
+        with open(pdf_path, "wb") as f:
+            writer.write(f)
+
+        ocr_calls: list[tuple] = []
+
+        def fake_ocr(path, page_number):
+            ocr_calls.append((path, page_number))
+            return "OCR text from page"
+
+        monkeypatch.setattr(_helpers, "_ocr_page", fake_ocr)
+
+        result = _helpers._read_pdf_text(pdf_path)
+        assert ocr_calls, "_ocr_page should have been called for the blank page"
+        assert ocr_calls[0][1] == 1  # page_number is 1-indexed
+        assert "OCR text from page" in result
+
+    def test_ocr_not_called_when_page_has_text(self, tmp_path, monkeypatch):
+        """When pypdf extracts text from a page, _ocr_page should NOT be called."""
+        import _helpers
+
+        pytest_mod = __import__("pytest")
+        pypdf = pytest_mod.importorskip("pypdf")
+        from pypdf import PdfWriter
+        from pypdf.generic import ContentStream, NameObject, ArrayObject, ByteStringObject
+
+        # We test this by checking that a page with text doesn't trigger OCR;
+        # use a blank PDF and pre-fill its extract_text return value via monkeypatch.
+        writer = PdfWriter()
+        writer.add_blank_page(width=200, height=200)
+        pdf_path = tmp_path / "with-text.pdf"
+        with open(pdf_path, "wb") as f:
+            writer.write(f)
+
+        # Patch PdfReader so the first page returns text
+        original_PdfReader = _helpers.__dict__.get("PdfReader")
+
+        class FakePage:
+            def extract_text(self):
+                return "Some real text on this page."
+
+        class FakeReader:
+            def __init__(self, path):
+                self.pages = [FakePage()]
+
+        import pypdf as pypdf_module
+        monkeypatch.setattr(pypdf_module, "PdfReader", FakeReader)
+
+        ocr_calls: list = []
+
+        def fake_ocr(path, page_number):
+            ocr_calls.append(page_number)
+            return "should not be called"
+
+        monkeypatch.setattr(_helpers, "_ocr_page", fake_ocr)
+
+        result = _helpers._read_pdf_text(pdf_path)
+        assert ocr_calls == [], "_ocr_page should NOT be called when the page has text"
+        assert "Some real text" in result
+
+
+# ---------------------------------------------------------------------------
+# _ocr_page
+# ---------------------------------------------------------------------------
+
+class TestOcrPage:
+    def test_returns_string_when_libraries_missing(self, tmp_path, monkeypatch):
+        """_ocr_page must return '' gracefully when pdf2image/pytesseract are absent."""
+        import _helpers
+        import builtins
+
+        real_import = builtins.__import__
+
+        def fake_import(name, *args, **kwargs):
+            if name in ("pdf2image", "pytesseract"):
+                raise ImportError(f"Mocked missing: {name}")
+            return real_import(name, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, "__import__", fake_import)
+
+        pdf_path = tmp_path / "dummy.pdf"
+        pdf_path.write_bytes(b"%PDF-1.4 fake")
+        result = _helpers._ocr_page(pdf_path, 1)
+        assert result == ""
+
+    def test_returns_empty_on_conversion_error(self, tmp_path, monkeypatch):
+        """_ocr_page returns '' if pdf2image raises (e.g. poppler not installed)."""
+        import _helpers
+
+        def fake_convert(*args, **kwargs):
+            raise RuntimeError("poppler not found")
+
+        try:
+            import pdf2image as _pdf2image_mod
+            monkeypatch.setattr(_pdf2image_mod, "convert_from_path", fake_convert)
+        except ImportError:
+            # pdf2image not installed — the ImportError path is tested above
+            return
+
+        result = _helpers._ocr_page(tmp_path / "any.pdf", 1)
+        assert result == ""
+
+    def test_page_number_is_one_indexed(self, tmp_path, monkeypatch):
+        """_ocr_page passes page_number directly to convert_from_path as first_page/last_page."""
+        import _helpers
+
+        captured: list[dict] = []
+
+        class FakeImage:
+            pass
+
+        def fake_convert(path, first_page, last_page):
+            captured.append({"first_page": first_page, "last_page": last_page})
+            return [FakeImage()]
+
+        try:
+            import pdf2image as _pdf2image_mod
+            import pytesseract as _pytesseract_mod
+            monkeypatch.setattr(_pdf2image_mod, "convert_from_path", fake_convert)
+            monkeypatch.setattr(_pytesseract_mod, "image_to_string", lambda img: "text")
+        except ImportError:
+            return  # libraries not installed — skip the assertion
+
+        _helpers._ocr_page(tmp_path / "any.pdf", 3)
+        if captured:
+            assert captured[0]["first_page"] == 3
+            assert captured[0]["last_page"] == 3

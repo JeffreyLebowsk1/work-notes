@@ -3,7 +3,7 @@
 *Source: `assets/documents/Transcript_Waiver_Form.pdf`*  
 *Print from `assets/documents/` or request a copy from the Registrar's Office.*
 
-> **Note:** This PDF is an image-based (scanned) form — pypdf extracts zero characters from it. OCR *could* technically read the printed field labels, but since the form is blank (no filled-in data), OCR would only reproduce the labels that are already documented below. **OCR is not needed for this file.**
+> **Note:** This PDF is an image-based (scanned) form — pypdf extracts zero characters from it. The inbox processor will automatically OCR it with Tesseract if `pytesseract`, `pdf2image`, and the `tesseract-ocr`/`poppler-utils` system packages are installed (see [SETUP.md](../SETUP.md)). Without those, the PDF is still copied to `assets/documents/` — but since this is a **blank intake form**, there is no filled-in data to recover regardless. Print the PDF and complete it by hand.
 
 ## Purpose
 

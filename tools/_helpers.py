@@ -10,18 +10,45 @@ from datetime import datetime
 from pathlib import Path
 
 
+def _ocr_page(path: Path, page_number: int) -> str:
+    """OCR a single PDF page using pdf2image + pytesseract.
+
+    *page_number* is 1-indexed (first page = 1), matching the convention
+    used by pdf2image's ``first_page``/``last_page`` parameters.
+
+    Returns an empty string if pdf2image or pytesseract are not installed,
+    if Tesseract is not available on the system PATH, or on any other error.
+    Callers should treat a non-empty return value as best-effort OCR output.
+    """
+    try:
+        from pdf2image import convert_from_path  # type: ignore[import]
+        import pytesseract  # type: ignore[import]
+    except ImportError:
+        return ""
+
+    try:
+        images = convert_from_path(
+            str(path), first_page=page_number, last_page=page_number
+        )
+        if not images:
+            return ""
+        return pytesseract.image_to_string(images[0])
+    except Exception:  # noqa: BLE001 — Tesseract/poppler errors are environment-dependent
+        return ""
+
+
 def _read_pdf_text(path: Path) -> str:
-    """Extract plain text from a PDF file using pypdf.
+    """Extract plain text from a PDF file.
+
+    Uses pypdf for fast native text extraction.  For pages that yield no
+    text (image-based / scanned pages), automatically falls back to OCR via
+    ``pdf2image`` + ``pytesseract`` if those libraries are available and
+    Tesseract is installed on the system.  This means the function handles
+    both digital-native PDFs and scanned documents transparently.
 
     Returns an empty string if pypdf is not installed or the file cannot
-    be parsed (e.g. encrypted, image-only, or corrupt PDF).
-
-    OCR note: An audit of all PDFs in assets/documents/ (2026-03-15) found
-    that only one file — Transcript_Waiver_Form.pdf — is fully image-based,
-    and it is a blank intake form with no data content to recover.  Three
-    decorative/cover pages in the CCCC Catalog are also image-only.  OCR
-    is therefore not needed for the current document set; pypdf text
-    extraction is sufficient.
+    be parsed (e.g. encrypted or corrupt PDF).  OCR failures on individual
+    pages are silently ignored; the rest of the document is still returned.
     """
     try:
         from pypdf import PdfReader  # type: ignore[import]
@@ -31,9 +58,15 @@ def _read_pdf_text(path: Path) -> str:
     try:
         reader = PdfReader(str(path))
         parts: list[str] = []
-        for page in reader.pages:
+        for i, page in enumerate(reader.pages, start=1):
             text = page.extract_text() or ""
-            parts.append(text)
+            if text.strip():
+                parts.append(text)
+            else:
+                # Page has no text layer — try OCR as a fallback
+                ocr_text = _ocr_page(path, i)
+                if ocr_text.strip():
+                    parts.append(ocr_text)
         return "\n".join(parts)
     except (OSError, ValueError, UnicodeDecodeError):
         return ""

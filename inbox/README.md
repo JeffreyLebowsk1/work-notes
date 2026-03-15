@@ -38,4 +38,7 @@ python3 tools/notes_helper.py process-inbox --force --organize
 - `README.md` (this file) is always skipped.
 - Hidden files (starting with `.`) are always skipped.
 - `.md` and `.txt` files are imported as notes into the correct section folder.
-- `.pdf` files have their text extracted (via pypdf) for folder detection, then the PDF is copied to `assets/documents/` (or the section's assets folder).  Other file types should be placed directly in `assets/`.
+- `.pdf` files have their text extracted for folder detection, then the PDF is copied to `assets/documents/` (or the section's assets folder).
+  - **Digital PDFs** (text layer present) — text is extracted directly with pypdf.
+  - **Scanned PDFs** (image-only pages) — each image-only page is automatically OCR'd via Tesseract if `pytesseract`, `pdf2image`, and the `tesseract-ocr`/`poppler-utils` system packages are installed. Without those, scanned pages are silently skipped but the PDF is still copied to assets.
+- Other file types should be placed directly in `assets/`.

@@ -157,6 +157,17 @@ pip install -r tools/requirements-web.txt
 
 > 💡 Skip the `venv` lines if you prefer to install globally — just run `pip install -r tools/requirements-web.txt` directly.
 
+#### OCR support for scanned PDFs (optional)
+
+The inbox processor can OCR scanned PDFs automatically, but this requires two **system packages** in addition to the Python dependencies above:
+
+| Package | Purpose | Install |
+|---|---|---|
+| **Tesseract OCR** | Text recognition engine | `sudo apt install tesseract-ocr` (Linux) · `brew install tesseract` (macOS) |
+| **Poppler** | PDF-to-image renderer | `sudo apt install poppler-utils` (Linux) · `brew install poppler` (macOS) |
+
+Without these, the inbox processor still works — it just won't be able to read scanned/image-only pages. Digital-native PDFs always work with pypdf alone.
+
 ---
 
 ### Step 3 — (Optional) Configure an AI key
