@@ -17,6 +17,10 @@ tools/.env
 .work-notes.log
 .work-notes.pid
 
+# Spreadsheets containing student PII — NEVER commit these
+assets/spreadsheets/*.xlsx
+assets/spreadsheets/*.xls
+
 # Prevent binary/document files from being committed to the inbox.
 # Only .md and .txt files belong there; everything else goes in assets/.
 inbox/*.pdf
