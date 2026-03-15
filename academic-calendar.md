@@ -67,20 +67,27 @@ Key dates and deadlines for the current and upcoming academic year.
 
 | Event | Date | Notes |
 |---|---|---|
-| *No events found yet* | | Check [calendar.cccc.edu](https://calendar.cccc.edu/) |
-
+| Semester Start | August 17, 2026 | Monday |
+| Last Day to Add/Drop | August 21, 2026 | Friday; end of first week |
+| Graduation Application Deadline | October 16, 2026 | Around midterm; confirm exact date |
+| Thanksgiving Break | November 23–27, 2026 | Monday–Friday; Thanksgiving is Nov 26 |
+| Last Day of Classes | December 10, 2026 | Thursday |
+| Finals Week | December 14–18, 2026 | Monday–Friday |
+| Commencement Ceremony | December 17, 2026 | Confirm date and venue |
+| Grades Due | December 21, 2026 | Monday after finals |
+| Semester End | December 18, 2026 | Friday; last day of finals |
 
 ---
 
-## 📌 Registrar Office Key Dates
+## 📌 Registrar Office Key Dates — Spring 2026
 
 | Task | Date | Notes |
 |---|---|---|
-| Graduation list to Provost | | |
-| Diploma order deadline | | |
-| Commencement program due to printer | | |
-| IPEDS reporting deadline | | |
-| Enrollment certification deadline | | |
+| Graduation list to Provost | April 25, 2026 | After degree audits complete |
+| Diploma order deadline | April 30, 2026 | Confirm with diploma vendor |
+| Commencement program due to printer | April 11, 2026 | |
+| IPEDS reporting deadline | October 15, 2026 | Fall enrollment IPEDS survey |
+| Enrollment certification deadline | September 15, 2026 | NSC enrollment reporting; confirm exact date |
 |
 
 ---

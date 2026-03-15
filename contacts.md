@@ -14,9 +14,12 @@ People and offices you work with regularly.
 |---|---|---|---|---|
 | Jamie Tyson Childress | Dean of Enrollment / Registrar | jchildress@cccc.edu | | |
 | Haley Thomas | Associate Registrar | hthomas@cccc.edu | | |
-| Abbey Marsh | Records Specialist | amarsh@cccc.edu | | |
-| Gavin Nelson | Records Specialist | gnelson@cccc.edu | | |
-| Student Records and Registrar's Office (SRR) | General | admissions@cccc.edu | (919) 718-7201 | Records, policy, graduation status |
+| Abbey Marsh | Records Assessment Specialist | amarsh@cccc.edu | | |
+| Gavin Nelson | Records Assessment Specialist | gnelson@cccc.edu | | |
+| Madison Williams | Records Assessment Specialist | mwilliams@cccc.edu | | |
+| Jennifer Phillips | Enrollment Services Coordinator | jphillips@cccc.edu | | |
+| Matt Dilworth | Graduation Coordinator & Records Assessment Specialist | mdilworth@cccc.edu | (919) 718-7063 | Graduation eligibility questions |
+| Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | Records, policy, graduation status |
 
 ---
 
@@ -83,20 +86,23 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Financial Aid | Amber Werkheiser | Director | awerkheiser@cccc.edu | (919) 718-7311 | R2T4 processing |
 | Financial Aid | Angie Estes | VA Benefits Coordinator | aestes@cccc.edu | (919) 718-7233 | VA Educational Benefits / GI Bill® |
 | Financial Aid | Financial Aid Office | General | finaid@cccc.edu | (919) 718-7229 | General inquiries |
-| Bursar / Student Accounts | | | | | |
-| Admissions (SRR) | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | |
-| IT Help Desk | | | | | |
-| Provost's Office | | | | | |
-| Student Affairs | | | | | |
-| Disability Services | Aaron Love | | alove@cccc.edu | | |
-| International Student Office | | | | | |
+| Bursar / Student Accounts | Business Office | | | (919) 718-7517 | Tuition billing and payment inquiries |
+| Admissions | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | Applications, enrollment, re-admission |
+| IT Help Desk | Michelle Coore | Help Desk Support | mcoore@cccc.edu | | Technical support |
+| IT Help Desk | MontE Christman | Executive Director of Information Technology | mchristman@cccc.edu | | IT escalations |
+| Provost's Office | Jon Matthews | Provost, Harnett County | jmatthews@cccc.edu | | |
+| Provost's Office | Mark Hall | Provost, Chatham County | mhall@cccc.edu | | |
+| Provost's Office | Kristi Short | Vice President / Chief Academic Officer | kshort@cccc.edu | | Academic affairs, college-wide |
+| Student Affairs | Ken Hoyle | Vice President of Student Services | khoyle@cccc.edu | | |
+| Disability Services | Aaron Love | Coordinator of Student Accessibility Services | alove@cccc.edu | | |
+| International Student Office | Student Records and Registrar's Office | General | admissions@cccc.edu | (919) 718-7201 | F-1/SEVIS — coordinate with SRR/Admissions |
 | Student Onboarding & Success | Sarah Shannon-Mohamed | Director | sshannon@cccc.edu | (919) 718-7300 | LMC lead |
 | Student Onboarding & Success | Megan Burgess | Dean | mburgess@cccc.edu | (919) 718-7232 | Escalation for Academic Warning/Suspension policy |
 | Student Onboarding & Success (LMC) | Office | General | onboarding@cccc.edu | (919) 718-7300 | Lee Main Campus navigator referrals |
-| Student Onboarding & Success (HMC) | Brian Post | Navigator Lead | | (984) 368-4911 (Text) | Harnett Main Campus |
-| Student Onboarding & Success (HMC) | J. Dwayne Garnett | Navigator | | (984) 368-4550 (Text) | Harnett Main Campus |
-| Student Onboarding & Success (CMC) | James Carr | Navigator Lead | | (984) 368-5159 (Text) | Chatham Main Campus |
-| Student Onboarding & Success (CMC) | Kim Brzozowski | Navigator | | (984) 368-5354 (Text) | Chatham Main Campus |
+| Student Onboarding & Success (HMC) | Brian Post | Director, Student Onboarding and Success | bpost@cccc.edu | (984) 368-4911 (Text) | Harnett Main Campus |
+| Student Onboarding & Success (HMC) | J. Dwayne Garnett | Associate Director / Limited Enrollment Coordinator | jgarnett@cccc.edu | (984) 368-4550 (Text) | Harnett Main Campus |
+| Student Onboarding & Success (CMC) | James Carr | Associate Director, Student Onboarding and Success | jcarr@cccc.edu | (984) 368-5159 (Text) | Chatham Main Campus |
+| Student Onboarding & Success (CMC) | Kim Brzozowski | Navigator | kbrzozowski@cccc.edu | (984) 368-5354 (Text) | Chatham Main Campus |
 
 ---
 
@@ -117,11 +123,16 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Graduation Coordinator | Matt Dilworth | mdilworth@cccc.edu | (919) 718-7063 | General graduation eligibility questions |
 | Financial Assistance / Regalia | Abby Walker | awalker@cccc.edu | (919) 718-7332 | CCCC Foundation — see also: [Foundation section](#-cccc-foundation) above |
 | Advisor Hub Issues | Jim Johnson | jjohn087@cccc.edu | (919) 718-7349 | Advising Hub upload/access issues |
-| Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) | | | Black caps and gowns; no personal stoles/cords |
+| Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) — Barry Weseleski, Rep | | | Black caps and gowns; no personal stoles/cords |
 | Diploma Vendor | | | | |
-| Ceremony Venue | Dennis A. Wicker Civic & Conference Center | | | Spring 2026 commencement venue |
+| Ceremony Venue | Dennis A. Wicker Civic & Conference Center — David Foster, Director | dfoster@cccc.edu | | Spring 2026 commencement venue |
+| Ceremony Announcer | Dr. Kristi Short, VP/CAO | kshort@cccc.edu | | Graduation ceremony announcer |
+| Ceremony Performer | Peter McArthur | | | Bagpiper |
+| Ceremony Décor — Ferns | Patrik Kelly | | | Fern/greenery rentals for ceremony |
+| Ceremony Décor — Flowers | Floral Designs by Eddie | | | Flowers and bows for ceremony |
 | Photographer / Videographer | | | | |
-| [National Student Clearinghouse](https://www.studentclearinghouse.org) | | | | |
+| Print Vendor (Backup) | Jones Printing | | | Backup to in-house Print Shop |
+| [National Student Clearinghouse](https://www.studentclearinghouse.org) | Enrollment & degree verification service | | | Used for enrollment verification and degree reporting |
 
 ---
 
@@ -129,8 +140,8 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 
 | Service | Contact / URL | Notes |
 |---|---|---|
-| Third-Party Transcript Service | | |
-| Enrollment Verification Service | | |
+| Third-Party Transcript Service | [Parchment](https://www.parchment.com) / [National Student Clearinghouse](https://www.studentclearinghouse.org) | Outgoing official transcripts sent electronically |
+| Enrollment Verification Service | [National Student Clearinghouse](https://www.studentclearinghouse.org) | Enrollment and degree verification for students and employers |
 
 ---
 
@@ -141,7 +152,7 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Pamela McKoy | ConEd Health Program Certificates | pmckoy@cccc.edu | (919) 545-8662 |
 | Bev Brock | Director of Health Programs (ConEd) | bbrock@cccc.edu | (919) 545-8042 |
 | Dr. Nutan Varma | Pre-2007 CE Transcripts / Adult High School / Harnett CCR Coordinator | nvarma@cccc.edu | (910) 814-8975 |
-| Chesure Tate | AHS Transcript Backup (Bell Welcome Center) | | (919) 718-7716 |
+| Chesure Tate | AHS Transcript Backup (Bell Welcome Center) | ctate@cccc.edu | (919) 718-7716 |
 | Anita Green | Lee/Chatham CCR Coordinator | agreen@cccc.edu | (919) 545-8669 |
 
 ---
