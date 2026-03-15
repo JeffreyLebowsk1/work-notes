@@ -664,7 +664,7 @@ def note_new():
                 section_dir = _SECTION_DIRS[section_key]
                 # Daily-log notes live in a YYYY-MM/ sub-folder — auto-create it.
                 if section_key == "daily-logs":
-                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}\.md$", safe_name)
+                    date_match = re.match(r"^(\d{4}-\d{2})-\d{2}", safe_name)
                     dest = (
                         section_dir / date_match.group(1) / safe_name
                         if date_match
