@@ -337,7 +337,9 @@ ngrok config add-authtoken <YOUR_AUTHTOKEN>
 Get your token at <https://dashboard.ngrok.com/get-started/your-authtoken>.
 
 **`ERR_NGROK_3200` — "Your account has reached the maximum number of simultaneous ngrok agent sessions"**
-Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears when a previous ngrok process is still running (or was not shut down cleanly) and that cap has been reached.
+Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears in two common situations:
+
+*Cause 1 — a previous ngrok process is still running:* A stale ngrok session is using up the free-tier slot.
 
 `linux-setup.sh --ngrok` now detects and stops any existing ngrok session automatically before starting a new one, so simply **re-running the script** is the easiest fix:
 ```bash
@@ -351,6 +353,18 @@ pgrep -x ngrok | xargs -r kill
 ngrok http 4200
 ```
 If that doesn't help, open the [ngrok dashboard → Agents](https://dashboard.ngrok.com/tunnels/agents) in your browser, terminate any listed sessions, and then run `ngrok http 4200` again.
+
+*Cause 2 — starting multiple named tunnels at once (e.g. `ngrok start foo bar baz`):* The `ngrok start` command with multiple tunnel names tries to open several tunnels in one session. Free-tier accounts are limited to **one tunnel at a time**, so naming more than one triggers ERR_NGROK_3200 immediately.
+
+Fix: start only the single tunnel you need, or use the plain HTTP tunnel instead:
+```bash
+# Start just one named tunnel from your ngrok config:
+ngrok start foo
+
+# Or skip named tunnels entirely and point directly at the app port:
+ngrok http 4200
+```
+If you genuinely need multiple simultaneous tunnels, that requires an ngrok paid plan.
 
 **ngrok shows a browser warning page ("You are about to visit…")**
 This is ngrok's free-tier interstitial. Click **Visit Site** to continue — it only appears once per browser session. It does not affect the app itself.
