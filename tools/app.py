@@ -951,6 +951,7 @@ def advisor_page():
         sections=SECTIONS,
         campus_codes=_advisor.CAMPUS_CODES,
         directory=_advisor.get_advisor_directory(),
+        grouped_directory=_advisor.get_advisor_directory_grouped(),
     )
 
 

@@ -25,10 +25,10 @@ gantt
     Student Line-up :coord3, after coord2, 10d
     
     section Final Preparations
-    Rehearsal & Logistics :final1, 7d
+    Rehearsal & Logistics :final1, after coord3, 7d
     
     section Ceremony
-    Ceremony Day :crit final2, 1d
+    Ceremony Day :crit, final2, after final1, 1d
     
     section Post-Ceremony
     Diplomas & Evaluations :post1, after final2, 10d

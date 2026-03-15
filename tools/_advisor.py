@@ -606,6 +606,58 @@ def get_advisor_directory() -> list[dict]:
     return result
 
 
+# Preferred campus group ordering and display names
+_CAMPUS_ORDER = ["LMC", "HMC", "PMC", "CMC", "DUNN", "ESTC", "WHC", "REMOTE", "VIRTUAL"]
+_CAMPUS_LABELS = {
+    "LMC": "Lee Main Campus (LMC)",
+    "HMC": "Harnett Main Campus (HMC)",
+    "PMC": "Pittsboro Main Campus (PMC)",
+    "CMC": "Chatham Main Campus (CMC)",
+    "DUNN": "Dunn Center",
+    "ESTC": "ESTC",
+    "WHC": "West Harnett Center (WHC)",
+    "REMOTE": "Remote",
+    "VIRTUAL": "Virtual",
+}
+
+
+def get_advisor_directory_grouped() -> list[dict]:
+    """Return advisor directory grouped by primary campus.
+
+    Returns a list of dicts: {code, label, advisors}.
+    Groups are ordered by _CAMPUS_ORDER; advisors alphabetically within each.
+    """
+    directory = get_advisor_directory()
+    groups: dict[str, list[dict]] = {}
+    for adv in directory:
+        if adv["campuses"]:
+            code = campus_code_for(adv["campuses"][0])
+            # Handle messy values that don't resolve to a known code
+            if code not in _CAMPUS_LABELS:
+                code = "OTHER"
+        else:
+            code = "OTHER"
+        groups.setdefault(code, []).append(adv)
+
+    # Build ordered result
+    result = []
+    for code in _CAMPUS_ORDER:
+        if code in groups:
+            result.append({
+                "code": code,
+                "label": _CAMPUS_LABELS[code],
+                "advisors": groups.pop(code),
+            })
+    # Remaining (OTHER or unknown)
+    for code, advisors in sorted(groups.items()):
+        result.append({
+            "code": code,
+            "label": _CAMPUS_LABELS.get(code, "Other"),
+            "advisors": advisors,
+        })
+    return result
+
+
 _CACHED_PROGRAMS: list[dict] | None = None
 
 

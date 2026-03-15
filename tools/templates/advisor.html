@@ -43,20 +43,32 @@
     <div class="advisor-directory">
         <div class="advisor-directory-header">
             <h2>📋 Advisor Directory</h2>
-            <p>{{ directory | length }} advisors</p>
+            <p>{{ directory | length }} advisors across {{ grouped_directory | length }} campuses</p>
             <input type="text" id="dir-filter" class="advisor-dir-filter" placeholder="Filter by name, program, or campus…">
         </div>
-        <div class="advisor-dir-list" id="dir-list">
-            {% for adv in directory %}
-            <div class="advisor-dir-card" data-search="{{ adv.name | lower }} {{ adv.programs | join(' ') | lower }} {{ adv.campuses | join(' ') | lower }} {{ adv.email | lower }}">
-                <div class="advisor-dir-name">{{ adv.name }}</div>
-                <div class="advisor-dir-meta">
-                    {% if adv.email %}<a href="mailto:{{ adv.email }}">{{ adv.email }}</a>{% endif %}
-                    {% if adv.office %}<span>📍 {{ adv.office }}</span>{% endif %}
-                </div>
-                <div class="advisor-dir-details">
-                    {% if adv.campuses %}<span class="advisor-dir-tag">{{ adv.campuses | join(', ') }}</span>{% endif %}
-                    {% if adv.programs %}<span class="advisor-dir-programs">{{ adv.programs | join(' · ') }}</span>{% endif %}
+        <div id="dir-list">
+            {% for group in grouped_directory %}
+            <div class="advisor-dir-group" data-campus="{{ group.code }}">
+                <h3 class="advisor-dir-group-header">🏫 {{ group.label }} <span class="advisor-dir-group-count">({{ group.advisors | length }})</span></h3>
+                <div class="advisor-dir-list">
+                    {% for adv in group.advisors %}
+                    <div class="advisor-dir-card" data-search="{{ adv.name | lower }} {{ adv.programs | join(' ') | lower }} {{ adv.campuses | join(' ') | lower }} {{ adv.email | lower }} {{ group.label | lower }}" data-advisor='{{ adv | tojson | e }}'>
+                        <div class="advisor-dir-card-row">
+                            <div class="advisor-avatar" data-initials="{{ adv.name.split()[0][0] }}{{ adv.name.split()[-1][0] }}"></div>
+                            <div class="advisor-dir-card-info">
+                                <div class="advisor-dir-name">{{ adv.name }}</div>
+                                <div class="advisor-dir-meta">
+                                    {% if adv.email %}<a href="mailto:{{ adv.email }}">{{ adv.email }}</a>{% endif %}
+                                    {% if adv.office %}<span>📍 {{ adv.office }}</span>{% endif %}
+                                </div>
+                                <div class="advisor-dir-details">
+                                    {% if adv.campuses %}<span class="advisor-dir-tag">{{ adv.campuses | join(', ') }}</span>{% endif %}
+                                    {% if adv.programs %}<span class="advisor-dir-programs">{{ adv.programs | join(' · ') }}</span>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
@@ -205,10 +217,22 @@
 .advisor-modal-close:hover { color: var(--text, #212529); }
 
 /* Modal content */
+.advisor-detail-header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.advisor-avatar-lg {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    font-size: 1.1rem;
+}
 .advisor-detail-name {
     font-size: 1.35rem;
     font-weight: 700;
-    margin-bottom: .35rem;
+    margin-bottom: .15rem;
     color: var(--text, #212529);
 }
 .advisor-detail-id {
@@ -307,20 +331,66 @@
     border-color: #1d3557;
     box-shadow: 0 0 0 3px rgba(29,53,87,.15);
 }
+/* Campus group headers */
+.advisor-dir-group {
+    margin-bottom: 1.5rem;
+}
+.advisor-dir-group-header {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy, #1d3557);
+    margin: 0 0 .65rem;
+    padding-bottom: .4rem;
+    border-bottom: 2px solid var(--border, #dee2e6);
+}
+.advisor-dir-group-count {
+    font-weight: 400;
+    font-size: .9rem;
+    color: var(--text-muted, #6c757d);
+}
 .advisor-dir-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: .75rem;
+}
+/* Advisor avatar */
+.advisor-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: var(--navy, #1d3557);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .85rem;
+    letter-spacing: .03em;
+}
+.advisor-avatar::after {
+    content: attr(data-initials);
+}
+.advisor-dir-card-row {
+    display: flex;
+    gap: .75rem;
+    align-items: flex-start;
+}
+.advisor-dir-card-info {
+    flex: 1;
+    min-width: 0;
 }
 .advisor-dir-card {
     background: var(--surface, #f8f9fa);
     border: 1px solid var(--border, #dee2e6);
     border-radius: 10px;
     padding: .85rem 1rem;
-    transition: border-color .15s;
+    transition: border-color .15s, box-shadow .15s;
+    cursor: pointer;
 }
 .advisor-dir-card:hover {
     border-color: #1d3557;
+    box-shadow: 0 2px 8px rgba(29,53,87,.12);
 }
 .advisor-dir-name {
     font-weight: 700;
@@ -411,27 +481,40 @@
 
     /* ---- Open detail modal ---- */
     function showAdvisor(r) {
+        /* Normalize: directory entries use 'name'/'campuses'/'programs' arrays;
+           search results use 'advisor_name'/'campus'/'program' strings. */
+        const name = r.advisor_name || r.name || '';
+        const id = r.advisor_id || '';
+        const campus = r.campus || (r.campuses ? r.campuses.join(', ') : '—');
+        const program = r.program || (r.programs ? r.programs.join(', ') : '—');
         const emailLink = r.email
             ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`
             : '—';
         const qrParams = new URLSearchParams({
-            name: r.advisor_name,
-            id: r.advisor_id || '',
+            name: name,
+            id: id,
             email: r.email || '',
             office: r.office || '',
-            program: r.program || '',
+            program: r.program || (r.programs ? r.programs[0] : '') || '',
         });
         const qrSrc = `/api/advisor/qr?${qrParams.toString()}`;
 
+        const initials = name.split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).join('').slice(0, 2);
+
         body.innerHTML = `
-            <div class="advisor-detail-name">${esc(r.advisor_name)}</div>
-            <div class="advisor-detail-id">ID# ${esc(r.advisor_id || '—')}</div>
+            <div class="advisor-detail-header">
+                <div class="advisor-avatar advisor-avatar-lg" data-initials="${esc(initials)}"></div>
+                <div>
+                    <div class="advisor-detail-name">${esc(name)}</div>
+                    <div class="advisor-detail-id">ID# ${esc(id || '—')}</div>
+                </div>
+            </div>
             <table class="advisor-detail-table">
-                <tr><td>Program</td><td>${esc(r.program || '—')}</td></tr>
-                <tr><td>Campus</td><td>${esc(r.campus || '—')}</td></tr>
+                <tr><td>Program</td><td>${esc(program)}</td></tr>
+                <tr><td>Campus</td><td>${esc(campus)}</td></tr>
                 <tr><td>Office</td><td>${esc(r.office || '—')}</td></tr>
                 <tr><td>Email</td><td>${emailLink}</td></tr>
-                <tr><td>Students</td><td>${esc(r.name_range_text || 'All')}</td></tr>
+                ${r.name_range_text ? `<tr><td>Students</td><td>${esc(r.name_range_text)}</td></tr>` : ''}
             </table>
             <div class="advisor-qr-row">
                 <div class="advisor-qr-item">
@@ -495,14 +578,28 @@
         }
     });
 
+    /* ---- Directory card click ---- */
+    const dirList = document.getElementById('dir-list');
+    dirList.addEventListener('click', function(e) {
+        const card = e.target.closest('.advisor-dir-card');
+        if (!card || e.target.closest('a')) return; /* don't hijack email links */
+        showAdvisor(JSON.parse(card.dataset.advisor));
+    });
+
     /* ---- Directory filter ---- */
     const dirFilter = document.getElementById('dir-filter');
     const dirCards = document.querySelectorAll('.advisor-dir-card');
+    const dirGroups = document.querySelectorAll('.advisor-dir-group');
     if (dirFilter) {
         dirFilter.addEventListener('input', function() {
             const q = this.value.trim().toLowerCase();
             dirCards.forEach(function(card) {
                 card.style.display = (!q || card.dataset.search.includes(q)) ? '' : 'none';
+            });
+            /* Hide group headers when all their cards are hidden */
+            dirGroups.forEach(function(group) {
+                const visible = group.querySelectorAll('.advisor-dir-card:not([style*="display: none"])');
+                group.style.display = visible.length ? '' : 'none';
             });
         });
     }
