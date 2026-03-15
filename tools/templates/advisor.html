@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+
+{% block title %}Advisor Lookup — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>👤 Advisor Lookup</h1>
+        <p>Find a student's assigned advisor by last name, program, and campus.</p>
+    </div>
+
+    <div class="advisor-search-card">
+        <form id="advisor-form" autocomplete="off">
+            <div class="advisor-form-row">
+                <div class="advisor-field advisor-field-program">
+                    <label for="program">Program Code or Name</label>
+                    <input type="text" id="program" name="program" placeholder="e.g. A25800 or Accounting" list="program-list" autofocus>
+                    <datalist id="program-list"></datalist>
+                </div>
+                <div class="advisor-field">
+                    <label for="campus">Campus</label>
+                    <select id="campus" name="campus">
+                        <option value="">All Campuses</option>
+                        {% for code, names in campus_codes.items() %}
+                            <option value="{{ code }}">{{ names | join(', ') }} ({{ code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="advisor-field">
+                    <label for="last-name">Student Last Name</label>
+                    <input type="text" id="last-name" name="last_name" placeholder="e.g. Smith" required>
+                </div>
+                <div class="advisor-field advisor-field-btn">
+                    <button type="submit" class="btn btn-primary">🔍 Look Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="advisor-results" class="advisor-results" style="display:none;"></div>
+</div>
+
+<!-- Advisor detail modal -->
+<div id="advisor-modal" class="advisor-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Advisor details">
+    <div class="advisor-modal">
+        <button class="advisor-modal-close" id="modal-close" aria-label="Close">&times;</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<style>
+/* Search card */
+.advisor-search-card {
+    background: var(--surface, #f8f9fa);
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.advisor-form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+.advisor-field {
+    flex: 1;
+    min-width: 160px;
+}
+.advisor-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: .35rem;
+    font-size: .9rem;
+    color: var(--text-muted, #6c757d);
+}
+.advisor-field input,
+.advisor-field select {
+    width: 100%;
+    padding: .55rem .75rem;
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--surface, #fff);
+    color: var(--text, #212529);
+}
+.advisor-field input:focus,
+.advisor-field select:focus {
+    outline: none;
+    border-color: #1d3557;
+    box-shadow: 0 0 0 3px rgba(29,53,87,.15);
+}
+.advisor-field-btn {
+    flex: 0 0 auto;
+    min-width: auto;
+}
+.advisor-field-btn .btn {
+    padding: .55rem 1.25rem;
+    font-size: 1rem;
+}
+.advisor-field-program {
+    flex: 1.5;
+}
+
+/* Results list */
+.advisor-results {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+.advisor-results-header {
+    font-size: .95rem;
+    color: var(--text-muted, #6c757d);
+    margin-bottom: .25rem;
+}
+.advisor-result-card {
+    background: var(--surface, #f8f9fa);
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: box-shadow .15s, border-color .15s;
+}
+.advisor-result-card:hover {
+    border-color: #1d3557;
+    box-shadow: 0 2px 8px rgba(29,53,87,.12);
+}
+.advisor-result-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text, #212529);
+}
+.advisor-result-meta {
+    font-size: .88rem;
+    color: var(--text-muted, #6c757d);
+    margin-top: .2rem;
+}
+.advisor-no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted, #6c757d);
+}
+
+/* ----- Modal overlay & card ----- */
+.advisor-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.advisor-modal {
+    background: var(--surface, #fff);
+    border-radius: 14px;
+    padding: 2rem 2.25rem;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 12px 40px rgba(0,0,0,.2);
+    animation: advisorSlideIn .2s ease;
+    color: var(--text, #212529);
+}
+@keyframes advisorSlideIn {
+    from { opacity: 0; transform: translateY(-18px) scale(.97); }
+    to   { opacity: 1; transform: none; }
+}
+.advisor-modal-close {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--text-muted, #6c757d);
+    line-height: 1;
+}
+.advisor-modal-close:hover { color: var(--text, #212529); }
+
+/* Modal content */
+.advisor-detail-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: .35rem;
+    color: var(--text, #212529);
+}
+.advisor-detail-id {
+    font-size: .95rem;
+    color: #1d3557;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.advisor-detail-table {
+    width: 100%;
+    font-size: .92rem;
+    margin-bottom: 1.25rem;
+}
+.advisor-detail-table td {
+    padding: .3rem 0;
+    vertical-align: top;
+}
+.advisor-detail-table td:first-child {
+    font-weight: 600;
+    color: var(--text-muted, #6c757d);
+    width: 90px;
+    white-space: nowrap;
+    padding-right: .75rem;
+}
+.advisor-detail-table td:last-child {
+    color: var(--text, #212529);
+}
+.advisor-detail-table a {
+    color: #457b9d;
+    text-decoration: none;
+}
+.advisor-detail-table a:hover { text-decoration: underline; }
+
+/* QR section */
+.advisor-qr-row {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border, #dee2e6);
+}
+.advisor-qr-item {
+    text-align: center;
+}
+.advisor-qr-item img {
+    border-radius: 6px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--border, #dee2e6);
+}
+.advisor-qr-label {
+    display: block;
+    font-size: .75rem;
+    color: var(--text-muted, #6c757d);
+    margin-top: .3rem;
+}
+
+@media (max-width: 600px) {
+    .advisor-form-row { flex-direction: column; }
+    .advisor-modal { padding: 1.5rem; }
+    .advisor-qr-row { flex-direction: column; align-items: center; }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const form   = document.getElementById('advisor-form');
+    const box    = document.getElementById('advisor-results');
+    const overlay = document.getElementById('advisor-modal');
+    const body   = document.getElementById('modal-body');
+    const closeBtn = document.getElementById('modal-close');
+
+    /* ---- Load program datalist ---- */
+    fetch('/api/programs')
+        .then(r => r.json())
+        .then(programs => {
+            const dl = document.getElementById('program-list');
+            programs.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.code;
+                opt.textContent = p.code + ' — ' + p.name;
+                dl.appendChild(opt);
+            });
+        })
+        .catch(() => {});
+
+    /* ---- Close modal ---- */
+    function closeModal() { overlay.style.display = 'none'; }
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    /* ---- Build result card HTML ---- */
+    function resultCard(r) {
+        const meta = [r.program, r.campus, r.name_range_text].filter(Boolean).join(' · ');
+        return `<div class="advisor-result-card" data-advisor='${JSON.stringify(r).replace(/'/g, "&#39;")}'>
+            <div class="advisor-result-name">${esc(r.advisor_name)}</div>
+            <div class="advisor-result-meta">${esc(meta)}</div>
+        </div>`;
+    }
+
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+    }
+
+    /* ---- Open detail modal ---- */
+    function showAdvisor(r) {
+        const emailLink = r.email
+            ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`
+            : '—';
+        const qrParams = new URLSearchParams({
+            name: r.advisor_name,
+            id: r.advisor_id || '',
+            email: r.email || '',
+            office: r.office || '',
+            program: r.program || '',
+        });
+        const qrSrc = `/api/advisor/qr?${qrParams.toString()}`;
+
+        body.innerHTML = `
+            <div class="advisor-detail-name">${esc(r.advisor_name)}</div>
+            <div class="advisor-detail-id">ID# ${esc(r.advisor_id || '—')}</div>
+            <table class="advisor-detail-table">
+                <tr><td>Program</td><td>${esc(r.program || '—')}</td></tr>
+                <tr><td>Campus</td><td>${esc(r.campus || '—')}</td></tr>
+                <tr><td>Office</td><td>${esc(r.office || '—')}</td></tr>
+                <tr><td>Email</td><td>${emailLink}</td></tr>
+                <tr><td>Students</td><td>${esc(r.name_range_text || 'All')}</td></tr>
+            </table>
+            <div class="advisor-qr-row">
+                <div class="advisor-qr-item">
+                    <img src="${qrSrc}" alt="QR" width="100" height="100" loading="lazy">
+                    <span class="advisor-qr-label">Scan for info</span>
+                </div>
+            </div>`;
+        overlay.style.display = 'flex';
+    }
+
+    /* ---- Form submit ---- */
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const lastName = document.getElementById('last-name').value.trim();
+        const campus   = document.getElementById('campus').value;
+        const program  = document.getElementById('program').value.trim();
+        if (!lastName) return;
+
+        box.style.display = 'none';
+        box.innerHTML = '<p style="padding:1rem;color:var(--text-muted);">Searching…</p>';
+        box.style.display = 'block';
+
+        fetch('/api/advisor', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({last_name: lastName, campus: campus, program: program})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.results || data.results.length === 0) {
+                box.innerHTML = '<div class="advisor-no-results">No advisors found for that name / campus combination.</div>';
+                return;
+            }
+            /* If exactly one result, jump straight to the popup */
+            if (data.results.length === 1) {
+                box.innerHTML = '<p class="advisor-results-header">1 match — showing details</p>' + resultCard(data.results[0]);
+                showAdvisor(data.results[0]);
+                return;
+            }
+            let html = `<p class="advisor-results-header">${data.results.length} matches — click one for details</p>`;
+            data.results.forEach(r => { html += resultCard(r); });
+            box.innerHTML = html;
+        })
+        .catch(() => {
+            box.innerHTML = '<div class="advisor-no-results" style="color:#c0392b;">Lookup failed — please try again.</div>';
+        });
+    });
+
+    /* ---- Delegate click on result cards ---- */
+    box.addEventListener('click', function(e) {
+        const card = e.target.closest('.advisor-result-card');
+        if (!card) return;
+        showAdvisor(JSON.parse(card.dataset.advisor));
+    });
+
+    /* ---- Keyboard shortcut: / to focus search ---- */
+    document.addEventListener('keydown', function(e) {
+        if (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+            e.preventDefault();
+            document.getElementById('last-name').focus();
+        }
+    });
+})();
+</script>
+{% endblock %}

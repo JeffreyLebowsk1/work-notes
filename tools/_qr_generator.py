@@ -5,6 +5,7 @@ Watches for configured links in the repository and auto-generates CCCC-branded Q
 via the qoder API when they're detected.
 """
 
+import base64
 import json
 import re
 from pathlib import Path
@@ -15,6 +16,7 @@ import requests
 REPO_ROOT = Path(__file__).resolve().parent.parent
 QR_OUTPUT_DIR = REPO_ROOT / "assets" / "images" / "qr-codes"
 QR_CONFIG_FILE = Path(__file__).resolve().parent / "qr_config.json"
+CCCC_LOGO = REPO_ROOT / "assets" / "images" / "logos" / "central-carolina-community-college_logo.png"
 
 # Default CCCC branding
 CCCC_BRAND = {
@@ -24,7 +26,11 @@ CCCC_BRAND = {
     "eye_style": "rounded",
     "error_correction": "H",
     "box_size": 20,
-    "border": 3,
+    "border": 4,
+    "logo_size_percent": 22,
+    "logo_border": 8,
+    "logo_shape": "circle",
+    "logo_corner_radius": 0,
 }
 
 # Default important links — can be overridden by qr_config.json
@@ -78,6 +84,28 @@ def _find_urls_in_content(content: str) -> dict[str, str]:
     return urls
 
 
+# Cached base64 data URI for the CCCC logo — computed once on first use.
+_LOGO_DATA_URI: str | None = None
+
+
+def _logo_data_uri() -> str:
+    """Read the CCCC logo PNG and return it as a base64 data URI."""
+    global _LOGO_DATA_URI
+    if _LOGO_DATA_URI is None:
+        raw = CCCC_LOGO.read_bytes()
+        b64 = base64.b64encode(raw).decode("ascii")
+        _LOGO_DATA_URI = f"data:image/png;base64,{b64}"
+    return _LOGO_DATA_URI
+
+
+def _build_payload(url: str) -> dict:
+    """Build the qoder API payload for a URL, including the logo if available."""
+    payload = {"data": url, **CCCC_BRAND}
+    if CCCC_LOGO.exists():
+        payload["logo_path"] = _logo_data_uri()
+    return payload
+
+
 def generate_qr_codes(
     qoder_url: str = "http://localhost:8080",
     dry_run: bool = False,
@@ -114,9 +142,9 @@ def generate_qr_codes(
             print(f"  ✓ {filename} — would create for {url}")
             continue
 
-        # Call qoder API
+        # Call qoder API — logo is embedded server-side via base64 data URI
         try:
-            payload = {"data": url, **CCCC_BRAND}
+            payload = _build_payload(url)
             response = requests.post(
                 f"{qoder_url}/api/qr/text",
                 json=payload,
@@ -124,7 +152,6 @@ def generate_qr_codes(
             )
             response.raise_for_status()
 
-            # Save PNG
             filepath.write_bytes(response.content)
             size_kb = filepath.stat().st_size / 1024
             results[filename] = "created"

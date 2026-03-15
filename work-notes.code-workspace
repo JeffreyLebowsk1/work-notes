@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"chat.tools.terminal.autoApprove": {
+			"Get-Command": true,
+			"ConvertTo-Json": true
+		},
+		"git.useEditorAsCommitInput": false
+	}
+}
