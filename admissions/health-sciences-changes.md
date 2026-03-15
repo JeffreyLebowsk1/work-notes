@@ -230,6 +230,9 @@ Use the following when advising students about Health Sciences limited enrollmen
 
 Check the student's record on **IASU >> HSA** and **SPRO** screens to confirm transcript receipt and acceptance status ("Fully Accepted" or "Provisionally Accepted") before processing a limited enrollment application.
 
+![IASU HSA — transcript receipt and acceptance status (Fully/Provisionally Accepted)](../assets/screenshots/admissions/iasu-hsa-transcript-status.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
 ### Verify GPA Eligibility
 
 Use the **EVAL** or **PSPR** mnemonics in Colleague to run a "what-if" evaluation and confirm the student's program-specific GPA against the minimum admission threshold. Ensure all external transcripts are received and evaluated via **IASU > HSA** before confirming eligibility. See [What-If EVAL/PSPR Guidance](../graduation/student-tracking/what-if-eval-pspr.md) for the step-by-step process.

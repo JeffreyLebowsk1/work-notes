@@ -231,6 +231,12 @@ The error message "Must be CCPP student to enroll in this section" means the stu
 
 ### Internal Staff Action Steps
 
+![SPRO — CCPP student type field for current term](../assets/screenshots/admissions/spro-ccpp-student-type.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
+![XNC2 — active CCP pathway entry](../assets/screenshots/admissions/xnc2-ccp-pathway-active.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
 1. **Check SPRO** — Ensure the student is coded as CCPP for the specific term they are trying to register for.
 2. **Verify XNC2** — Confirm the student has an active pathway (e.g., College Transfer or CTE) on the XNC2 screen.
 3. **Leon's Law Check** — If the student is under 18, verify the Leon's Law acknowledgement form is on file in Slate or Etrieve. The system may block registration for minors who have not completed this mandatory step.
@@ -248,6 +254,9 @@ For high schools whose graduation falls **after our Summer Semester begins**:
 
 ### On SPRO
 
+![SPRO — ending CCP program, student type, and home location (NULL date entry)](../assets/screenshots/admissions/spro-ccp-program-end.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
 1. End the CCP Program(s) for the **last date of the semester**.
 2. Enter **NULL** for Student Type, ending **1 day after** the CCP Program end date.
 3. For **Home Location**, end for the **same date** as the CCP Program end.
@@ -256,6 +265,9 @@ For high schools whose graduation falls **after our Summer Semester begins**:
 6. Start a new Advisor for the traditional curriculum program for **Summer Semester on 6/1** of the current year (e.g., 6/1/26).
 
 ### On XNC2
+
+![XNC2 — ending CCP pathway with end date one day after program end](../assets/screenshots/admissions/xnc2-ccp-pathway-end.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
 
 1. End pathway for **1 day after** the CCP Program end date.
 
@@ -286,6 +298,9 @@ If a CCP student graduates from high school **during** the semester they submitt
 ## CCP Drop and Withdrawal Dates
 
 - To see the **drop date** for a CCP student: go to **SRGD**, enter the full class and section, pick a semester, and look at **"Drop End Date"** for the last date to drop.
+
+![SRGD — drop end date lookup for a CCP course section](../assets/screenshots/admissions/srgd-drop-end-date.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
 - To see the **last day to withdraw without WF**: check the **Master Calendar by Locations** Google doc from Jamie.
 - Student requests to **transfer from one section to another** are only considered if:
   - Both courses have the same time frame (e.g., 8-week to 8-week).
@@ -306,7 +321,13 @@ CCP students have been found whose programs, student types, pathways, locations,
 | Locations | SPRO |
 | Pathways | XNC2 |
 
+![SACP — CCP program cleanup showing active programs to be ended](../assets/screenshots/admissions/sacp-ccp-cleanup.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
 > Use the **CHSP** advisor type for CCP students on SPRO → **FADT** (Faculty Advisee Detail).
+
+![FADT — CHSP advisor type entry on SPRO for CCP students](../assets/screenshots/admissions/fadt-chsp-advisor-type.png)
+*📸 Screenshot needed · [Jim Johnson](../contacts.md#-graduation-vendors--external-contacts) · jjohn087@cccc.edu · (919) 718-7349*
 
 ---
 

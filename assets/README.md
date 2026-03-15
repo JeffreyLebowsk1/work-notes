@@ -5,7 +5,7 @@ Shared assets including images, screenshots, spreadsheets, and reference files.
 ## Structure
 
 - `images/` — Diagrams, photos, and general images
-- `screenshots/` — Screenshots organized by topic/area
+- `screenshots/` — Screenshots organized by topic/area — see [Screenshot Capture Checklist](screenshots/README.md)
   - `admissions/` — Admissions system screenshots
   - `continuing-education/` — CE and workforce program screenshots
   - `graduation/` — Graduation process and ceremony screenshots

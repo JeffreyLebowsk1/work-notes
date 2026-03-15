@@ -66,12 +66,12 @@ When assisting a minor over the phone or at the counter:
 
 ## Contacts
 
-| Role | Name | Phone | Email |
-|---|---|---|---|
-| Harnett County CCR Coordinator | Dr. Nutan Varma | (910) 814-8975 | nvarma@cccc.edu |
-| Lee/Chatham County CCR Coordinator | Anita Green | (919) 545-8669 | agreen@cccc.edu |
-| CCR Registration Info | — | — | [Registration Page](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness/registration) |
-| College & Career Readiness | — | — | [CCR Webpage](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness) |
+| Role | Name |
+|---|---|
+| Harnett County CCR Coordinator | [Dr. Nutan Varma](../contacts.md#-continuing-education--workforce-development) |
+| Lee/Chatham County CCR Coordinator | [Anita Green](../contacts.md#-continuing-education--workforce-development) |
+| CCR Registration Info | [Registration Page](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness/registration) |
+| College & Career Readiness | [CCR Webpage](https://www.cccc.edu/support-success/all-offices-services/college-career-readiness) |
 
 ---
 *Last updated: 2026-03-13*

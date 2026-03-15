@@ -32,8 +32,8 @@ Non-credit/Continuing Education transcript responsibilities are split between th
 
 | Record Type | Who Handles It |
 |---|---|
-| **Post-2007 CE records** | Student Records and Registrar's Office — (919) 718-7201 / admissions@cccc.edu |
-| **Pre-2007 CE records** | Nutan Varma, Harnett Main Campus (CE Building) — (910) 814-8975 / nvarma@cccc.edu |
+| **Post-2007 CE records** | [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) |
+| **Pre-2007 CE records** | [Nutan Varma](../contacts.md#-continuing-education--workforce-development), Harnett Main Campus (CE Building) |
 | **Personal Enrichment / Short-Term Training** | Requires the **"Personal Enrichment & Short-Term Training Transcript Request"** form; handled by Registrar's Office (post-2007) |
 | **GED / HSE records** | CCCC does not maintain these — students must order through **[DiplomaSender](https://www.diplomasender.com)** at (855) 313-5799 |
 
@@ -72,15 +72,14 @@ See also: [Financial Aid — Workforce Pell](../financial-aid/README.md).
 
 ## Key Contacts
 
-| Role | Name | Phone | Email |
-|---|---|---|---|
-| ConEd Health Program Certificates | Pamela McKoy | (919) 545-8662 | pmckoy@cccc.edu |
-| Director of Health Programs (ConEd) | Bev Brock | (919) 545-8042 | bbrock@cccc.edu |
-| Pre-2007 CE Transcripts / Adult High School | Nutan Varma | (910) 814-8975 | nvarma@cccc.edu |
-| AHS Transcript Backup | Chesure Tate | (919) 718-7716 | — |
-| Harnett County CCR Coordinator | Dr. Nutan Varma | (910) 814-8975 | nvarma@cccc.edu |
-| Lee/Chatham County CCR Coordinator | Anita Green | (919) 545-8669 | agreen@cccc.edu |
-| Student Records and Registrar's Office | (general) | (919) 718-7201 | admissions@cccc.edu |
+| Role | Name |
+|---|---|
+| ConEd Health Program Certificates | [Pamela McKoy](../contacts.md#-continuing-education--workforce-development) |
+| Director of Health Programs (ConEd) | [Bev Brock](../contacts.md#-continuing-education--workforce-development) |
+| Pre-2007 CE Transcripts / AHS / Harnett CCR Coordinator | [Dr. Nutan Varma](../contacts.md#-continuing-education--workforce-development) |
+| AHS Transcript Backup (Bell Welcome Center) | [Chesure Tate](../contacts.md#-continuing-education--workforce-development) |
+| Lee/Chatham CCR Coordinator | [Anita Green](../contacts.md#-continuing-education--workforce-development) |
+| Student Records and Registrar's Office | [Registrar's Office](../contacts.md#-internal--registrars-office) |
 
 ---
 *Last updated: 2026-03-13*
