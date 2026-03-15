@@ -27,7 +27,9 @@
 
             <div class="staff-card" style="cursor: default;">
                 <div class="staff-photo-wrap">
-                    {% if display_name and display_name.split()|length >= 2 %}
+                    {% if c.get('photo_url') %}
+                    <img class="staff-photo" src="{{ c.photo_url }}" alt="{{ display_name }}" loading="lazy">
+                    {% elif display_name and display_name.split()|length >= 2 %}
                     <div class="staff-avatar" data-initials="{{ display_name.split()[0][0] }}{{ display_name.split()[-1][0] }}"></div>
                     {% elif display_name %}
                     <div class="staff-avatar" data-initials="{{ display_name[0:2] | upper }}"></div>

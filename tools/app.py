@@ -1185,6 +1185,13 @@ def contacts_page():
     if not contacts_path.exists():
         return render_template("404.html"), 404
     sections = _parse_contacts(contacts_path)
+    # Enrich contacts with photos from the staff directory
+    photos = _advisor.get_photo_map()
+    for section in sections:
+        for contact in section["contacts"]:
+            name = contact.get("name", "").strip()
+            if name:
+                contact["photo_url"] = photos.get(name.lower(), "")
     return render_template("contacts.html", sections=sections)
 
 

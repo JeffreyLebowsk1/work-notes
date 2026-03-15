@@ -11,9 +11,10 @@
 #   2. Creates a Python virtual environment at .venv/ (skipped if it already exists)
 #   3. Installs all Python dependencies from tools/requirements-web.txt
 #   4. Scaffolds tools/.env from tools/.env.example (skipped if it already exists)
-#   5. Checks that the chosen port is free
-#   6. Starts the web app at http://localhost:<PORT>
-#   7. (--ngrok only) Runs `ngrok http <PORT>` to create a public HTTPS tunnel
+#   5. Installs the pre-commit PII scanner hook (from tools/pre-commit.hook)
+#   6. Checks that the chosen port is free
+#   7. Starts the web app at http://localhost:<PORT>
+#   8. (--ngrok only) Runs `ngrok http <PORT>` to create a public HTTPS tunnel
 #
 # Options:
 #   --port PORT, -p PORT   Port to run the web app on (default: 4200)
@@ -170,6 +171,20 @@ else
   else
     warn "tools/.env.example not found — skipping .env creation."
   fi
+fi
+
+# ---------------------------------------------------------------------------
+# 4a. Install the pre-commit PII scanner hook
+# ---------------------------------------------------------------------------
+HOOK_SRC="$REPO_ROOT/tools/pre-commit.hook"
+HOOK_DST="$REPO_ROOT/.git/hooks/pre-commit"
+
+if [ -f "$HOOK_SRC" ]; then
+  cp "$HOOK_SRC" "$HOOK_DST"
+  chmod +x "$HOOK_DST"
+  success "Installed pre-commit PII scanner hook."
+else
+  warn "tools/pre-commit.hook not found — skipping hook installation."
 fi
 
 # ---------------------------------------------------------------------------

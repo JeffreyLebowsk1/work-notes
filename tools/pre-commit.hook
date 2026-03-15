@@ -1,0 +1,10 @@
+#!/bin/sh
+# Pre-commit hook — scan staged files for potential student PII before allowing commit.
+# This repo is PUBLIC on GitHub. Do not commit SSNs, student IDs, or bulk records.
+#
+# Bypass with: git commit --no-verify  (use only after manual verification)
+#
+# Installed by: tools/linux-setup.sh → .git/hooks/pre-commit
+# Source:       tools/pre-commit.hook (tracked — .gitattributes forces LF)
+
+python tools/_pii_scanner.py

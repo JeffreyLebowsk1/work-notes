@@ -48,27 +48,25 @@
         </div>
         <div id="dir-list">
             {% for group in grouped_directory %}
-            <div class="advisor-dir-group" data-campus="{{ group.code }}">
-                <h3 class="advisor-dir-group-header">🏫 {{ group.label }} <span class="advisor-dir-group-count">({{ group.advisors | length }})</span></h3>
-                <div class="advisor-dir-list">
+            <div class="staff-group" data-campus="{{ group.code }}">
+                <h3 class="staff-group-header">🏫 {{ group.label }} <span class="staff-group-count">({{ group.advisors | length }})</span></h3>
+                <div class="staff-grid">
                     {% for adv in group.advisors %}
-                    <div class="advisor-dir-card" data-search="{{ adv.name | lower }} {{ adv.programs | join(' ') | lower }} {{ adv.campuses | join(' ') | lower }} {{ adv.email | lower }} {{ group.label | lower }}" data-advisor='{{ adv | tojson | e }}'>
-                        {% if adv.photo_url %}
-                        <div class="advisor-photo-wrap">
-                            <img class="advisor-photo" src="{{ adv.photo_url }}" alt="{{ adv.name }}" loading="lazy">
+                    <div class="staff-card" data-search="{{ adv.name | lower }} {{ adv.programs | join(' ') | lower }} {{ adv.campuses | join(' ') | lower }} {{ adv.email | lower }} {{ group.label | lower }}" data-advisor='{{ adv | tojson | e }}'>
+                        <div class="staff-photo-wrap">
+                            {% if adv.photo_url %}
+                            <img class="staff-photo" src="{{ adv.photo_url }}" alt="{{ adv.name }}" loading="lazy">
+                            {% else %}
+                            <div class="staff-avatar" data-initials="{{ adv.name.split()[0][0] }}{{ adv.name.split()[-1][0] }}"></div>
+                            {% endif %}
                         </div>
-                        {% else %}
-                        <div class="advisor-photo-wrap">
-                            <div class="advisor-avatar" data-initials="{{ adv.name.split()[0][0] }}{{ adv.name.split()[-1][0] }}"></div>
-                        </div>
-                        {% endif %}
-                        <div class="advisor-dir-card-body">
-                            <div class="advisor-dir-name">{{ adv.name }}</div>
-                            <div class="advisor-dir-meta">
+                        <div class="staff-card-body">
+                            <div class="staff-card-name">{{ adv.name }}</div>
+                            <div class="staff-card-meta">
                                 {% if adv.email %}<a href="mailto:{{ adv.email }}">{{ adv.email }}</a>{% endif %}
                                 {% if adv.office %}<span>📍 {{ adv.office }}</span>{% endif %}
                             </div>
-                            <div class="advisor-dir-details">
+                            <div class="staff-card-details">
                                 {% if adv.campuses %}<span class="staff-card-tag">{{ adv.campuses | join(', ') }}</span>{% endif %}
                                 {% if adv.programs %}<span class="advisor-dir-programs">{{ adv.programs | join(' · ') }}</span>{% endif %}
                             </div>
@@ -246,15 +244,15 @@
     /* ---- Directory card click ---- */
     const dirList = document.getElementById('dir-list');
     dirList.addEventListener('click', function(e) {
-        const card = e.target.closest('.advisor-dir-card');
+        const card = e.target.closest('.staff-card');
         if (!card || e.target.closest('a')) return; /* don't hijack email links */
         showAdvisor(JSON.parse(card.dataset.advisor));
     });
 
     /* ---- Directory filter ---- */
     const dirFilter = document.getElementById('dir-filter');
-    const dirCards = document.querySelectorAll('.advisor-dir-card');
-    const dirGroups = document.querySelectorAll('.advisor-dir-group');
+    const dirCards = document.querySelectorAll('.staff-card');
+    const dirGroups = document.querySelectorAll('.staff-group');
     if (dirFilter) {
         dirFilter.addEventListener('input', function() {
             const q = this.value.trim().toLowerCase();
@@ -263,7 +261,7 @@
             });
             /* Hide group headers when all their cards are hidden */
             dirGroups.forEach(function(group) {
-                const visible = group.querySelectorAll('.advisor-dir-card:not([style*="display: none"])');
+                const visible = group.querySelectorAll('.staff-card:not([style*="display: none"])');
                 group.style.display = visible.length ? '' : 'none';
             });
         });
