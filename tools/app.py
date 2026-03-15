@@ -398,13 +398,16 @@ if _ASSETS_DIR.is_dir():
             _ASSET_INDEX[_rel] = _ap
 
 # Relative path to the CCCC logo within the asset index
-_CCCC_LOGO_REL = next(
-    (r for r in _ASSET_INDEX
-     if "logos/" in r.lower()
-     and ("cccc" in r.lower() or "central-carolina" in r.lower())
-     and r.lower().endswith((".png", ".jpg", ".jpeg", ".svg", ".webp"))),
-    None,
-)
+if config.LOGO_PATH and config.LOGO_PATH in _ASSET_INDEX:
+    _CCCC_LOGO_REL = config.LOGO_PATH
+else:
+    _CCCC_LOGO_REL = next(
+        (r for r in _ASSET_INDEX
+         if "logos/" in r.lower()
+         and ("cccc" in r.lower() or "central-carolina" in r.lower())
+         and r.lower().endswith((".png", ".jpg", ".jpeg", ".svg", ".webp"))),
+        None,
+    )
 
 # ---------------------------------------------------------------------------
 # Note index — whitelist of all known .md files, built once at startup.
@@ -966,24 +969,112 @@ def calendar_page():
     )
 
 
+# ---------------------------------------------------------------------------
+# Contacts parser
+# ---------------------------------------------------------------------------
+
+
+def _parse_contacts(path: Path) -> list[dict]:
+    """Parse contacts.md into structured sections with contact dicts.
+
+    Returns a list of dicts, each with keys:
+        title (str), icon (str), description (str), headers (list[str]),
+        contacts (list[dict]) — each contact has keys matching the lowercase
+        header names (name, title, email, phone, notes, etc.)
+    """
+    text = path.read_text(encoding="utf-8", errors="replace")
+    sections: list[dict] = []
+    current: dict | None = None
+    headers: list[str] = []
+    desc_lines: list[str] = []
+    in_desc = False  # between heading and table
+
+    for line in text.splitlines():
+        stripped = line.strip()
+
+        # Section heading: ## 🏛️ Title
+        if stripped.startswith("## ") and not stripped.startswith("###"):
+            # Save previous section
+            if current is not None:
+                if desc_lines:
+                    current["description"] = " ".join(desc_lines).strip()
+                sections.append(current)
+            raw = stripped.lstrip("#").strip()
+            icon_match = re.match(r"([^\w\s])\s*(.*)", raw, re.UNICODE)
+            if icon_match and not icon_match.group(1).isalnum():
+                icon = icon_match.group(1)
+                title = icon_match.group(2)
+            else:
+                icon = ""
+                title = raw
+            current = {
+                "title": title,
+                "icon": icon,
+                "description": "",
+                "headers": [],
+                "contacts": [],
+            }
+            headers = []
+            desc_lines = []
+            in_desc = True
+            continue
+
+        if current is None:
+            continue
+
+        # Table separator row (must check before data rows)
+        if stripped.startswith("|") and all(c in "-|: " for c in stripped):
+            continue
+
+        # Table header row
+        if stripped.startswith("|") and not headers:
+            parts = [p.strip() for p in stripped.split("|")]
+            if parts and parts[0] == "":
+                parts = parts[1:]
+            if parts and parts[-1] == "":
+                parts = parts[:-1]
+            headers = [h.lower() for h in parts]
+            current["headers"] = list(parts)
+            in_desc = False
+            continue
+
+        # Table data row
+        if stripped.startswith("|") and headers:
+            in_desc = False
+            parts = [p.strip() for p in stripped.split("|")]
+            if parts and parts[0] == "":
+                parts = parts[1:]
+            if parts and parts[-1] == "":
+                parts = parts[:-1]
+            contact = {}
+            for i, key in enumerate(headers):
+                contact[key] = parts[i] if i < len(parts) else ""
+            current["contacts"].append(contact)
+            continue
+
+        # Description lines between heading and table
+        if in_desc and stripped and not stripped.startswith("---"):
+            clean = stripped.lstrip("> ").strip()
+            if clean:
+                desc_lines.append(clean)
+
+    # Save last section
+    if current is not None:
+        if desc_lines:
+            current["description"] = " ".join(desc_lines).strip()
+        sections.append(current)
+
+    return sections
+
+
 @app.route("/contacts")
 def contacts_page():
-    """Render the contacts directory as a standalone page."""
+    """Render the contacts directory with structured contact cards."""
     contacts_path = REPO_ROOT / "contacts.md"
     if not contacts_path.exists():
         return render_template("404.html"), 404
-    content_html = _render_markdown(
-        contacts_path.read_text(encoding="utf-8", errors="replace")
-    )
-    return render_template(
-        "note.html",
-        note=_parse_note(contacts_path),
-        content_html=content_html,
-        section_key="",
-        meta={"title": "Reference", "icon": "👥", "color": "blue", "description": ""},
-        prev_note=None,
-        next_note=None,
-    )
+    sections = _parse_contacts(contacts_path)
+    return render_template("contacts.html", sections=sections)
 
 
 # ---------------------------------------------------------------------------
@@ -1107,6 +1198,11 @@ def email_templates():
 @app.errorhandler(404)
 def not_found(e):
     return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template("500.html"), 500
 
 
 if __name__ == "__main__":

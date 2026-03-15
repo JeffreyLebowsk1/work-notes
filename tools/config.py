@@ -30,6 +30,11 @@ EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD", "")
 EMAIL_FOLDER = os.environ.get("EMAIL_FOLDER", "Work-Notes")
 EMAIL_ALLOWED_SENDERS = os.environ.get("EMAIL_ALLOWED_SENDERS", "")
 
+# ── Branding ─────────────────────────────────────────────────────────────────
+# Relative path inside assets/ to the CCCC logo image.
+# Falls back to auto-detection from the asset index when blank.
+LOGO_PATH = os.environ.get("LOGO_PATH", "")
+
 # ── HTTP Basic Auth (optional — leave blank for no auth) ─────────────────────
 APP_USERNAME = os.environ.get("APP_USERNAME", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")

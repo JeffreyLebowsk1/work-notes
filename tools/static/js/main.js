@@ -35,3 +35,34 @@
         applyTheme(next);
     });
 }());
+
+// Hamburger menu toggle for tablet/medium screens.
+(function () {
+    var btn = document.getElementById('nav-hamburger');
+    var drawer = document.getElementById('nav-drawer');
+    if (!btn || !drawer) return;
+
+    btn.addEventListener('click', function () {
+        var open = btn.classList.toggle('open');
+        drawer.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', String(open));
+    });
+
+    // Close drawer when a link inside it is clicked.
+    drawer.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            btn.classList.remove('open');
+            drawer.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    // Close drawer on Escape key.
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && drawer.classList.contains('open')) {
+            btn.classList.remove('open');
+            drawer.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+}());

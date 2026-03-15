@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Server Error — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="server-error">
+    <div class="server-error-content">
+        <div class="server-error-icon">🔧</div>
+        <h1>Something Went Wrong</h1>
+        <p>An unexpected error occurred. Please try again or return to the home page.</p>
+        <div class="server-error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">🏠 Go Home</a>
+            <a href="{{ url_for('search') }}" class="btn btn-secondary">🔍 Search Notes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

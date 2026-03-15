@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Contacts — CCCC Notes{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>👥 Contacts Directory</h1>
+        <p>People and offices you work with regularly.</p>
+    </div>
+
+    {% for section in sections %}
+    <div class="contacts-section">
+        <h2 class="contacts-section-header">{{ section.icon }} {{ section.title }}</h2>
+        {% if section.description %}
+        <p class="contacts-section-desc">{{ section.description }}</p>
+        {% endif %}
+
+        <div class="staff-grid">
+            {% for c in section.contacts %}
+            {% set display_name = c.get('name', '') or c.get('office', '') or c.get('department', '') or c.get('service', '') or c.get('vendor / organization', '') %}
+            {% set display_role = c.get('title', '') or c.get('role', '') or c.get('contact', '') or c.get('chair', '') %}
+            {% set email = c.get('email', '') or c.get('contact / url', '') %}
+            {% set phone = c.get('phone', '') %}
+            {% set notes = c.get('notes', '') %}
+            {% set dean = c.get('dean', '') %}
+
+            <div class="staff-card" style="cursor: default;">
+                <div class="staff-photo-wrap">
+                    {% if display_name and display_name.split()|length >= 2 %}
+                    <div class="staff-avatar" data-initials="{{ display_name.split()[0][0] }}{{ display_name.split()[-1][0] }}"></div>
+                    {% elif display_name %}
+                    <div class="staff-avatar" data-initials="{{ display_name[0:2] | upper }}"></div>
+                    {% else %}
+                    <div class="staff-avatar" data-initials="?"></div>
+                    {% endif %}
+                </div>
+                <div class="staff-card-body">
+                    <div class="staff-card-name">{{ display_name }}</div>
+                    {% if display_role %}
+                    <div class="staff-card-role">{{ display_role }}</div>
+                    {% endif %}
+                    {% if dean %}
+                    <div class="staff-card-role">Dean: {{ dean }}</div>
+                    {% endif %}
+                    <div class="staff-card-meta">
+                        {% if email and '@' in email %}
+                        <a class="contact-email-link" href="mailto:{{ email }}">{{ email }}</a>
+                        {% elif email and email.startswith('[') %}
+                        <span class="contact-note">{{ email }}</span>
+                        {% endif %}
+                        {% if phone %}
+                        <span class="contact-phone">{{ phone }}</span>
+                        {% endif %}
+                    </div>
+                    {% if notes %}
+                    <div class="contact-note">{{ notes }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
