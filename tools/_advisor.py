@@ -626,7 +626,7 @@ def get_navigators() -> list[dict]:
     """
     entries = _parse_directory_entries()
     navs = [e for e in entries if "education navigator" in e["role"].lower()]
-    return sorted(navs, key=lambda e: e["name"].lower())
+    return sorted(navs, key=lambda e: e["name"].rsplit(None, 1)[-1].lower())
 
 
 def get_advisor_directory() -> list[dict]:
@@ -662,7 +662,7 @@ def get_advisor_directory() -> list[dict]:
     # Convert sets to sorted lists for JSON serialization
     photos = get_photo_map()
     result = []
-    for adv in sorted(advisors.values(), key=lambda a: a["name"].lower()):
+    for adv in sorted(advisors.values(), key=lambda a: a["name"].rsplit(None, 1)[-1].lower()):
         adv["campuses"] = sorted(adv["campuses"])
         adv["programs"] = sorted(adv["programs"])
         adv["photo_url"] = photos.get(adv["name"].lower(), "")
