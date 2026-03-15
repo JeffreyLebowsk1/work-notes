@@ -12,10 +12,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 
 from _importer import (  # noqa: E402
     FOLDER_KEYWORDS,
+    IMPORT_LOG_PATH,
     _detect_folder,
     _pdf_dest_dir,
     _suggest_dest_dir,
     _suggest_filename,
+    _write_import_log,
 )
 
 
@@ -208,3 +210,93 @@ class TestFolderKeywords:
     def test_every_folder_has_at_least_one_keyword(self):
         for folder, keywords in FOLDER_KEYWORDS.items():
             assert len(keywords) >= 1, f"{folder} has no keywords"
+
+
+# ---------------------------------------------------------------------------
+# _write_import_log
+# ---------------------------------------------------------------------------
+
+class TestWriteImportLog:
+    def _make_source(self, tmp_path, name="note.md", content="# Hello"):
+        p = tmp_path / name
+        p.write_text(content, encoding="utf-8")
+        return p
+
+    def test_creates_log_with_header_row(self, tmp_path, monkeypatch):
+        import _importer
+        log_path = tmp_path / "import-log.csv"
+        monkeypatch.setattr(_importer, "IMPORT_LOG_PATH", log_path)
+
+        source = self._make_source(tmp_path)
+        dest = tmp_path / "meetings" / "note.md"
+        _write_import_log(source, "# Hello", "meetings", 0.8, dest, "imported")
+
+        lines = log_path.read_text(encoding="utf-8").splitlines()
+        assert lines[0] == "timestamp,source_name,extension,size_bytes,content_chars,detected_folder,confidence,destination,status"
+        assert len(lines) == 2
+
+    def test_data_row_contains_correct_fields(self, tmp_path, monkeypatch):
+        import _importer
+        log_path = tmp_path / "import-log.csv"
+        monkeypatch.setattr(_importer, "IMPORT_LOG_PATH", log_path)
+        # Also monkeypatch REPO_ROOT so _relative works predictably
+        monkeypatch.setattr(_importer, "REPO_ROOT", tmp_path)
+        import _helpers
+        monkeypatch.setattr(_helpers, "REPO_ROOT", tmp_path)
+
+        source = self._make_source(tmp_path, "scan.pdf", "")
+        source.write_bytes(b"%PDF-1.4")
+        dest = tmp_path / "assets" / "documents" / "scan.pdf"
+
+        _write_import_log(source, "", "transcripts", 0.5, dest, "imported")
+
+        import csv
+        rows = list(csv.DictReader(log_path.open(encoding="utf-8")))
+        assert len(rows) == 1
+        row = rows[0]
+        assert row["source_name"] == "scan.pdf"
+        assert row["extension"] == ".pdf"
+        assert row["detected_folder"] == "transcripts"
+        assert row["status"] == "imported"
+        assert row["confidence"] == "0.50"
+
+    def test_appends_without_duplicate_header(self, tmp_path, monkeypatch):
+        import _importer
+        log_path = tmp_path / "import-log.csv"
+        monkeypatch.setattr(_importer, "IMPORT_LOG_PATH", log_path)
+
+        source = self._make_source(tmp_path)
+        dest = tmp_path / "meetings" / "note.md"
+        _write_import_log(source, "content", "meetings", 0.8, dest, "imported")
+        _write_import_log(source, "content", "meetings", 0.8, dest, "imported")
+
+        lines = log_path.read_text(encoding="utf-8").splitlines()
+        header_count = sum(1 for ln in lines if ln.startswith("timestamp,"))
+        assert header_count == 1
+        assert len(lines) == 3  # header + 2 data rows
+
+    def test_none_dest_writes_empty_destination(self, tmp_path, monkeypatch):
+        import _importer
+        log_path = tmp_path / "import-log.csv"
+        monkeypatch.setattr(_importer, "IMPORT_LOG_PATH", log_path)
+
+        source = self._make_source(tmp_path)
+        _write_import_log(source, "", "(unknown)", 0.0, None, "error")
+
+        import csv
+        rows = list(csv.DictReader(log_path.open(encoding="utf-8")))
+        assert rows[0]["destination"] == ""
+        assert rows[0]["status"] == "error"
+
+    def test_dry_run_status_logged(self, tmp_path, monkeypatch):
+        import _importer
+        log_path = tmp_path / "import-log.csv"
+        monkeypatch.setattr(_importer, "IMPORT_LOG_PATH", log_path)
+
+        source = self._make_source(tmp_path)
+        dest = tmp_path / "graduation" / "note.md"
+        _write_import_log(source, "text", "graduation", 1.0, dest, "dry-run")
+
+        import csv
+        rows = list(csv.DictReader(log_path.open(encoding="utf-8")))
+        assert rows[0]["status"] == "dry-run"

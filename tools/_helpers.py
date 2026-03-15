@@ -76,6 +76,34 @@ def _read_pdf_text(path: Path) -> str:
 REPO_ROOT = Path(__file__).resolve().parent.parent
 IGNORED_DIRS = {".git", ".github", "tools", "assets", "inbox"}
 
+# ---------------------------------------------------------------------------
+# Inbox file-type categories
+# ---------------------------------------------------------------------------
+
+_TEXT_EXTS = frozenset({".md", ".txt"})
+_PDF_EXTS = frozenset({".pdf"})
+_IMAGE_EXTS = frozenset({
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".ico", ".tiff", ".tif", ".bmp",
+})
+_SHEET_EXTS = frozenset({".xlsx", ".xls", ".csv", ".ods", ".numbers"})
+
+#: All extensions that the inbox processor will pick up and route automatically.
+INBOX_EXTENSIONS: frozenset[str] = _TEXT_EXTS | _PDF_EXTS | _IMAGE_EXTS | _SHEET_EXTS
+
+
+def _binary_inbox_dest(path: Path) -> Path:
+    """Return the assets destination directory for a non-PDF binary inbox file.
+
+    Images go to ``assets/images/``, spreadsheets to ``assets/spreadsheets/``,
+    and everything else to ``assets/documents/``.
+    """
+    ext = path.suffix.lower()
+    if ext in _IMAGE_EXTS:
+        return REPO_ROOT / "assets" / "images"
+    if ext in _SHEET_EXTS:
+        return REPO_ROOT / "assets" / "spreadsheets"
+    return REPO_ROOT / "assets" / "documents"
+
 
 def _all_notes(root: Path = REPO_ROOT) -> list[Path]:
     """Return all Markdown files in the repository, sorted by path."""
@@ -100,7 +128,11 @@ def _all_assets() -> list[Path]:
 
 
 def pending_inbox_files() -> list[Path]:
-    """Return all processable (.md / .txt / .pdf) files currently sitting in inbox/."""
+    """Return all processable files currently sitting in inbox/.
+
+    Picks up text notes (``.md``, ``.txt``), PDFs, images, and spreadsheets.
+    Hidden files and ``README.md`` are always skipped.
+    """
     inbox_dir = REPO_ROOT / "inbox"
     if not inbox_dir.exists():
         return []
@@ -109,7 +141,7 @@ def pending_inbox_files() -> list[Path]:
         if p.is_file()
         and not p.name.startswith(".")
         and p.name.lower() != "readme.md"
-        and p.suffix.lower() in (".md", ".txt", ".pdf")
+        and p.suffix.lower() in INBOX_EXTENSIONS
     )
 
 

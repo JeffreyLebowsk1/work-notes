@@ -9,8 +9,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 
 from _helpers import (  # noqa: E402
+    INBOX_EXTENSIONS,
     REPO_ROOT,
     _asset_meta,
+    _binary_inbox_dest,
     _ocr_page,
     _parse_note,
     _read_pdf_text,
@@ -201,7 +203,7 @@ class TestPendingInboxFiles:
         monkeypatch.setattr(_helpers, "REPO_ROOT", tmp_path)
         assert _helpers.pending_inbox_files() == []
 
-    def test_returns_md_and_txt_only(self, tmp_path, monkeypatch):
+    def test_returns_text_and_image_files(self, tmp_path, monkeypatch):
         import _helpers
         monkeypatch.setattr(_helpers, "REPO_ROOT", tmp_path)
         inbox = tmp_path / "inbox"
@@ -213,19 +215,26 @@ class TestPendingInboxFiles:
         (inbox / "README.md").write_text("# Readme")
         files = _helpers.pending_inbox_files()
         names = {f.name for f in files}
-        assert names == {"note.md", "draft.txt"}
+        # text notes AND images are now picked up; hidden files and README are not
+        assert "note.md" in names
+        assert "draft.txt" in names
+        assert "image.png" in names
+        assert ".hidden" not in names
+        assert "README.md" not in names
 
-    def test_returns_pdf_files(self, tmp_path, monkeypatch):
+    def test_returns_pdf_and_image_files(self, tmp_path, monkeypatch):
         import _helpers
         monkeypatch.setattr(_helpers, "REPO_ROOT", tmp_path)
         inbox = tmp_path / "inbox"
         inbox.mkdir()
         (inbox / "form.pdf").write_bytes(b"%PDF-1.4 fake")
-        (inbox / "image.png").write_bytes(b"img")
+        (inbox / "scan.png").write_bytes(b"img")
+        (inbox / "data.xlsx").write_bytes(b"xlsx")
         files = _helpers.pending_inbox_files()
         names = {f.name for f in files}
         assert "form.pdf" in names
-        assert "image.png" not in names
+        assert "scan.png" in names
+        assert "data.xlsx" in names
 
 
 # ---------------------------------------------------------------------------
@@ -393,3 +402,56 @@ class TestOcrPage:
         if captured:
             assert captured[0]["first_page"] == 3
             assert captured[0]["last_page"] == 3
+
+
+# ---------------------------------------------------------------------------
+# _binary_inbox_dest
+# ---------------------------------------------------------------------------
+
+class TestBinaryInboxDest:
+    def test_image_goes_to_assets_images(self, monkeypatch):
+        import _helpers
+        fake_root = __import__("pathlib").Path("/fake/repo")
+        monkeypatch.setattr(_helpers, "REPO_ROOT", fake_root)
+        for ext in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".tiff"):
+            p = __import__("pathlib").Path(f"/tmp/scan{ext}")
+            result = _helpers._binary_inbox_dest(p)
+            assert result == fake_root / "assets" / "images", f"failed for {ext}"
+
+    def test_spreadsheet_goes_to_assets_spreadsheets(self, monkeypatch):
+        import _helpers
+        fake_root = __import__("pathlib").Path("/fake/repo")
+        monkeypatch.setattr(_helpers, "REPO_ROOT", fake_root)
+        for ext in (".xlsx", ".xls", ".csv", ".ods"):
+            p = __import__("pathlib").Path(f"/tmp/data{ext}")
+            result = _helpers._binary_inbox_dest(p)
+            assert result == fake_root / "assets" / "spreadsheets", f"failed for {ext}"
+
+    def test_unknown_extension_goes_to_assets_documents(self, monkeypatch):
+        import _helpers
+        fake_root = __import__("pathlib").Path("/fake/repo")
+        monkeypatch.setattr(_helpers, "REPO_ROOT", fake_root)
+        p = __import__("pathlib").Path("/tmp/file.docx")
+        result = _helpers._binary_inbox_dest(p)
+        assert result == fake_root / "assets" / "documents"
+
+
+# ---------------------------------------------------------------------------
+# INBOX_EXTENSIONS
+# ---------------------------------------------------------------------------
+
+class TestInboxExtensions:
+    def test_includes_text_extensions(self):
+        assert ".md" in INBOX_EXTENSIONS
+        assert ".txt" in INBOX_EXTENSIONS
+
+    def test_includes_pdf(self):
+        assert ".pdf" in INBOX_EXTENSIONS
+
+    def test_includes_image_extensions(self):
+        for ext in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".tiff"):
+            assert ext in INBOX_EXTENSIONS, f"{ext} missing from INBOX_EXTENSIONS"
+
+    def test_includes_spreadsheet_extensions(self):
+        for ext in (".xlsx", ".xls", ".csv", ".ods"):
+            assert ext in INBOX_EXTENSIONS, f"{ext} missing from INBOX_EXTENSIONS"
