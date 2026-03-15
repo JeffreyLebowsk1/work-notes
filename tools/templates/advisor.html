@@ -38,6 +38,30 @@
     </div>
 
     <div id="advisor-results" class="advisor-results" style="display:none;"></div>
+
+    <!-- Advisor directory -->
+    <div class="advisor-directory">
+        <div class="advisor-directory-header">
+            <h2>📋 Advisor Directory</h2>
+            <p>{{ directory | length }} advisors</p>
+            <input type="text" id="dir-filter" class="advisor-dir-filter" placeholder="Filter by name, program, or campus…">
+        </div>
+        <div class="advisor-dir-list" id="dir-list">
+            {% for adv in directory %}
+            <div class="advisor-dir-card" data-search="{{ adv.name | lower }} {{ adv.programs | join(' ') | lower }} {{ adv.campuses | join(' ') | lower }} {{ adv.email | lower }}">
+                <div class="advisor-dir-name">{{ adv.name }}</div>
+                <div class="advisor-dir-meta">
+                    {% if adv.email %}<a href="mailto:{{ adv.email }}">{{ adv.email }}</a>{% endif %}
+                    {% if adv.office %}<span>📍 {{ adv.office }}</span>{% endif %}
+                </div>
+                <div class="advisor-dir-details">
+                    {% if adv.campuses %}<span class="advisor-dir-tag">{{ adv.campuses | join(', ') }}</span>{% endif %}
+                    {% if adv.programs %}<span class="advisor-dir-programs">{{ adv.programs | join(' · ') }}</span>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 <!-- Advisor detail modal -->
@@ -249,6 +273,91 @@
     .advisor-modal { padding: 1.5rem; }
     .advisor-qr-row { flex-direction: column; align-items: center; }
 }
+
+/* ----- Advisor directory ----- */
+.advisor-directory {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border, #dee2e6);
+    padding-top: 1.5rem;
+}
+.advisor-directory-header {
+    margin-bottom: 1rem;
+}
+.advisor-directory-header h2 {
+    margin: 0 0 .25rem;
+    font-size: 1.3rem;
+}
+.advisor-directory-header p {
+    color: var(--text-muted, #6c757d);
+    font-size: .9rem;
+    margin: 0 0 .75rem;
+}
+.advisor-dir-filter {
+    width: 100%;
+    max-width: 400px;
+    padding: .5rem .75rem;
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 8px;
+    font-size: .95rem;
+    background: var(--surface, #fff);
+    color: var(--text, #212529);
+}
+.advisor-dir-filter:focus {
+    outline: none;
+    border-color: #1d3557;
+    box-shadow: 0 0 0 3px rgba(29,53,87,.15);
+}
+.advisor-dir-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: .75rem;
+}
+.advisor-dir-card {
+    background: var(--surface, #f8f9fa);
+    border: 1px solid var(--border, #dee2e6);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    transition: border-color .15s;
+}
+.advisor-dir-card:hover {
+    border-color: #1d3557;
+}
+.advisor-dir-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: .3rem;
+}
+.advisor-dir-meta {
+    font-size: .88rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .75rem;
+    margin-bottom: .35rem;
+}
+.advisor-dir-meta a {
+    color: #457b9d;
+    text-decoration: none;
+}
+.advisor-dir-meta a:hover { text-decoration: underline; }
+.advisor-dir-meta span { color: var(--text-muted, #6c757d); }
+.advisor-dir-details {
+    font-size: .82rem;
+    color: var(--text-muted, #6c757d);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .5rem;
+    align-items: baseline;
+}
+.advisor-dir-tag {
+    background: rgba(29,53,87,.08);
+    padding: .15rem .5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.advisor-dir-programs {
+    line-height: 1.4;
+}
 </style>
 {% endblock %}
 
@@ -385,6 +494,18 @@
             document.getElementById('last-name').focus();
         }
     });
+
+    /* ---- Directory filter ---- */
+    const dirFilter = document.getElementById('dir-filter');
+    const dirCards = document.querySelectorAll('.advisor-dir-card');
+    if (dirFilter) {
+        dirFilter.addEventListener('input', function() {
+            const q = this.value.trim().toLowerCase();
+            dirCards.forEach(function(card) {
+                card.style.display = (!q || card.dataset.search.includes(q)) ? '' : 'none';
+            });
+        });
+    }
 })();
 </script>
 {% endblock %}

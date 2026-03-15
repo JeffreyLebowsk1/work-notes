@@ -939,11 +939,12 @@ def contacts_page():
 
 @app.route("/advisor")
 def advisor_page():
-    """Render the advisor lookup page."""
+    """Render the advisor lookup page with full directory listing."""
     return render_template(
         "advisor.html",
         sections=SECTIONS,
         campus_codes=_advisor.CAMPUS_CODES,
+        directory=_advisor.get_advisor_directory(),
     )
 
 
