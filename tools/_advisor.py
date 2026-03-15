@@ -567,10 +567,39 @@ def _clean_program_name(name: str) -> str:
     return name
 
 
+# ---------------------------------------------------------------------------
+# Photo URL map from synced faculty-staff directory
+# ---------------------------------------------------------------------------
+
+_PLACEHOLDER_PHOTO = "IMG_Roster_Placeholder.png"
+_PHOTO_RE = re.compile(
+    r'<img\s+src="([^"]+)"[^>]*>\s*\|\s*\[([^\]]+)\]',
+    re.IGNORECASE,
+)
+
+
+def get_photo_map() -> dict[str, str]:
+    """Parse faculty-staff-directory.md → {normalised_name: photo_url}.
+
+    Excludes entries that use the placeholder headshot.
+    """
+    md_path = REPO_ROOT / "documentation" / "faculty-staff-directory.md"
+    if not md_path.exists():
+        return {}
+    text = md_path.read_text(encoding="utf-8", errors="replace")
+    photos: dict[str, str] = {}
+    for m in _PHOTO_RE.finditer(text):
+        url, name = m.group(1), m.group(2).strip()
+        if _PLACEHOLDER_PHOTO in url:
+            continue
+        photos[name.lower()] = url
+    return photos
+
+
 def get_advisor_directory() -> list[dict]:
     """Return a deduplicated, alphabetical list of unique advisors.
 
-    Each entry: {name, email, office, campuses, programs}.
+    Each entry: {name, email, office, campuses, programs, photo_url}.
     """
     records = get_records()
     advisors: dict[str, dict] = {}
@@ -598,10 +627,12 @@ def get_advisor_directory() -> list[dict]:
         if rec.get("program"):
             entry["programs"].add(rec["program"])
     # Convert sets to sorted lists for JSON serialization
+    photos = get_photo_map()
     result = []
     for adv in sorted(advisors.values(), key=lambda a: a["name"].lower()):
         adv["campuses"] = sorted(adv["campuses"])
         adv["programs"] = sorted(adv["programs"])
+        adv["photo_url"] = photos.get(adv["name"].lower(), "")
         result.append(adv)
     return result
 
