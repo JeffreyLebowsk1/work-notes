@@ -1016,6 +1016,11 @@ body { overflow-x: hidden; width: 100%; }
 [data-theme="dark"] .notify-success { background: #142e1c; border-color: #1e6038; color: #86efac; }
 [data-theme="dark"] .notify-error { background: #332414; border-color: #8c3818; color: #fdba74; }
 [data-theme="dark"] .notify-info { background: #332e1a; border-color: #6a5a2a; color: #fde68a; }
+[data-theme="dark"] .staff-group-header { color: #8fb8da; }
+[data-theme="dark"] .contacts-section-header { color: #8fb8da; }
+[data-theme="dark"] .advisor-detail-id { color: #8fb8da; }
+[data-theme="dark"] .staff-card-tag { background: color-mix(in srgb, #8fb8da 15%, transparent); }
+[data-theme="dark"] .advisor-dir-filter { background: var(--surface); color: var(--text); border-color: var(--border); }
 
 /* Theme toggle button */
 .theme-toggle {
@@ -1232,9 +1237,9 @@ body { overflow-x: hidden; width: 100%; }
 .staff-card-meta {
   font-size: .85rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: .35rem .6rem;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
   margin-bottom: .4rem;
 }
 .staff-card-meta a {
