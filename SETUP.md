@@ -337,7 +337,7 @@ ngrok config add-authtoken <YOUR_AUTHTOKEN>
 Get your token at <https://dashboard.ngrok.com/get-started/your-authtoken>.
 
 **`ERR_NGROK_3200` — "Your account has reached the maximum number of simultaneous ngrok agent sessions"**
-Free ngrok accounts allow only **1 active agent session at a time**. This error appears when a previous ngrok process is still running (or was not shut down cleanly). Fix:
+Every ngrok plan has a cap on simultaneous agent sessions (1 for free, higher for paid tiers). This error appears when a previous ngrok process is still running (or was not shut down cleanly) and that cap has been reached. Fix:
 ```bash
 # Kill any leftover ngrok processes, then restart:
 pkill -x ngrok
