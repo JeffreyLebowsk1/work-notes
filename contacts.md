@@ -101,8 +101,12 @@ Quick-reference by advisor — see [CCP Procedures — Advisor Contacts](admissi
 | Cap & Gown Vendor | [Herff Jones](https://www.herffjones.com) — Barry Weseleski, Rep | | | Black caps and gowns; no personal stoles/cords |
 | Diploma Vendor | | | | |
 | Ceremony Venue | Dennis A. Wicker Civic & Conference Center — David Foster, Director | dfoster@cccc.edu | | Spring 2026 commencement venue |
+| Ceremony Announcer | Dr. Kristi Short, VP/CAO | kshort@cccc.edu | | Graduation ceremony announcer |
 | Ceremony Performer | Peter McArthur | | | Bagpiper |
+| Ceremony Décor — Ferns | Patrik Kelly | | | Fern/greenery rentals for ceremony |
+| Ceremony Décor — Flowers | Floral Designs by Eddie | | | Flowers and bows for ceremony |
 | Photographer / Videographer | | | | |
+| Print Vendor (Backup) | Jones Printing | | | Backup to in-house Print Shop |
 | [National Student Clearinghouse](https://www.studentclearinghouse.org) | Enrollment & degree verification service | | | Used for enrollment verification and degree reporting |
 
 ---
