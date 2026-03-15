@@ -145,29 +145,6 @@ def _add_cache_headers(response):
     return response
 
 
-@app.before_request
-def _basic_auth_check():
-    """Enforce HTTP Basic Auth when APP_USERNAME is configured.
-
-    Set APP_USERNAME and APP_PASSWORD in tools/.env (or as hosting env vars)
-    to password-protect the app when deployed to a public URL.
-    Leave both blank for local/dev use with no auth prompt.
-    """
-    if not config.APP_USERNAME:
-        return  # Auth disabled — local use
-    auth = request.authorization
-    if (
-        auth is None
-        or auth.username != config.APP_USERNAME
-        or auth.password != config.APP_PASSWORD
-    ):
-        return Response(
-            "CCCC Notes — Authentication required.",
-            401,
-            {"WWW-Authenticate": 'Basic realm="CCCC Notes"'},
-        )
-
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
