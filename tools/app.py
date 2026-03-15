@@ -461,6 +461,41 @@ def _reload_indexes() -> None:
                 _ASSET_INDEX[_rel] = _ap
 
 
+def _log_to_daily_log(filename: str, subfolder: str) -> None:
+    """Append an upload entry to today's daily log, creating it if needed."""
+    from datetime import date
+
+    today = date.today()
+    month_dir = REPO_ROOT / "daily-logs" / today.strftime("%Y-%m")
+    month_dir.mkdir(parents=True, exist_ok=True)
+    log_path = month_dir / f"{today.isoformat()}.md"
+
+    link = f"../../assets/{subfolder}/{filename}"
+    entry = f"- [{filename}]({link}) — uploaded via web app\n"
+
+    if log_path.exists():
+        text = log_path.read_text(encoding="utf-8")
+        if "## Attachments" in text:
+            text = text.replace(
+                "## Attachments\n", f"## Attachments\n{entry}", 1,
+            )
+        else:
+            text = text.rstrip("\n") + f"\n\n## Attachments\n{entry}"
+        log_path.write_text(text, encoding="utf-8")
+    else:
+        log_path.write_text(
+            f"# {today.isoformat()}\n\n"
+            f"## Today's Focus\n\n"
+            f"## Completed\n\n"
+            f"## In Progress\n\n"
+            f"## Blockers / Questions\n\n"
+            f"## Notes\n\n"
+            f"## Attachments\n{entry}",
+            encoding="utf-8",
+        )
+    _reload_indexes()
+
+
 # Regex to find markdown image refs like ![alt](screenshots/foo.png)
 _IMG_REF_RE = re.compile(r"!\[[^\]]*\]\((?:assets/)?screenshots/([^)]+)\)")
 
@@ -713,7 +748,7 @@ def asset_upload():
         )
 
     uploaded.save(str(dest))
-    _reload_indexes()
+    _log_to_daily_log(safe_name, subfolder)
     return redirect(
         url_for("assets_browser") + f"?msg={safe_name}+uploaded+successfully&msg_type=success"
     )
@@ -1141,10 +1176,11 @@ def api_advisor_qr():
     # Build cccc.edu staff directory URL from name
     slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
     directory_url = f"https://www.cccc.edu/faculty-staff-directory/{slug}"
-    # Clean, minimal styling — no logo/circle modules that hurt scannability
+    # Optional staff photo as center logo
+    photo = request.args.get("photo", "").strip()
     try:
         import json as _json
-        payload = _json.dumps({
+        payload: dict = {
             "data": directory_url,
             "fg_color": "#1d3557",
             "bg_color": "#FFFFFF",
@@ -1153,10 +1189,19 @@ def api_advisor_qr():
             "error_correction": "M",
             "box_size": 10,
             "border": 2,
-        }).encode()
+        }
+        if photo and photo.startswith("https://"):
+            payload.update({
+                "error_correction": "H",
+                "logo_path": photo,
+                "logo_size_percent": 22,
+                "logo_border": 6,
+                "logo_shape": "circle",
+            })
+        payload_bytes = _json.dumps(payload).encode()
         req = urllib.request.Request(
             "http://localhost:8080/api/qr/text",
-            data=payload,
+            data=payload_bytes,
             headers={"Content-Type": "application/json"},
             method="POST",
         )

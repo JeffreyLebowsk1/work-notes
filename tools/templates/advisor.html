@@ -156,6 +156,7 @@
             email: r.email || '',
             office: r.office || '',
             program: r.program || (r.programs ? r.programs[0] : '') || '',
+            photo: r.photo_url || '',
         });
         const qrSrc = `/api/advisor/qr?${qrParams.toString()}`;
 
