@@ -36,6 +36,7 @@ from werkzeug.utils import secure_filename
 _TOOLS_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_TOOLS_DIR))
 
+import _advisor  # noqa: E402
 import ai_providers  # noqa: E402
 import config  # noqa: E402
 from _helpers import REPO_ROOT, _all_notes, _parse_note, _relative  # noqa: E402
@@ -825,57 +826,76 @@ def asset_commit():
 # ---------------------------------------------------------------------------
 # Routes — search
 # ---------------------------------------------------------------------------
-# Routes — important links & QR codes
+# Routes — Advisor lookup
 # ---------------------------------------------------------------------------
 
-# Human-readable labels for each qr_config.json key.
-_LINK_LABELS: dict[str, str] = {
-    "cfnc":               "CFNC",
-    "diplomasender":      "DiplomaSender",
-    "cccc-scholarships":  "CCCC Scholarships",
-    "cccc-financial-aid": "CCCC Financial Aid",
-    "civic-center":       "Civic Center (Venue)",
-    "ce-schedule":        "CE Course Schedule",
-    "academic-calendar":  "Academic Calendar",
-    "registrar-office":   "Registrar's Office",
-    "transcript-request": "Transcript Request",
-    "fafsa":              "FAFSA",
-    "advising-hub":       "Advising Hub",
-    "nc-residency":       "NC Residency (RDS)",
-    "ce-scholarship":     "CE Scholarship Program",
-    "ccr-registration":   "CCR Registration",
-}
+
+@app.route("/advisor")
+def advisor_page():
+    """Render the advisor lookup page."""
+    return render_template(
+        "advisor.html",
+        sections=SECTIONS,
+        campus_codes=_advisor.CAMPUS_CODES,
+    )
 
 
-def _load_important_links() -> dict[str, str]:
-    """Load important_links from tools/qr_config.json."""
-    import json as _json
-    config_path = _TOOLS_DIR / "qr_config.json"
-    if config_path.exists():
-        try:
-            return _json.loads(config_path.read_text(encoding="utf-8")).get(
-                "important_links", {}
-            )
-        except Exception:
-            pass
-    return {}
+@app.route("/api/programs")
+def api_programs():
+    """Return the program code list as JSON for autocomplete."""
+    programs = _advisor.get_programs()
+    return jsonify(programs)
 
 
-@app.route("/links")
-def links_page():
-    """Important links page — shows each configured URL with its QR code."""
-    items = []
-    for name, url in _load_important_links().items():
-        qr_key = f"images/qr-codes/{name}.png"
-        items.append({
-            "name":    name,
-            "label":   _LINK_LABELS.get(name, name.replace("-", " ").title()),
-            "url":     url,
-            "qr_key":  qr_key,
-            "qr_url":  url_for("repo_asset", asset_path=qr_key)
-                       if qr_key in _ASSET_INDEX else None,
-        })
-    return render_template("links.html", items=items)
+@app.route("/api/advisor", methods=["POST"])
+def api_advisor():
+    """Look up advisors by student last name, optional campus and program."""
+    data = request.get_json(silent=True)
+    if not data or not data.get("last_name"):
+        return jsonify({"error": "last_name is required"}), 400
+    last_name = data["last_name"].strip()
+    campus = data.get("campus", "").strip()
+    program = data.get("program", "").strip()
+    records = _advisor.get_records()
+    matches = _advisor.lookup_advisor(records, last_name, campus, program)
+    return jsonify({"results": matches})
+
+
+@app.route("/api/advisor/qr")
+def api_advisor_qr():
+    """Generate a QR code for an advisor contact via the qoder API."""
+    name = request.args.get("name", "")
+    advisor_id = request.args.get("id", "")
+    email = request.args.get("email", "")
+    office = request.args.get("office", "")
+    program = request.args.get("program", "")
+    lines = [f"Advisor: {name}"]
+    if advisor_id:
+        lines.append(f"ID#: {advisor_id}")
+    if program:
+        lines.append(f"Program: {program}")
+    if office:
+        lines.append(f"Office: {office}")
+    if email:
+        lines.append(f"Email: {email}")
+    qr_text = "\n".join(lines)
+    try:
+        import requests as req
+        from _qr_generator import CCCC_BRAND, _logo_data_uri, CCCC_LOGO
+        payload = {"data": qr_text, **CCCC_BRAND}
+        if CCCC_LOGO.exists():
+            payload["logo_path"] = _logo_data_uri()
+        resp = req.post("http://localhost:8080/api/qr/text", json=payload, timeout=10)
+        resp.raise_for_status()
+        return Response(resp.content, mimetype="image/png")
+    except Exception:
+        return Response(
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+            b"\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4"
+            b"\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05"
+            b"\x00\x01\r\n\xb4\x00\x00\x00\x00IEND\xaeB`\x82",
+            mimetype="image/png",
+        )
 
 
 # ---------------------------------------------------------------------------
