@@ -11,6 +11,12 @@ This repository is a living knowledge base, not a versioned software release. Th
 
 ---
 
+## Preventive Controls
+
+This repository uses [ggshield](https://github.com/GitGuardian/ggshield) (GitGuardian's CLI) as a **pre-commit hook** to automatically block commits that contain secrets such as API keys, passwords, or tokens. Setup instructions are in [`SETUP.md`](SETUP.md#-secret-scanning-with-gitguardian-ggshield). The hook configuration lives in [`.pre-commit-config.yaml`](.pre-commit-config.yaml).
+
+---
+
 ## Data Privacy & FERPA Notice
 
 This repository stores **work procedures, policies, meeting notes, and coordination materials** for the Registrar's Office at Central Carolina Community College. It must **never** contain:
