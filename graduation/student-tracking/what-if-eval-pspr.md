@@ -62,6 +62,9 @@ Use PSPR to simulate the new or additional credential:
 
 > **Talking Point:** "We are using a 'what-if' evaluation to test your completed coursework against this additional program to see if you meet all of its requirements."
 
+![PSPR — what-if program selection showing program code, award type, and catalog of record](../../assets/screenshots/graduation/pspr-what-if-program-setup.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
+
 ---
 
 ### Step 4: Run the "What-If" Evaluation Using EVAL
@@ -73,6 +76,9 @@ Once the PSPR record is set up, you will use EVAL to complete the audit.
 1. Enter the EVAL mnemonic.
 2. Select the student and choose the proposed program (from PSPR) as the program to evaluate.
 3. Confirm you are running the evaluation against the correct program and catalog.
+
+![EVAL — degree audit results showing course requirements, completion status, and any gaps](../../assets/screenshots/graduation/eval-degree-audit-results.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
 
 **Review:**
 

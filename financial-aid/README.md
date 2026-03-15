@@ -169,8 +169,7 @@ If an appeal is approved, the student is placed on **Probation** and is eligible
 | **Degree Audit** | Run an **EVAL** to see exactly how many credits the student has remaining to complete their degree — essential context for advising and for any appeal. |
 | **Estimate PACE Impact** | If a student is considering a withdrawal, add the current course credits to their "Attempted" total while keeping "Completed" unchanged to calculate their projected new PACE. |
 
-For detailed case reviews or appeal submissions, refer students to:
-**Financial Aid Office** — Phone: (919) 718-7229 — Email: finaid@cccc.edu
+For detailed case reviews or appeal submissions, refer students to the **Financial Aid Office** — see [Contacts](../contacts.md#-other-campus-offices).
 [SAP Policy Webpage](https://www.cccc.edu/paying-college/deadlines-policies-procedures/satisfactory-academic-progress-sap-policy)
 
 ---
@@ -183,6 +182,12 @@ For detailed case reviews or appeal submissions, refer students to:
 | **ASUM** | Check general Financial Aid status. Detailing into the "Fin Aid" box shows proration level (F = full-time, Q = 3/4, etc.). |
 | **FA Freeze Date** | Occurs approximately two weeks into the semester. Snapshot of enrollment used to finalize award amounts. Changes after this date may result in the student owing money back. |
 | **R2T4** | Return of Title IV Funds. Students who withdraw from **all** classes before the **60% point** of the term may be required to repay a portion of their aid. The Financial Aid Director (Amber Werkheiser) has a **45-day window** to process these returns. |
+
+![SASM — SAP status history showing completion rate (PACE) and cumulative attempted hours](../assets/screenshots/updates/sasm-sap-status-history.png)
+*📸 Screenshot needed · [Amber Werkheiser](../contacts.md#-other-campus-offices) · awerkheiser@cccc.edu · (919) 718-7311*
+
+![ASUM — Financial Aid applicant summary showing status and proration level](../assets/screenshots/updates/asum-financial-aid-status.png)
+*📸 Screenshot needed · [Amber Werkheiser](../contacts.md#-other-campus-offices) · awerkheiser@cccc.edu · (919) 718-7311*
 
 ---
 
@@ -197,13 +202,13 @@ When a student needs to submit a GED/HSE transcript for aid eligibility:
 
 ## 📞 Support Contacts
 
-| Role / Topic | Contact | Phone | Email |
-|---|---|---|---|
-| Director of Financial Aid | Amber Werkheiser | (919) 718-7311 | awerkheiser@cccc.edu |
-| Foundation Scholarships (Asst. Director) | Abby Walker | (919) 718-7332 | awalker@cccc.edu |
-| Scholarship Disbursement | Nichelle Lariviere | | nlariviere@cccc.edu |
-| VA Educational Benefits | Angie Estes | (919) 718-7233 | aestes@cccc.edu |
-| General Financial Aid Office | Financial Aid Office | (919) 718-7229 | finaid@cccc.edu |
+| Role / Topic | Contact |
+|---|---|
+| Director of Financial Aid | [Amber Werkheiser](../contacts.md#-other-campus-offices) |
+| Foundation Scholarships | [Abby Walker](../contacts.md#-cccc-foundation) |
+| Scholarship Disbursement | [Nichelle Lariviere](../contacts.md#-cccc-foundation) |
+| VA Educational Benefits | [Angie Estes](../contacts.md#-other-campus-offices) |
+| General Financial Aid Office | [Financial Aid Office](../contacts.md#-other-campus-offices) |
 
 For Foundation scholarship details, see [Foundation Scholarships](./foundation-scholarships.md).
 For more details, refer staff and students to the [CCCC Financial Aid page](https://www.cccc.edu/paying-college).

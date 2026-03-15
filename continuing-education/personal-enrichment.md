@@ -19,8 +19,8 @@ Reference notes for personal enrichment (Community Service) non-credit courses o
 | Topic | Details |
 |---|---|
 | **Transcript Form** | Students must use the **"Personal Enrichment & Short-Term Training Transcript Request"** form. |
-| **Post-2007 processing** | Handled by the Student Records and Registrar's Office — (919) 718-7201 / admissions@cccc.edu |
-| **Pre-2007 processing** | Handled by Nutan Varma at Harnett Main Campus — (910) 814-8975 / nvarma@cccc.edu |
+| **Post-2007 processing** | Handled by the [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) |
+| **Pre-2007 processing** | Handled by [Nutan Varma](../contacts.md#-continuing-education--workforce-development) at Harnett Main Campus |
 | **Fee** | Continuing Education transcripts are provided **free of charge**. |
 | **Internal CE listings** | Employee Hub → College Operations → Find Data → **CE Course Section Report** |
 

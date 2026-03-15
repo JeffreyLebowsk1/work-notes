@@ -37,6 +37,9 @@ Ethical decision-making in academic advising requires a strategic balance betwee
 ### Golden Rules for Navigators
 
 - **Prioritize Transparency:** Clearly explain the difference between a "Drop" and a "Withdrawal." Staff should utilize the RGCS screen in Datatel to verify Never Attends (NAs) that will eventually populate into STAC.
+
+![RGCS — Never Attends (NA) verification screen showing enrollment and attendance status](../assets/screenshots/updates/rgcs-never-attends.png)
+*📸 Screenshot needed · [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) · admissions@cccc.edu · (919) 718-7201*
 - **Advocate Through Evidence:** Use all available documentation — including "Sent" timestamps on emails — to support student requests.
 - **Ensure Strategic Eligibility:** Only recommend program changes or double majors that genuinely align with the student's long-term academic plan.
 
@@ -153,29 +156,32 @@ Academic sanctions and Financial Aid SAP operate on parallel but independent tra
 | **Check for hold** | If the student has not yet met with a Navigator, a hold should remain on the account. Verify on **SACS** — do not clear it until the meeting is confirmed. |
 | **Find the right Navigator** | Navigator assignment is based on the student's **program code** (e.g., A10100, A55280NR) and **home campus** (LMC, HMC, or PMC). Provide the program code, campus, and the first letter of the student's last name to identify the assigned Navigator. See the [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts) for the full assignment list. |
 | **Early intervention** | If a student mentions struggling, refer them immediately to the **Academic Assistance Center** at (919) 718-7502 or their assigned Navigator. |
-| **Escalation** | For complex Academic Warning or Suspension policy questions, refer to **Megan Burgess**, Dean of Student Onboarding and Success — mburgess@cccc.edu. |
+| **Escalation** | For complex Academic Warning or Suspension policy questions, refer to [**Megan Burgess**](../contacts.md#-other-campus-offices), Dean of Student Onboarding and Success. |
+
+![SACS — academic standing screen showing Warning/Suspension status and hold indicator](../assets/screenshots/updates/sacs-academic-standing.png)
+*📸 Screenshot needed · [Megan Burgess](../contacts.md#-other-campus-offices) · mburgess@cccc.edu · (919) 718-7232*
 
 ### Campus Navigator Contacts
 
 For immediate assistance, contact the campus lead below. Full Navigator assignments by program are on the [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts).
 
-| Campus | Name | Contact |
-|---|---|---|
-| **Chatham Main Campus (CMC)** | James Carr | (984) 368-5159 (Text) |
-| **Chatham Main Campus (CMC)** | Kim Brzozowski | (984) 368-5354 (Text) |
-| **Harnett Main Campus (HMC)** | Brian Post | (984) 368-4911 (Text) |
-| **Harnett Main Campus (HMC)** | J. Dwayne Garnett | (984) 368-4550 (Text) |
-| **Lee Main Campus (LMC)** | Student Onboarding & Success Office | (919) 718-7300 — onboarding@cccc.edu |
-| **Lee Main Campus (LMC)** | Sarah Shannon-Mohamed (Director) | sshannon@cccc.edu |
+| Campus | Name |
+|---|---|
+| **Chatham Main Campus (CMC)** | [James Carr](../contacts.md#-other-campus-offices) |
+| **Chatham Main Campus (CMC)** | [Kim Brzozowski](../contacts.md#-other-campus-offices) |
+| **Harnett Main Campus (HMC)** | [Brian Post](../contacts.md#-other-campus-offices) |
+| **Harnett Main Campus (HMC)** | [J. Dwayne Garnett](../contacts.md#-other-campus-offices) |
+| **Lee Main Campus (LMC)** | [Student Onboarding & Success Office](../contacts.md#-other-campus-offices) |
+| **Lee Main Campus (LMC)** | [Sarah Shannon-Mohamed](../contacts.md#-other-campus-offices) |
 
 ### Contacts
 
-| Office / Person | Phone | Link / Email |
-|---|---|---|
-| Student Onboarding and Success (general) | (919) 718-7300 | onboarding@cccc.edu — [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts) |
-| Megan Burgess (Dean of Student Onboarding and Success) | — | mburgess@cccc.edu |
-| Financial Aid Office | (919) 718-7229 | [Financial Aid Webpage](https://www.cccc.edu/paying-college/financial-aid/) |
-| Student Records and Registrar's Office | (919) 718-7201 | admissions@cccc.edu — [Registrar's Webpage](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office) |
+| Office / Person | Details |
+|---|---|
+| [Student Onboarding and Success](../contacts.md#-other-campus-offices) | [Advising Contact Page](https://www.cccc.edu/support-success/advising/college-advisors/campus-contacts) |
+| [Megan Burgess](../contacts.md#-other-campus-offices) | Dean of Student Onboarding and Success |
+| Financial Aid Office | [Financial Aid Webpage](https://www.cccc.edu/paying-college/financial-aid/) |
+| [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) | [Registrar's Webpage](https://www.cccc.edu/support-success/all-offices-services/student-records-and-registrars-office) |
 
 ---
 

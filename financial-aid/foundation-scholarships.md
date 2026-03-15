@@ -81,11 +81,11 @@ Before referring a student to the Foundation, clarify:
 
 ## 📞 Support Contacts
 
-| Role | Contact | Phone | Email |
-|---|---|---|---|
-| Assistant Director, Foundation | Abby Walker | (919) 718-7332 | awalker@cccc.edu |
-| Scholarship Disbursement | Nichelle Lariviere | | nlariviere@cccc.edu |
-| General Foundation Office | Marchant Hall, Room 7332 | | [Foundation Webpage](https://www.cccc.edu/foundation/) |
+| Role | Contact |
+|---|---|
+| Assistant Director, Foundation | [Abby Walker](../contacts.md#-cccc-foundation) |
+| Scholarship Disbursement | [Nichelle Lariviere](../contacts.md#-cccc-foundation) |
+| General Foundation Office | [CCCC Foundation](../contacts.md#-cccc-foundation) — Marchant Hall, Room 7332 |
 
 ---
 *Last updated: 2026-03-13*

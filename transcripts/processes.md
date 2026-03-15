@@ -76,8 +76,8 @@ Non-credit/CE transcript handling is split by record date. **Always ask the stud
 
 | Record Date | Who Handles It |
 |---|---|
-| **2007 to present** | Student Records and Registrar's Office — (919) 718-7201 / admissions@cccc.edu |
-| **Prior to 2007** | Nutan Varma, Harnett Main Campus (CE Building) — (910) 814-8975 / nvarma@cccc.edu |
+| **2007 to present** | [Student Records and Registrar's Office](../contacts.md#-internal--registrars-office) |
+| **Prior to 2007** | [Nutan Varma](../contacts.md#-continuing-education--workforce-development), Harnett Main Campus (CE Building) |
 
 ### Personal Enrichment & Short-Term Training
 
